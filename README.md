@@ -1,3 +1,10 @@
+Developer Notes
+---------------
+
+Dependencies:
+
+* Ruby 1.9.3
+
 License
 -------
 
