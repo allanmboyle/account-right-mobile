@@ -10,7 +10,7 @@ define([ "backbone", "jquery", "underscore", "models/customer_files", "text!view
       @customerFiles.fetch()
 
     render: () ->
-      $("#customer-files-page").html(@template(customerFiles: @customerFiles))
+      $("#customer-files").html(@template(customerFiles: @customerFiles))
       $.mobile.changePage("#customer-files" , reverse: false, changeHash: false)
       this
   )
