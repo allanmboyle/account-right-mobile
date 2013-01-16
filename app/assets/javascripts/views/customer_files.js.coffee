@@ -1,17 +1,24 @@
 define([ "backbone", "jquery", "underscore", "models/customer_files", "text!views/customer_files.html" ], (Backbone, $, _, CustomerFiles, ViewHtml) ->
-  Backbone.View.extend(
-    initialize: () ->
-      $("body").append("<div id='customer-files' data-role='page'></div>")
-      @customerFiles = new CustomerFiles()
-      @template = _.template(ViewHtml)
 
-    show: () ->
+  $("body").append("<div id='customer_files' data-role='page'></div>")
+
+  Backbone.View.extend(
+
+    initialize: () ->
+      @template = _.template(ViewHtml)
+      @customerFiles = new CustomerFiles()
       @customerFiles.on('reset', @render, this)
+
+    el: $("#customer_files")
+
+    update: () ->
       @customerFiles.fetch()
 
     render: () ->
-      $("#customer-files").html(@template(customerFiles: @customerFiles))
-      $.mobile.changePage("#customer-files" , reverse: false, changeHash: false)
+      console.log("rendering customer files")
+      @$el.html(@template(customerFiles: @customerFiles))
+      $.mobile.changePage("#customer_files", reverse: false, changeHash: true)
       this
+
   )
 )
