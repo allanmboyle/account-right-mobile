@@ -1,3 +1,5 @@
 define([ "backbone" ], (Backbone) ->
-    Backbone.Model.extend({})
+
+  class Login extends Backbone.Model
+
 )

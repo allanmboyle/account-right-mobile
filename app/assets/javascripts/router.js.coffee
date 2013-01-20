@@ -1,22 +1,32 @@
-define([ "jquery", "backbone", "views/login", "views/customer_files" ], ($, Backbone, LoginView, CustomerFilesView) ->
-  Backbone.Router.extend(
+define([ "jquery", "backbone", "views/live_login", "views/customer_files", "views/customer_file_login", "views/contacts" ], ($, Backbone, LiveLoginView, CustomerFilesView, CustomerFileLoginView, ContactsView) ->
+
+  class AccountRightRouter extends Backbone.Router
 
     initialize: () ->
       # Tells Backbone to start watching for hashchange events
       Backbone.history.start()
 
     routes:
-      "": "login"
-      "login": "login"
+      "live_login": "live_login"
       "customer_files": "customer_files"
+      "customer_file_login": "customer_file_login"
+      "contacts": "contacts"
+      "": "live_login"
 
-    login: () ->
-      @loginView ?= new LoginView()
-      @loginView.render()
+    live_login: () ->
+      @liveLoginView ?= new LiveLoginView()
+      @liveLoginView.render()
 
     customer_files: () ->
       @customerFilesView ?= new CustomerFilesView()
       @customerFilesView.update()
 
-  )
+    customer_file_login: () ->
+      @customerFileLoginView ?= new CustomerFileLoginView()
+      @customerFileLoginView.render()
+
+    contacts: () ->
+      @contactsView ?= new ContactsView()
+      @contactsView.update()
+
 )
