@@ -1,0 +1,5 @@
+{
+  "name": "account-right-mobile",
+  "version": "0.0.1",
+  "dependencies": { "coffeelint": ">= 0.5.4" }
+}

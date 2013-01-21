@@ -4,6 +4,7 @@ Developer Notes
 Dependencies:
 
 * Ruby 1.9.3
+* Node 0.8.17
 
 License
 -------
