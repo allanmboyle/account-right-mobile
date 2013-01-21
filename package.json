@@ -1,5 +1,11 @@
 {
   "name": "account-right-mobile",
+  "description": "Account Right for mobile devices",
   "version": "0.0.1",
-  "dependencies": { "coffeelint": ">= 0.5.4" }
+  "dependencies": {
+      "coffeelint": ">= 0.5.4"
+  },
+  "engines": {
+      "node": ">=0.8.17"
+  }
 }
