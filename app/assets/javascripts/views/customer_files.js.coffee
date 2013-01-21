@@ -1,4 +1,8 @@
-define([ "backbone", "jquery", "underscore", "models/customer_files", "text!views/customer_files.tmpl" ], (Backbone, $, _, CustomerFiles, Template) ->
+define([ "backbone",
+         "jquery",
+         "underscore",
+         "models/customer_files",
+         "text!views/customer_files.tmpl" ], (Backbone, $, _, CustomerFiles, Template) ->
 
   $("body").append("<div id='customer_files' data-role='page' data-title='Customer Files'></div>")
 

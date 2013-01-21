@@ -1,4 +1,9 @@
-define([ "jquery", "backbone", "views/live_login", "views/customer_files", "views/customer_file_login", "views/contacts" ], ($, Backbone, LiveLoginView, CustomerFilesView, CustomerFileLoginView, ContactsView) ->
+define([ "jquery",
+         "backbone",
+         "views/live_login",
+         "views/customer_files",
+         "views/customer_file_login",
+         "views/contacts" ], ($, Backbone, LiveLoginView, CustomerFilesView, CustomerFileLoginView, ContactsView) ->
 
   class AccountRightRouter extends Backbone.Router
 
