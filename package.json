@@ -3,6 +3,7 @@
   "description": "Account Right for mobile devices",
   "version": "0.0.1",
   "dependencies": {
+      "coffee-script": ">= 1.4.0",
       "coffeelint": ">= 0.5.4"
   },
   "engines": {
