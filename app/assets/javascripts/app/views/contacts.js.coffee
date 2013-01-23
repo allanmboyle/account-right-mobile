@@ -1,8 +1,8 @@
 define([ "backbone",
          "jquery",
          "underscore",
-         "models/contacts",
-         "text!views/contacts.tmpl" ], (Backbone, $, _, Contacts, Template) ->
+         "../models/contacts",
+         "text!./contacts.tmpl" ], (Backbone, $, _, Contacts, Template) ->
 
   $("body").append("<div id='contacts' data-role='page' data-title='Contacts'></div>")
   $("#contacts").bind("pagebeforeshow", () ->

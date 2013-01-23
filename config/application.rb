@@ -60,6 +60,6 @@ module AccountRightMobile
     config.assets.version = '1.0'
 
     # Register additional asset locations
-    config.assets.paths << Rails.root.join("vendor", "assets", "images")
+    config.assets.paths << Rails.root.join("vendor", "assets", "images") << Rails.root.join("tmp", "assets", "javascripts", "optimized")
   end
 end

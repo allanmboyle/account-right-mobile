@@ -13,31 +13,31 @@
 ###
 
 require.config(
-  # Script aliases
+  baseUrl: "assets/lib"
   paths:
-    # Core Libraries
-    "jquery": "jquery-1.8.3.min",
-    "jquerymobile": "jquery.mobile-1.2.0.min",
-    "underscore": "lodash-0.10.0.min",
-    "backbone": "backbone-0.9.9.min",
-    "text" : "text-2.0.3"
+    app: "../app"
+    jquery: "jquery-1.8.3.min",
+    jquerymobile: "jquery.mobile-1.2.0.min",
+    underscore: "lodash-0.10.0.min",
+    backbone: "backbone-0.9.9.min",
+    text : "text-2.0.3"
 
   # Sets the configuration for your third party scripts that are not AMD compatible
   shim:
-    "backbone":
-      "deps": [ "underscore", "jquery" ],
-      "exports": "Backbone"  #attaches "Backbone" to the window object
+    backbone:
+      deps: [ "underscore", "jquery" ],
+      exports: "Backbone"  #attaches "Backbone" to the window object
 )
 
-require([ "require", "backbone", "jquery", "underscore", ], (require, Backbone, $, _) ->
+require([ "require", "jquery", "backbone", "underscore" ], (require, $, Backbone, _) ->
   # Set up the "mobileinit" handler before requiring jQuery Mobile's module
   $(document).on("mobileinit",
-    () ->
-      # Disable jQuery Mobile Navigation
-      $.mobile.ajaxEnabled = false
-      $.mobile.linkBindingEnabled = false
-      $.mobile.hashListeningEnabled = false
-      $.mobile.pushStateEnabled = false
+  () ->
+    # Disable jQuery Mobile Navigation
+    $.mobile.ajaxEnabled = false
+    $.mobile.linkBindingEnabled = false
+    $.mobile.hashListeningEnabled = false
+    $.mobile.pushStateEnabled = false
   )
-  require([ "router", "jquerymobile" ], (AccountRightRouter) -> @router = new AccountRightRouter())
+  require([ "app/router", "jquerymobile" ], (AccountRightRouter) -> @router = new AccountRightRouter())
 )

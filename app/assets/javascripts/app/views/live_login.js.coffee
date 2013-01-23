@@ -1,4 +1,4 @@
-define([ "backbone", "jquery", "underscore", "text!views/login.tmpl" ], (Backbone, $, _, Template) ->
+define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $, _, Template) ->
 
   $("body").append(_.template(Template, title : "Account Right Live Login", type : "live"))
   $("#live_login").on("pageshow", () -> $("#live_username").focus())

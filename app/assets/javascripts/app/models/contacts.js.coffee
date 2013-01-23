@@ -1,4 +1,4 @@
-define([ "backbone", "models/contact" ], (Backbone, Contact) ->
+define([ "backbone", "./contact" ], (Backbone, Contact) ->
 
   class Contacts extends Backbone.Collection
 

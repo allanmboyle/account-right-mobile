@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "dependencies": {
       "coffee-script": ">= 1.4.0",
-      "coffeelint": ">= 0.5.4"
+      "coffeelint": ">= 0.5.4",
+      "requirejs": ">= 2.1.2"
   },
   "engines": {
       "node": ">=0.8.17"

@@ -1,4 +1,4 @@
-define([ "backbone", "jquery", "underscore", "text!views/login.tmpl" ], (Backbone, $, _, Template) ->
+define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $, _, Template) ->
 
   $("body").append(_.template(Template, title : "Customer File Login", type : "customer_file"))
   $("#customer_file_login").on("pageshow", () -> $("#customer_file_username").focus())
