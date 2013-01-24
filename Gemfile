@@ -21,6 +21,12 @@ end
 
 gem 'jquery-rails'
 
+group :test do
+  gem 'cucumber-rails', '~> 1.3', :require => false
+  gem 'selenium-webdriver', '~> 2.29'
+  gem 'ruby-debug19'
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -32,6 +38,3 @@ gem 'jquery-rails'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug'

@@ -8,7 +8,7 @@ define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $
     el: $("#customer_file_login")
 
     events: () ->
-      "click #submit": "login"
+      "click #customer_file_login_submit": "login"
 
     login: (event) ->
       location.hash = "contacts"
