@@ -1,10 +1,10 @@
+desc "All metrics checks"
+task(:metrics => "metrics:coffeescript")
+
 namespace(:metrics) do
 
-  desc "All metrics checks"
-  task(:all => "metrics:coffee-script")
-
   desc "CoffeeScript metrics checks"
-  task("coffee-script" => "npm:install") do
+  task("coffeescript" => "npm:install") do
     puts "Running CoffeeLint code analysis..."
     coffeelint_script_location = NODE_BIN_DIR.join("coffeelint")
     coffeescript_files_directory = Rails.root.join("app", "assets", "javascripts")

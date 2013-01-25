@@ -17,18 +17,18 @@ namespace(:assets) do
   directory "tmp/assets/javascripts/optimized"
   directory "tmp/config"
 
+  desc "Deletes generated assets"
   task(:clean) do
     [BUILD_ASSETS_DIR, BUILD_CONFIG_DIR].each { |dir| rm_rf(dir) }
   end
 
+  desc "Compiles and optimizes JavaScript via RequireJS"
   task(:precompile => %w{ assets:compile assets:optimize assets:publish })
 
-  desc "All compilation steps"
   task(:compile => "assets:compile:coffeescript")
 
   namespace(:compile) do
 
-    desc "CoffeeScript compilation"
     task("coffeescript" => %w{ tmp/assets/javascripts/compiled npm:install }) do
       puts "Compiling CoffeeScript..."
       destination_directory = COMPILED_JAVASCRIPTS_DIR
@@ -39,7 +39,6 @@ namespace(:assets) do
 
   end
 
-  desc "All optimization steps"
   task(:optimize => "assets:optimize:javascript")
 
   namespace(:optimize) do
@@ -49,7 +48,6 @@ namespace(:assets) do
       cp("#{NODE_MODULES_DIR}/requirejs/bin/r.js", BUILD_CONFIG_DIR)
     end
 
-    desc "Optimize Javascript"
     task(:javascript => %w{ tmp/assets/javascripts/unoptimized
                             tmp/assets/javascripts/optimized
                             npm:install
@@ -64,7 +62,6 @@ namespace(:assets) do
 
   end
 
-  desc "Publishes assembled assets"
   task(:publish) { cp_r("#{OPTIMIZED_JAVASCRIPTS_DIR}/.", PUBLIC_ASSETS_DIR) }
 
   private
