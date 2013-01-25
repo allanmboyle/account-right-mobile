@@ -9,12 +9,17 @@ namespace(:assets) do
   OPTIMIZED_JAVASCRIPTS_DIR = BUILD_JAVASCRIPTS_DIR.join("optimized")
   PUBLIC_ASSETS_DIR = Rails.root.join("public", "assets")
   CONFIG_DIR = Rails.root.join("config")
+  BUILD_CONFIG_DIR = Rails.root.join("tmp", "config")
+  NODE_MODULES_DIR = Rails.root.join("node_modules")
 
   directory "tmp/assets/javascripts/compiled"
   directory "tmp/assets/javascripts/unoptimized"
   directory "tmp/assets/javascripts/optimized"
+  directory "tmp/config"
 
-  task(:clean) { rm_rf(BUILD_ASSETS_DIR) }
+  task(:clean) do
+    [BUILD_ASSETS_DIR, BUILD_CONFIG_DIR].each { |dir| rm_rf(dir) }
+  end
 
   task(:precompile => %w{ assets:compile assets:optimize assets:publish })
 
@@ -39,14 +44,22 @@ namespace(:assets) do
 
   namespace(:optimize) do
 
+    task(:prepare => "tmp/config" ) do
+      cp("#{CONFIG_DIR}/require_js_build.js", BUILD_CONFIG_DIR)
+      cp("#{NODE_MODULES_DIR}/requirejs/bin/r.js", BUILD_CONFIG_DIR)
+    end
+
     desc "Optimize Javascript"
-    task(:javascript => %w{ tmp/assets/javascripts/unoptimized tmp/assets/javascripts/optimized npm:install }) do
+    task(:javascript => %w{ tmp/assets/javascripts/unoptimized
+                            tmp/assets/javascripts/optimized
+                            npm:install
+                            assets:optimize:prepare }) do
       puts "Optimizing Javascript..."
       cp_r("#{COMPILED_JAVASCRIPTS_DIR}/.", UNOPTIMIZED_JAVASCRIPTS_DIR)
       cp_r_preserving_directory_structure(Dir.glob("#{APP_JAVASCRIPTS_DIR}/**/*.tmpl"),
-                                          base_dir: APP_JAVASCRIPTS_DIR, to_dir: UNOPTIMIZED_JAVASCRIPTS_DIR)
+                                          replace_dir: APP_JAVASCRIPTS_DIR, with_dir: UNOPTIMIZED_JAVASCRIPTS_DIR)
       cp_r("#{VENDOR_JAVASCRIPTS_DIR}/.", UNOPTIMIZED_JAVASCRIPTS_DIR)
-      execute_with_logging "node #{CONFIG_DIR}/r.js -o #{CONFIG_DIR}/build.js"
+      execute_with_logging "node #{BUILD_CONFIG_DIR}/r.js -o #{BUILD_CONFIG_DIR}/require_js_build.js appDir=tmp/assets/javascripts/unoptimized dir=tmp/assets/javascripts/optimized baseUrl=lib"
     end
 
   end
@@ -57,7 +70,7 @@ namespace(:assets) do
   private
 
   def cp_r_preserving_directory_structure(files, options)
-    files.each { |file| cp(file.to_s, file.to_s.sub(options[:base_dir].to_s, options[:to_dir].to_s)) }
+    files.each { |file| cp(file.to_s, file.to_s.sub(options[:replace_dir].to_s, options[:with_dir].to_s)) }
   end
 
   def remove_duplicate_js_extension_from_files_in(directory)

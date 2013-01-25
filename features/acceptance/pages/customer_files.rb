@@ -13,7 +13,7 @@ module AccountRightMobile
         end
 
         def url
-          "/customer_files"
+          "/#customer_files"
         end
 
         def shown?

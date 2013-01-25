@@ -6,3 +6,5 @@ require File.expand_path('../config/application', __FILE__)
 require File.expand_path('../lib/tasks/object_extensions', __FILE__)
 
 AccountRightMobile::Application.load_tasks
+
+task :default => "build:commit"

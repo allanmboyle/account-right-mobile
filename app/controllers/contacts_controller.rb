@@ -1,10 +1,12 @@
 class ContactsController < ApplicationController
 
   def index
-    @contacts = [Contact.new(name: "A Customer", type: "Customer", balance: 100.00),
-                 Contact.new(name: "A Supplier", type: "Customer", balance: -100.00),
-                 Contact.new(name: "G Customer", type: "Supplier", balance: 200.00),
-                 Contact.new(name: "W Customer", type: "Customer", balance: 150.00)]
+    @contacts = [{ name: "A Customer", type: "Customer", balance: 100.00 },
+                 { name: "A Supplier", type: "Customer", balance: -100.00 },
+                 { name: "G Customer", type: "Supplier", balance: 200.00 },
+                 { name: "W Customer", type: "Customer", balance: 150.00 }].map do |attributes|
+      AccountRight::Contact.new(attributes)
+    end
     respond_to do |format|
       format.json  { render :json => @contacts.to_json }
     end
