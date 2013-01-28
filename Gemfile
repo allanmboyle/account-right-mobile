@@ -24,7 +24,7 @@ gem 'jquery-rails'
 group :test do
   gem 'cucumber-rails', '~> 1.3', :require => false
   gem 'selenium-webdriver', '~> 2.29'
-  gem 'ruby-debug19'
+  # gem 'ruby-debug19'
 end
 
 # To use ActiveModel has_secure_password
