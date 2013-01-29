@@ -16,10 +16,6 @@ module AccountRightMobile
           "/"
         end
 
-        def shown?
-          @session.has_content?(self.class.name)
-        end
-
         def enter_credentials(options)
           @session.fill_in("live_username", :with => options[:username])
           @session.fill_in("live_password", :with => options[:password])

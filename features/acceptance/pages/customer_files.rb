@@ -16,10 +16,6 @@ module AccountRightMobile
           "/#customer_files"
         end
 
-        def shown?
-          @session.has_content?(self.class.name)
-        end
-
       end
 
     end

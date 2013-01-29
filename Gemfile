@@ -24,6 +24,8 @@ gem 'jquery-rails'
 group :test do
   gem 'cucumber-rails', '~> 1.3', :require => false
   gem 'selenium-webdriver', '~> 2.29'
+
+  # For debugging purposes - should never be pushed
   # gem 'ruby-debug19'
 end
 

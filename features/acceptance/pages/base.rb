@@ -23,20 +23,12 @@ module AccountRightMobile
           @session.visit(url)
         end
 
+        def shown?
+          @session.has_content?(self.class.name)
+        end
+
         def shown_without_error?
           shown? && @session.has_no_content?("error")
-        end
-
-        def wait_until_shown!
-          AccountRightMobile::Acceptance::Wait.new(:message => "Timed-out waiting for #{self.class.name} page to be shown").until do
-            shown?
-          end
-        end
-
-        def wait_until_shown_without_error!
-          AccountRightMobile::Acceptance::Wait.new(:message => "Timed-out waiting for #{self.class.name} page to be shown without error").until do
-            shown_without_error?
-          end
         end
 
       end
