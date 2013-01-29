@@ -24,6 +24,7 @@ gem 'jquery-rails'
 group :test do
   gem 'cucumber-rails', '~> 1.3', :require => false
   gem 'selenium-webdriver', '~> 2.29'
+  gem 'immutable_struct', '~> 1.1.0'
 
   # For debugging purposes - should never be pushed
   # gem 'ruby-debug19'
