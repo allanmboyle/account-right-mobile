@@ -1,5 +1,5 @@
 Capybara.run_server = false
-Capybara.app_host = "http://localhost:3001"
+Capybara.app_host = "http://localhost:3000"
 
 Capybara.register_driver(:selenium_override) do |app|
   AccountRightMobile::Acceptance::DriverFactory.for(app).create(ENV['driver'] || :firefox)
