@@ -28,7 +28,7 @@ namespace(:assets) do
   task(:compile => "assets:compile:coffeescript")
 
   task(:environment) do
-    output = execute_with_logging("node -v")
+    output = execute_with_logging "node -v"
     raise "node.js must be installed" if output =~ /error/i
   end
 

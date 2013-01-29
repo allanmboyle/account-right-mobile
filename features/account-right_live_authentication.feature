@@ -1,5 +1,5 @@
-Feature: User Authentication via AccountRight Live
-  In order to secure access data
+Feature: Authenticated AccountRight Live Access
+  In order to secure access to data
   As a user
   I want access to AccountRight Live to be authenticated
 

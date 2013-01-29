@@ -4,15 +4,19 @@ module AccountRightMobile
 
       class Base
 
-        def self.inherited(subclass)
-          @page_classes ||= []
-          @page_classes << subclass
-        end
+        class << self
 
-        def self.page_class_with_name(name)
-          @page_classes.find { |page_class| page_class.name == name }.tap do |page_class|
-            raise "Page with name '#{name}' not found" unless page_class
+          def inherited(subclass)
+            @page_classes ||= []
+            @page_classes << subclass
           end
+
+          def page_class_with_name(name)
+            @page_classes.find { |page_class| page_class.name == name }.tap do |page_class|
+              raise "Page with name '#{name}' not found" unless page_class
+            end
+          end
+
         end
 
         def initialize(session)

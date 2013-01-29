@@ -2,10 +2,10 @@ module AccountRightMobile
   module Acceptance
     module Pages
 
-      class CustomerFiles < Pages::Base
+      class Contacts < Pages::Base
 
         def self.name
-          "Customer Files"
+          "Contacts"
         end
 
         def initialize(session)
@@ -13,11 +13,7 @@ module AccountRightMobile
         end
 
         def url
-          "/#customer_files"
-        end
-
-        def access_a_file
-          @session.find('#customer-files-list').all('a').first.click
+          "/#contacts"
         end
 
       end

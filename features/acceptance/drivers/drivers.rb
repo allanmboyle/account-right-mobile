@@ -1,0 +1,6 @@
+require File.expand_path('../dimensions', __FILE__)
+require File.expand_path('../base', __FILE__)
+require File.expand_path('../default', __FILE__)
+require File.expand_path('../iphone', __FILE__)
+require File.expand_path('../iphone_firefox', __FILE__)
+require File.expand_path('../driver_factory', __FILE__)
