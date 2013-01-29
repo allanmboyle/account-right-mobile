@@ -27,9 +27,14 @@ namespace(:assets) do
 
   task(:compile => "assets:compile:coffeescript")
 
+  task(:environment) do
+    output = execute_with_logging("node -v")
+    raise "node.js must be installed" if output =~ /error/i
+  end
+
   namespace(:compile) do
 
-    task("coffeescript" => %w{ tmp/assets/javascripts/compiled npm:install }) do
+    task("coffeescript" => %w{ tmp/assets/javascripts/compiled assets:environment npm:install }) do
       puts "Compiling CoffeeScript..."
       destination_directory = COMPILED_JAVASCRIPTS_DIR
       output = execute_with_logging "#{NODE_BIN_DIR.join("coffee")} --lint --compile --output #{destination_directory} #{APP_JAVASCRIPTS_DIR} 2>&1"
