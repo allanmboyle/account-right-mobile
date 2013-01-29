@@ -7,7 +7,7 @@ module ObjectExtensions
   module InstanceMethods
 
     def execute_with_logging(command)
-      puts "Executing #{command}..."
+      puts command
       `#{command}`.tap { |output| puts output }
     end
 
