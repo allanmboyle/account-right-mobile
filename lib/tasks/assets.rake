@@ -31,7 +31,7 @@ namespace(:assets) do
 
   namespace(:compile) do
 
-    task("coffeescript" => %w{ tmp/assets/javascripts/compiled node:environment npm:install }) do
+    task("coffeescript" => %w{ tmp/assets/javascripts/compiled node:required npm:install }) do
       destination_directory = COMPILED_JAVASCRIPTS_DIR
       output = execute_with_logging "node #{NODE_EXTENSIONS_DIR}/coffee-script/bin/coffee.js --lint --compile --output #{destination_directory} #{APP_JAVASCRIPTS_DIR} 2>&1"
       raise "CoffeeScript compilation failed" if (output =~ /error/i) || (output =~ /warning/i)
@@ -51,8 +51,8 @@ namespace(:assets) do
 
     task(:javascript => %w{ tmp/assets/javascripts/unoptimized
                             tmp/assets/javascripts/optimized
+                            node:required
                             npm:install
-                            node:environment
                             assets:optimize:prepare }) do
       cp_r("#{COMPILED_JAVASCRIPTS_DIR}/.", UNOPTIMIZED_JAVASCRIPTS_DIR)
       cp_r_preserving_directory_structure(Dir.glob("#{APP_JAVASCRIPTS_DIR}/**/*.tmpl"),
