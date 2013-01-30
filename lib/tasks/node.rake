@@ -1,8 +1,11 @@
 namespace(:node) do
 
   task(:environment) do
-    output = execute_with_logging "node -v"
-    raise "Node.js must be installed" if output.contains_execution_error?
+    begin
+      execute_with_logging "node -v"
+    rescue
+      raise "Node.js must be installed"
+    end
   end
 
 end
@@ -10,8 +13,14 @@ end
 namespace(:npm) do
 
   task(:environment) do
-    output = execute_with_logging "npm -v"
-    NPM_INSTALLED = !output.contains_execution_error?
+    NPM_INSTALLED = begin
+      execute_with_logging "npm -v"
+      puts "NPM detected"
+      true
+    rescue
+      puts "NPM not detected"
+      false
+    end
   end
 
   desc "Updates npm packages when npm has been installed"
