@@ -12,7 +12,7 @@ module AccountRightMobile
         end
 
         def self.name
-          :default
+          :iphone_firefox
         end
 
         def initialize(options)
