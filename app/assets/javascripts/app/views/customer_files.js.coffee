@@ -10,10 +10,10 @@ define([ "backbone",
   class CustomerFilesView extends Backbone.View
 
     initialize: () ->
-      @$el.html(_.template(LayoutTemplate))
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles()
       @customerFiles.on('reset', @render, this)
+      @$el.html(_.template(LayoutTemplate))
 
     el: $("#customer_files")
 
