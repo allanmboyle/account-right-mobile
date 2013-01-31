@@ -12,7 +12,7 @@ end
 
 namespace(:npm) do
 
-  NPM_BIN_DIR = Rails.root.join("node_modules", ".bin")
+  NPM_DIR = Rails.root.join("node_modules")
 
   task(:environment) do
     NPM_INSTALLED = begin
@@ -23,11 +23,6 @@ namespace(:npm) do
       puts "Node.js npm not detected"
       false
     end
-  end
-
-  desc "Fails should npm not be installed"
-  task(:required => "npm:environment") do
-    raise "Node.js npm must be installed" unless NPM_INSTALLED
   end
 
   desc "Updates npm packages when npm has been installed"

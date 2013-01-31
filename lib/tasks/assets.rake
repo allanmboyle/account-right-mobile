@@ -12,7 +12,6 @@ namespace(:assets) do
   BUILD_CONFIG_DIR = Rails.root.join("tmp", "config")
 
   NODE_MODULES_DIR = Rails.root.join("node_modules")
-  NODE_EXTENSIONS_DIR = Rails.root.join("lib", "node")
 
   directory "tmp/assets/javascripts/compiled"
   directory "tmp/assets/javascripts/unoptimized"
@@ -31,11 +30,14 @@ namespace(:assets) do
 
   namespace(:compile) do
 
+
     task("coffeescript" => %w{ tmp/assets/javascripts/compiled node:required npm:install }) do
-      destination_directory = COMPILED_JAVASCRIPTS_DIR
-      output = execute_with_logging "node #{NODE_EXTENSIONS_DIR}/coffee-script/bin/coffee.js --lint --compile --output #{destination_directory} #{APP_JAVASCRIPTS_DIR} 2>&1"
+      coffee_script_path = "#{NPM_DIR}/.bin/coffee"
+      source_dir = APP_JAVASCRIPTS_DIR
+      destination_dir = COMPILED_JAVASCRIPTS_DIR
+      output = execute_with_logging "node #{coffee_script_path} --lint --compile --output #{destination_dir} #{source_dir} 2>&1"
       raise "CoffeeScript compilation failed" if (output =~ /error/i) || (output =~ /warning/i)
-      remove_duplicate_js_extension_from_files_in(destination_directory)
+      remove_duplicate_js_extension_from_files_in(destination_dir)
     end
 
   end
@@ -58,7 +60,11 @@ namespace(:assets) do
       cp_r_preserving_directory_structure(Dir.glob("#{APP_JAVASCRIPTS_DIR}/**/*.tmpl"),
                                           replace_dir: APP_JAVASCRIPTS_DIR, with_dir: UNOPTIMIZED_JAVASCRIPTS_DIR)
       cp_r("#{VENDOR_JAVASCRIPTS_DIR}/.", UNOPTIMIZED_JAVASCRIPTS_DIR)
-      execute_with_logging "node #{BUILD_CONFIG_DIR}/r.js -o #{BUILD_CONFIG_DIR}/require_js_build.js appDir=tmp/assets/javascripts/unoptimized dir=tmp/assets/javascripts/optimized baseUrl=lib"
+      reducer_script_path = "#{BUILD_CONFIG_DIR}/r.js"
+      config_script_path = "#{BUILD_CONFIG_DIR}/require_js_build.js"
+      source_dir = "tmp/assets/javascripts/unoptimized"
+      destination_dir = "tmp/assets/javascripts/optimized"
+      execute_with_logging "node #{reducer_script_path} -o #{config_script_path} appDir=#{source_dir} dir=#{destination_dir} baseUrl=lib"
     end
 
   end
