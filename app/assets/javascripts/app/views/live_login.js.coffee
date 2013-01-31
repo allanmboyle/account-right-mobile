@@ -1,9 +1,12 @@
 define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $, _, Template) ->
 
-  $("body").append(_.template(Template, title : "AccountRight Live Login", type : "live"))
+  $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live Login'></div>")
   $("#live_login").on("pageshow", () -> $("#live_username").focus())
 
   class LiveLoginView extends Backbone.View
+
+    initialize: () ->
+      @$el.html(_.template(Template, title : "AccountRight Live Login", type : "live"))
 
     el: $("#live_login")
 
