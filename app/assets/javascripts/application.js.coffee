@@ -26,11 +26,11 @@ require.config(
   shim:
     backbone:
       deps: [ "underscore", "jquery" ],
-      exports: "Backbone"  #attaches "Backbone" to the window object
+      exports: "Backbone"  # Attaches "Backbone" to Window
 )
 
 require([ "require", "jquery", "backbone", "underscore" ], (require, $, Backbone, _) ->
-  # Set up the "mobileinit" handler before requiring jQuery Mobile's module
+  # Register JQueryMobile configuration
   $(document).on("mobileinit",
   () ->
     # Disable jQuery Mobile Navigation
@@ -39,5 +39,6 @@ require([ "require", "jquery", "backbone", "underscore" ], (require, $, Backbone
     $.mobile.hashListeningEnabled = false
     $.mobile.pushStateEnabled = false
   )
-  require([ "app/router", "jquerymobile" ], (AccountRightRouter) -> @router = new AccountRightRouter())
+  # JQueryMobile must be loaded prior to the Backbone Views
+  require([ "jquerymobile", "app/router" ], ($_mobile, AccountRightRouter) -> @router = new AccountRightRouter())
 )
