@@ -6,10 +6,6 @@ define([ "backbone",
          "text!./contacts_content.tmpl"], (Backbone, $, _, Contacts, LayoutTemplate, ContentTemplate) ->
 
   $("body").append("<div id='contacts' data-role='page' data-title='Contacts'></div>")
-  $("#contacts").bind("pagebeforeshow", () ->
-    $("#contacts-list").listview(autodividers: true, autodividersSelector: (li) -> $(li).find(".name").text()[0])
-    $("#contacts-list").listview("refresh")
-  )
 
   class ContactsView extends Backbone.View
 
@@ -18,6 +14,10 @@ define([ "backbone",
       @contacts = new Contacts()
       @contacts.on("reset", @render, this)
       @$el.html(_.template(LayoutTemplate))
+      @$el.bind("pagebeforeshow", () ->
+        $("#contacts-list").listview(autodividers: true, autodividersSelector: (li) -> $(li).find(".name").text()[0])
+        $("#contacts-list").listview("refresh")
+      )
 
     el: $("#contacts")
 
@@ -25,8 +25,9 @@ define([ "backbone",
       @contacts.fetch()
 
     render: () ->
-      $("#contacts-content").html(@compiledContentTemplate(contacts: @contacts,
-                                                           balanceDescription: @balanceDescription))
+      $("#contacts-content").html(
+        @compiledContentTemplate(contacts: @contacts, balanceDescription: @balanceDescription)
+      )
       $.mobile.changePage("#contacts", reverse: false, changeHash: false)
       this
 
