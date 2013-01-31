@@ -32,7 +32,7 @@ namespace(:assets) do
 
 
     task("coffeescript" => %w{ tmp/assets/javascripts/compiled node:required npm:install }) do
-      coffee_script_path = "#{NPM_DIR}/.bin/coffee"
+      coffee_script_path = "#{NPM_DIR}/coffee-script/bin/coffee"
       source_dir = APP_JAVASCRIPTS_DIR
       destination_dir = COMPILED_JAVASCRIPTS_DIR
       output = execute_with_logging "node #{coffee_script_path} --lint --compile --output #{destination_dir} #{source_dir} 2>&1"

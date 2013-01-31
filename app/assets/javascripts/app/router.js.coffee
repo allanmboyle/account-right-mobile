@@ -8,7 +8,7 @@ define([ "jquery",
   class AccountRightRouter extends Backbone.Router
 
     initialize: () ->
-      # Tells Backbone to start watching for hashchange events
+      # Start tracking hashchange events
       Backbone.history.start()
 
     routes:
