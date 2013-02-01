@@ -9,8 +9,9 @@ Runtime:
 
 Build:
 * Runtime
-* Node >= 0.8.17
-* jsl
+* Node.JS >= 0.8.17
+* jsl (optional)
+* Firefox (default acceptance browser)
 
 License
 =======
