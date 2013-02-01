@@ -1,5 +1,5 @@
 Capybara.run_server = false
-Capybara.app_host = "http://localhost:3000"
+Capybara.app_host = ENV["host"]
 
 Capybara.register_driver(:selenium_override) do |app|
   type = (ENV["driver"] &&  ENV["driver"].to_sym) || :firefox
