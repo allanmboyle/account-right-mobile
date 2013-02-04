@@ -1,5 +1,11 @@
 .idea
+*.log
+_SpecRunner.html
+grunt
+grunt-jasmine-runner
 log
 node_modules/coffeelint
+node_modules/grunt
+node_modules/grunt-jasmine-runner
 public/assets
 tmp

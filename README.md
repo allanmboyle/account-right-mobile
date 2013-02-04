@@ -10,8 +10,9 @@ Runtime:
 Build:
 * Runtime
 * Node.JS >= 0.8.17
-* jsl (optional)
-* Firefox (default acceptance browser)
+* PhantomJS >= 1.8 (unit testing dependency)
+* jsl (metrics check dependency)
+* Firefox (acceptance testing dependency - default browser)
 
 License
 =======

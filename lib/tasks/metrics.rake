@@ -5,7 +5,7 @@ namespace(:metrics) do
 
   desc "CoffeeScript metrics checks"
   task("coffeescript" => %w{ node:required npm:install }) do
-    coffeelint_script_path = NPM_DIR.join("coffeelint", "bin", "coffeelint")
+    coffeelint_script_path = AccountRightMobile::Npm.root.join("coffeelint", "bin", "coffeelint")
     coffeescript_files_dir = Rails.root.join("app", "assets", "javascripts")
     coffeelint_config_path = Rails.root.join("config", "coffeelint.json")
     output = execute_with_logging "node #{coffeelint_script_path} -f #{coffeelint_config_path} #{coffeescript_files_dir} -r -q"
