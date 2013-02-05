@@ -16,8 +16,8 @@ namespace(:jasmine) do
                                              dest_dir: SPEC_COMPILED_JAVASCRIPTS_DIR)
   end
 
-  task(:run => %w{ assets:compile:coffeescripts jasmine:compile }) do
-    execute_with_logging "node #{AccountRightMobile::Npm.root.join("grunt", "bin", "grunt")} jasmine"
+  task(:run => %w{ assets:precompile jasmine:compile }) do
+    execute_with_logging "node #{AccountRightMobile::Npm.root.join("grunt", "bin", "grunt")} -v jasmine"
   end
 
 end

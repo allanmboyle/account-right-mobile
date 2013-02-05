@@ -15,7 +15,7 @@
 require.config(
   baseUrl: "assets/lib"
   paths:
-    app: "../app"
+    app: "../app",
     jquery: "jquery-1.8.3.min",
     jquerymobile: "jquery.mobile-1.2.0.min",
     underscore: "lodash-0.10.0.min",

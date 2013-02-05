@@ -1,18 +1,20 @@
-module.exports = function(grunt) {
-    grunt.initConfig({
-        jasmine : {
-            src : 'tmp/assets/javascripts/invalid/**/*.js',
-            specs : 'tmp/spec/javascripts/**/*_spec.js',
-            helpers : 'tmp/spec/javascripts/helpers/**/*.js',
-            junit : {
-                output : 'tmp/output/spec/javascripts/'
-            }
-        }
-    });
+module.exports = function (grunt) {
+  grunt.initConfig({
+    jasmine: {
+      specs: 'tmp/spec/javascripts/**/*_spec.js',
+      amd: {
+        lib: 'vendor/assets/javascripts/lib/require-2.1.4.min.js',
+        main: 'tmp/spec/javascripts/spec_main.js'
+      },
+      helpers: [
+        'spec/javascripts/helpers/**/*.js'
+      ]
+    }
+  });
 
-    // Register tasks.
-    grunt.loadNpmTasks('grunt-jasmine-runner');
+  // Register tasks.
+  grunt.loadNpmTasks('grunt-jasmine-runner');
 
-    // Default task.
-    grunt.registerTask('default', 'lint jasmine');
+  // Default task.
+  grunt.registerTask('default', 'jasmine');
 };
