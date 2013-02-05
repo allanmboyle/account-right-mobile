@@ -1,5 +1,5 @@
 require.config(
-  baseUrl: "tmp/assets/javascripts/unoptimized/lib",
+  baseUrl: "/tmp/assets/javascripts/unoptimized/lib",
   paths:
     app: "../app",
     jquery: "jquery-1.8.3.min",

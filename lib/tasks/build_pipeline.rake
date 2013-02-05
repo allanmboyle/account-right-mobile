@@ -8,7 +8,7 @@ desc "Unit Test pipeline stage"
 task(:unit => "jasmine")
 
 desc "Commit pipeline phase"
-task(:commit => %w{clean compile metrics})
+task(:commit => %w{clean compile metrics unit})
 
 desc "Acceptance pipeline stage, e=? to target environment"
 task :acceptance do

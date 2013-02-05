@@ -8,7 +8,8 @@ module.exports = function (grunt) {
       },
       helpers: [
         'spec/javascripts/helpers/**/*.js'
-      ]
+      ],
+      runner_dir: 'tmp/spec/javascripts'
     }
   });
 
