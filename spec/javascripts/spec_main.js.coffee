@@ -14,3 +14,5 @@ require.config(
       deps: [ "underscore", "jquery" ],
       exports: "Backbone"  # Attaches "Backbone" to Window
 )
+
+require(["jquerymobile"])

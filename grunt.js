@@ -7,7 +7,8 @@ module.exports = function (grunt) {
         main: 'tmp/spec/javascripts/spec_main.js'
       },
       helpers: [
-        'spec/javascripts/helpers/**/*.js'
+        'spec/javascripts/helpers/**/*.js',
+        'tmp/spec/javascripts/helpers/**/*.js'
       ],
       runner_dir: 'tmp/spec/javascripts'
     }

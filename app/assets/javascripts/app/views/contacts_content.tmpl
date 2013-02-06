@@ -1,9 +1,9 @@
 <ul id="contacts-list" data-role="listview" data-autodividers="true">
     <% contacts.each(function(contact) { %>
-    <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c">
+    <li class="contact" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c">
         <h3 class="name"><%= contact.get('name') %></h3>
-        <p><%= contact.get('type') %></p>
-        <p class="ui-li-aside"><%= balanceDescription(contact) %></p>
+        <p class="contact-type"><%= contact.get('type') %></p>
+        <p class="ui-li-aside balance"><%= balanceDescription(contact) %></p>
     </li>
     <% }); %>
 </ul>
