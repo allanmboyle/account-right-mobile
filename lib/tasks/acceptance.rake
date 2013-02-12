@@ -9,9 +9,6 @@ def generate_acceptance_task(task_name, cucumber_target)
   end
 end
 
-desc "Acceptance pipeline stage"
-generate_acceptance_task(:acceptance, :cucumber)
-
 namespace :acceptance do
 
   desc "Exercises acceptance tests marked as wip"
