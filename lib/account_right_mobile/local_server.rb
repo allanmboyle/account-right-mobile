@@ -4,9 +4,12 @@ module AccountRightMobile
     PID_DIR = "#{Rails.root}/tmp/pids"
     LOG_DIR = "#{Rails.root}/log"
 
+    attr_writer :log
+
     def initialize(options)
       @name = options[:name]
       @port = options[:port]
+      @log = AccountRightMobile::SimpleLog.new
       @deletable_artefacts = [pid_file_path]
     end
 
@@ -16,14 +19,14 @@ module AccountRightMobile
       spawn_options = ::OS.windows? ? { new_pgroup: true } : {}
       pid = Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] }.merge(spawn_options))
       create_pid_file(pid)
-      puts "#{@name} started"
+      @log.info "#{@name} started"
     end
 
     def stop!
       raise "#{@name} not running" unless running?
       Process.kill(9, current_pid)
       @deletable_artefacts.each { |artefact| File.delete(artefact) }
-      puts "#{@name} stopped"
+      @log.info "#{@name} stopped"
     end
 
     def status

@@ -1,6 +1,6 @@
 describe AccountRightMobile::LocalServer do
-  include AccountRightMobile::ServerLifecycleUtilities
-  
+  include_context "server lifecycle utilities"
+
   class TestRackServer < AccountRightMobile::LocalServer
 
     def initialize(options)
@@ -45,6 +45,12 @@ describe AccountRightMobile::LocalServer do
         end
       end
 
+      it "should log that the server started" do
+        log.should_receive(:info).with(/started/)
+
+        server.start!
+      end
+
     end
 
     describe "when the server is already running" do
@@ -79,6 +85,12 @@ describe AccountRightMobile::LocalServer do
         AccountRightMobile::Wait.until_true!("test rack server pid is deleted") do
           !File.exists?("#{Rails.root}/tmp/pids/test_rack_server.pid")
         end
+      end
+
+      it "should log that the server has stopped" do
+        log.should_receive(:info).with(/stopped/)
+
+        server.stop!
       end
 
     end

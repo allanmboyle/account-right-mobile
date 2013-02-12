@@ -9,6 +9,9 @@ require 'rspec/autorun'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# Requires shared potentially re-used in multiple specifications
+Dir[Rails.root.join("spec/**/*_shared_examples.rb")].each {|f| require f}
+
 RSpec.configure do |config|
   # ## Mock Framework
   #

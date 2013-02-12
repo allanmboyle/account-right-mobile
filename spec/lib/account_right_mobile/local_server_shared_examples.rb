@@ -1,6 +1,5 @@
 shared_examples_for "a local server" do
-
-  include AccountRightMobile::ServerLifecycleUtilities
+  include_context "server lifecycle utilities"
 
   it "should be an AccountRightMobile::LocalServer" do
     server.should be_an(AccountRightMobile::LocalServer)

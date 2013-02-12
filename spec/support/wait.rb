@@ -32,7 +32,7 @@ module AccountRightMobile
 
     end
 
-    self.default_timeout_in_seconds = 10
+    self.default_timeout_in_seconds = 20
 
   end
 end

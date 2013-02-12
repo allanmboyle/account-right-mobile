@@ -1,5 +1,5 @@
 describe AccountRightMobile::RailsServer do
-  include AccountRightMobile::ServerLifecycleUtilities
+  include_context "server lifecycle utilities"
 
   let(:description) { "Rails Test Server" }
   let(:port) { 4003 }
