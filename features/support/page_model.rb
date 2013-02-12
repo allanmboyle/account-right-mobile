@@ -1,3 +1,3 @@
-require File.expand_path('../../acceptance/acceptance', __FILE__)
+require File.expand_path('../../acceptance/', __FILE__)
 
 World(AccountRightMobile::Acceptance::DSL)

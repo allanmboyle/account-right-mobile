@@ -25,10 +25,14 @@ group :test do
   gem 'cucumber-rails', '~> 1.3', :require => false
   gem 'selenium-webdriver', '~> 2.29'
   gem 'immutable_struct', '~> 1.1.0'
+  gem 'http_stub', '~> 0.0.4'
+  gem 'rspec-rails', '~> 2.12.0'
 
   # For debugging purposes - should never be pushed
   # gem 'ruby-debug19'
 end
+
+gem 'os', '~> 0.9.6'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

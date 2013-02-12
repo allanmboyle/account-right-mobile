@@ -8,5 +8,6 @@ log
 node_modules/coffeelint
 node_modules/grunt
 node_modules/grunt-jasmine-runner
+node_modules/nock
 public/assets
 tmp

@@ -16,19 +16,21 @@ module AccountRightMobile
           "/"
         end
 
-        def enter_valid_credentials
-          enter_credentials(username: "valid_arl_user", password: "valid_password")
+        def enter_credentials
+          @session.fill_in("live_username", :with => "arl_user")
+          @session.fill_in("live_password", :with => "arl_password")
         end
 
         def login
           @session.click_link("live_login_submit")
         end
 
-        private
+        def shows_invalid_login_message!
+          @session.has_content?("User credentials were invalid")
+        end
 
-        def enter_credentials(options)
-          @session.fill_in("live_username", :with => options[:username])
-          @session.fill_in("live_password", :with => options[:password])
+        def shows_application_unavailable_message!
+          @session.has_content?("application is temporarily unavailable")
         end
 
       end

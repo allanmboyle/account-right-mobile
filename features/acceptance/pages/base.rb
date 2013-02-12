@@ -27,12 +27,12 @@ module AccountRightMobile
           @session.visit(url)
         end
 
-        def shown?
+        def shown!
           @session.has_content?(self.class.name)
         end
 
-        def shown_without_error?
-          shown? && @session.has_no_content?("error")
+        def shown_without_error!
+          shown! && @session.has_no_content?("error")
         end
 
       end

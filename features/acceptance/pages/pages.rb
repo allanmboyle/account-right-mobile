@@ -1,5 +1,0 @@
-require File.expand_path('../base', __FILE__)
-require File.expand_path('../accountright_live_login', __FILE__)
-require File.expand_path('../customer_files', __FILE__)
-require File.expand_path('../customer_file_login', __FILE__)
-require File.expand_path('../contacts', __FILE__)
