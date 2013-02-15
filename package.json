@@ -8,7 +8,7 @@
     "coffee-script": ">= 1.4.0",
     "requirejs": ">= 2.1.4",
     "grunt": ">= 0.3.17",
-    "grunt-jasmine-runner": "git://github.com/MYOB-Technology/grunt-jasmine-runner.git#d400526eaa53f106a594f467a1e9f3d060e50a3f"
+    "grunt-jasmine-runner": "git://github.com/MYOB-Technology/grunt-jasmine-runner.git#5c96d78228499092d41dd8ae19798a1c7662b590"
   },
   "engines": {
       "node": ">=0.8.17"
