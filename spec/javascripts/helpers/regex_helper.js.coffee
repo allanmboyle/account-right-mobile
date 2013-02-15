@@ -1,4 +1,4 @@
-regex_escape = (string) ->
+regexEscape = (string) ->
   string.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&')
 
-window.regex_escape = regex_escape
+window.regexEscape = regexEscape

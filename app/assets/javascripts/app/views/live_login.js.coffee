@@ -1,4 +1,8 @@
-define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $, _, Template) ->
+define([ "backbone",
+         "jquery",
+         "underscore",
+         "text!./login.tmpl",
+         "app/models/live_user" ], (Backbone, $, _, Template, LiveUser) ->
 
   $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live Login'></div>")
 
@@ -14,11 +18,15 @@ define([ "backbone", "jquery", "underscore", "text!./login.tmpl" ], (Backbone, $
       "click #live_login_submit": "login"
 
     login: (event) ->
+      this.user().login()
       location.hash = "customer_files"
       event.preventDefault()
 
     render: () ->
       $.mobile.changePage("#live_login" , reverse: false, changeHash: false)
       this
+
+    user: () ->
+      new LiveUser(username: $("#live_username").val(), password: $("#live_password").val())
 
 )
