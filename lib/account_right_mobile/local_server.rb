@@ -25,7 +25,7 @@ module AccountRightMobile
     def stop!
       raise "#{@name} not running" unless running?
       Process.kill(9, current_pid)
-      @deletable_artefacts.each { |artefact| File.delete(artefact) }
+      FileUtils.rm_f(@deletable_artefacts)
       @log.info "#{@name} stopped"
     end
 
