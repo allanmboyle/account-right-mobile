@@ -3,10 +3,10 @@ describe("ContactsView", () ->
   ContactsView = null
   Contact = null
 
-  specRequire(this, [ "jquerymobile",
-                      "backbone",
-                      "app/views/contacts",
-                      "app/models/contact" ], (jqm, Backbone, LoadedContactsView, LoadedContact) ->
+  jasmineRequire(this, [ "jquerymobile",
+                         "backbone",
+                         "app/views/contacts",
+                         "app/models/contact" ], (jqm, Backbone, LoadedContactsView, LoadedContact) ->
     ContactsView = LoadedContactsView
     Contact = LoadedContact
   )

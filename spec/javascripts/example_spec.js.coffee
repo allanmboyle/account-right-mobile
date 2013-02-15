@@ -3,7 +3,7 @@ describe("A specification with a asynchronous beforeEach", () ->
   Contact = null
   contact = null
 
-  specRequire(this, [ "app/models/contact" ], (LoadedContact) -> Contact = LoadedContact)
+  jasmineRequire(this, [ "app/models/contact" ], (LoadedContact) -> Contact = LoadedContact)
 
   beforeEach(() ->
     contact = new Contact()

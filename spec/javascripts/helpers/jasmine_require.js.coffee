@@ -1,4 +1,4 @@
-specContext = (stubs = {}) ->
+jasmineContext = (stubs = {}) ->
   map = {}
   for value, key of stubs
     map[key] = 'stub' + key
@@ -23,11 +23,11 @@ specContext = (stubs = {}) ->
     define('stub' + key, () -> value)
   require: newRequire
 
-specRequire = (executionContext, modulesToRequire, callback) ->
+jasmineRequire = (executionContext, modulesToRequire, callback) ->
   async = new AsyncSpec(executionContext)
   async.beforeEach((done) ->
     unless (executionContext.requireContext?)
-      context = executionContext.requireContext = specContext()
+      context = executionContext.requireContext = jasmineContext()
       context.require(modulesToRequire, () ->
         callback.apply(executionContext, arguments)
         done()
@@ -36,4 +36,4 @@ specRequire = (executionContext, modulesToRequire, callback) ->
       done()
   )
 
-window.specRequire = specRequire
+window.jasmineRequire = jasmineRequire

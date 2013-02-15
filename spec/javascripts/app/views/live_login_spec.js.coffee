@@ -6,7 +6,7 @@ describe("LiveLoginView", () ->
   LiveLoginView = null
   LiveUser = null
 
-  specRequire(this, [ "jquerymobile",
+  jasmineRequire(this, [ "jquerymobile",
                       "app/views/live_login",
                       "app/models/live_user" ], (jqm, LoadedLiveLoginView, LoadedLiveUser) ->
     LiveLoginView = LoadedLiveLoginView
