@@ -2,15 +2,15 @@ module.exports = function (grunt) {
   grunt.initConfig({
     jasmine: {
       specs: 'tmp/spec/javascripts/**/*_spec.js',
-      amd: {
-        lib: 'vendor/assets/javascripts/lib/require-2.1.4.min.js',
-        main: 'tmp/spec/javascripts/spec_main.js'
-      },
       helpers: [
         'spec/javascripts/helpers/**/*.js',
         'tmp/spec/javascripts/helpers/**/*.js'
       ],
-      runner_dir: 'tmp/spec/javascripts'
+      amd: {
+        lib: 'vendor/assets/javascripts/lib/require-2.1.4.min.js',
+        main: 'tmp/spec/javascripts/spec_main.js'
+      },
+      'runner-dir': 'tmp/spec/javascripts'
     }
   });
 
