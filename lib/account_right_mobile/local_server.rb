@@ -16,15 +16,14 @@ module AccountRightMobile
     def start!
       raise "#{@name} already running" if running?
       ensure_directories_exist
-      spawn_options = ::OS.windows? ? { new_pgroup: true } : {}
-      pid = Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] }.merge(spawn_options))
+      pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
       create_pid_file(pid)
       @log.info "#{@name} started"
     end
 
     def stop!
       raise "#{@name} not running" unless running?
-      Process.kill(9, current_pid)
+      ::Process.kill_tree(9, current_pid)
       FileUtils.rm_f(@deletable_artefacts)
       @log.info "#{@name} stopped"
     end
