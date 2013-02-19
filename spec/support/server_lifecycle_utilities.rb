@@ -21,12 +21,12 @@ shared_context "server lifecycle utilities" do
   end
 
   def wait_until_stopped!
-    AccountRightMobile::Wait.until!("#{description} stops") do
+    AccountRightMobile::Wait.until_true!("#{description} stops") do
       begin
         Net::HTTP.get_response("localhost", "/", port)
-        raise "#{description} still running"
-      rescue => exc
-        # Intentionally blank
+        false
+      rescue
+        true
       end
     end
   end
