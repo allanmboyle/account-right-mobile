@@ -32,7 +32,7 @@ module AccountRightMobile
 
     end
 
-    self.default_timeout_in_seconds = 20
+    self.default_timeout_in_seconds = ENV["timeout"] ? ENV["timeout"].to_i : 20
 
   end
 end

@@ -15,6 +15,7 @@ describe AccountRightMobile::LocalServer do
 
   let(:description) { "Test Rack Server" }
   let(:port) { 4001 }
+  let(:pid_file_name) { "test_rack_server.pid" }
   let(:server) { TestRackServer.new(port: port) }
 
   describe "#start!" do
@@ -32,9 +33,7 @@ describe AccountRightMobile::LocalServer do
       it "should create a pid file for the server" do
         server.start!
 
-        AccountRightMobile::Wait.until_true!("test rack server pid created") do
-          File.exists?("#{Rails.root}/tmp/pids/test_rack_server.pid")
-        end
+        AccountRightMobile::Wait.until_true!("test rack server pid created") { pid_file_exists? }
       end
 
       it "should create a log file capturing the stdout and stderr of the server" do

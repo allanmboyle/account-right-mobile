@@ -3,6 +3,7 @@ describe AccountRightMobile::RailsServer do
 
   let(:description) { "Rails Test Server" }
   let(:port) { 4003 }
+  let(:pid_file_name) { "server.pid" }
   let(:server) { AccountRightMobile::RailsServer.new(environment: "test", port: port) }
 
   it_should_behave_like "a local server"
