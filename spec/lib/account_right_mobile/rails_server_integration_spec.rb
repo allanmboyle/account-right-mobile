@@ -12,6 +12,8 @@ describe AccountRightMobile::RailsServer do
 
     before(:each) { force_start! }
 
+    after(:each) { wait_until_stopped! } # Ensure server has completely stopped
+
     it "should delete the Rails default server pid file" do
       server.stop!
 

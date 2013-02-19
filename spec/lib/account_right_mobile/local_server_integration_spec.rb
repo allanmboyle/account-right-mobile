@@ -24,6 +24,8 @@ describe AccountRightMobile::LocalServer do
 
     describe "when the server is not running" do
 
+      after(:each) { wait_until_started! } # Ensure server has completely started
+
       it "should start the server via the provided command" do
         server.start!
 
@@ -54,7 +56,10 @@ describe AccountRightMobile::LocalServer do
 
     describe "when the server is already running" do
 
-      before(:each) { server.start! }
+      before(:each) do
+        server.start!
+        wait_until_started!
+      end
 
       it "should raise an exception indicating the server is already running" do
         lambda { server.start! }.should raise_error(/already running/)
@@ -70,7 +75,7 @@ describe AccountRightMobile::LocalServer do
 
       before(:each) { force_start! }
 
-      after(:each) { wait_until_stopped! }
+      after(:each) { wait_until_stopped! } # Ensure server has completely stopped
 
       it "should stop the server" do
         server.stop!
