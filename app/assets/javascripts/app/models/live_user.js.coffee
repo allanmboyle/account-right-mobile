@@ -8,5 +8,12 @@ define([ "backbone" ], (Backbone) ->
     }
 
     login: () ->
+      user = this
+      Backbone.ajax(
+        type: "POST"
+        url: "/live_login",
+        data: user.attributes
+        success: (response) -> user.trigger("login:success", response)
+      )
 
 )

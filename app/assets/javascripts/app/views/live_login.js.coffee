@@ -1,3 +1,4 @@
+
 define([ "backbone",
          "jquery",
          "underscore",
@@ -9,6 +10,8 @@ define([ "backbone",
   class LiveLoginView extends Backbone.View
 
     initialize: () ->
+      @user = new LiveUser()
+      @user.on("login:success", @success, this)
       @$el.html(_.template(Template, title : "AccountRight Live Login", type : "live"))
       @$el.on("pageshow", () -> $("#live_username").focus())
 
@@ -17,16 +20,19 @@ define([ "backbone",
     events: () ->
       "click #live_login_submit": "login"
 
-    login: (event) ->
-      this.user().login()
-      location.hash = "customer_files"
-      event.preventDefault()
-
     render: () ->
       $.mobile.changePage("#live_login" , reverse: false, changeHash: false)
       this
 
-    user: () ->
-      new LiveUser(username: $("#live_username").val(), password: $("#live_password").val())
+    login: (event) ->
+      @syncUser()
+      @user.login()
+      event.preventDefault()
+
+    success: (response) ->
+      location.hash = "customer_files"
+
+    syncUser: () ->
+      @user.set(username: $("#live_username").val(), password: $("#live_password").val())
 
 )

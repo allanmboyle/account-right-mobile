@@ -1,12 +1,14 @@
 describe("ContactsView", () ->
 
+  Backbone = null
   ContactsView = null
   Contact = null
 
   jasmineRequire(this, [ "jquerymobile",
                          "backbone",
                          "app/views/contacts",
-                         "app/models/contact" ], (jqm, Backbone, LoadedContactsView, LoadedContact) ->
+                         "app/models/contact" ], (jqm, LoadedBackbone, LoadedContactsView, LoadedContact) ->
+    Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
     Contact = LoadedContact
   )
@@ -36,9 +38,7 @@ describe("ContactsView", () ->
                     { name: "B Name", type: "Supplier", balance: -100.00 },
                     { name: "C Name", type: "Customer", balance: 200.00 }]
 
-        spyOn(Backbone, "sync").andCallFake((method, model, options) ->
-          options.success(response)
-        )
+        spyOn(Backbone, "sync").andCallFake((method, model, options) -> options.success(response))
 
         contactsView.update()
 
