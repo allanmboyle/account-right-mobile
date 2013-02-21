@@ -3,7 +3,8 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require File.expand_path('../lib/account_right_mobile', __FILE__)
+require File.expand_path('../lib/account_right_mobile/build', __FILE__)
+require File.expand_path('../lib/account_right_mobile/services', __FILE__)
 
 AccountRightMobile::Application.load_tasks
 

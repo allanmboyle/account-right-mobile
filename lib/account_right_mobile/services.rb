@@ -1,0 +1,5 @@
+require File.expand_path('../services/simple_log', __FILE__)
+require File.expand_path('../services/local_server', __FILE__)
+require File.expand_path('../services/rails_server', __FILE__)
+require File.expand_path('../services/oauth_stub_server', __FILE__)
+require File.expand_path('../services/oauth_stub_client', __FILE__)
