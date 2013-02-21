@@ -14,7 +14,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
   describe "#login" do
 
-    describe "when the server allows the log-in attempt" do
+    describe "when the server allows the log-in attempt for a specific user" do
 
       before(:each) { oauth_service.grant_access_for(username: live_user.username, password: live_user.password) }
 
@@ -24,7 +24,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
     end
 
-    describe "when the server denies the log-in attempt" do
+    describe "when the server denies log-in attempts" do
 
       before(:each) { oauth_service.deny_access }
 

@@ -65,7 +65,7 @@ GEM
     gherkin (2.11.6-x86-mingw32)
       json (>= 1.7.6)
     hike (1.2.1)
-    http_stub (0.1.3)
+    http_stub (0.1.4)
       immutable_struct (~> 1.1.0)
       sinatra (~> 1.3.4)
     httparty (0.10.2)
@@ -170,7 +170,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (~> 1.3)
-  http_stub (~> 0.1.3)
+  http_stub (~> 0.1.4)
   httparty (~> 0.10.2)
   immutable_struct (~> 1.1.0)
   jquery-rails
