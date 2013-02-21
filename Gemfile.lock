@@ -65,9 +65,12 @@ GEM
     gherkin (2.11.6-x86-mingw32)
       json (>= 1.7.6)
     hike (1.2.1)
-    http_stub (0.0.4)
+    http_stub (0.1.3)
       immutable_struct (~> 1.1.0)
       sinatra (~> 1.3.4)
+    httparty (0.10.2)
+      multi_json (~> 1.0)
+      multi_xml (>= 0.5.2)
     i18n (0.6.1)
     immutable_struct (1.1.0)
     journey (1.0.4)
@@ -81,6 +84,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.21)
     multi_json (1.6.1)
+    multi_xml (0.5.3)
     nokogiri (1.5.6)
     nokogiri (1.5.6-x86-mingw32)
     polyglot (0.3.3)
@@ -166,7 +170,8 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (~> 1.3)
-  http_stub (~> 0.0.4)
+  http_stub (~> 0.1.3)
+  httparty (~> 0.10.2)
   immutable_struct (~> 1.1.0)
   jquery-rails
   json

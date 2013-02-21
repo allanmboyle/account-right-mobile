@@ -1,20 +1,21 @@
-require 'http/stub/start_server_rake_task'
-Http::Stub::StartServerRakeTask.new(name: :oauth_server, port: 3002)
+require 'http_stub/start_server_rake_task'
 
-namespace :oauth_server do
+::HttpStub::StartServerRakeTask.new(name: :oauth_stub_server, port: 3002)
+
+namespace :oauth_stub_server do
 
   desc "Starts a stub oAuth server as a background process"
   task :start do
-    oauth_server.start!
+    oauth_stub_server.start!
   end
 
   desc "Stops a running stub oAuth server"
   task :stop do
-    oauth_server.stop!
+    oauth_stub_server.stop!
   end
 
-  def oauth_server
-    AccountRightMobile::OAuthServer.new(port: 3002)
+  def oauth_stub_server
+    AccountRightMobile::OAuthStubServer.new(port: 3002)
   end
 
 end

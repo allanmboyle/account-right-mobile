@@ -10,10 +10,14 @@ shared_context "server lifecycle utilities" do
     wait_until_started!
   end
 
+  alias_method :force_server_start!, :force_start!
+
   def force_stop!
     server.stop!
     wait_until_stopped!
   end
+
+  alias_method :force_server_stop!, :force_stop!
 
   def wait_until_started!
     AccountRightMobile::Wait.until_true!("#{description} starts") do
