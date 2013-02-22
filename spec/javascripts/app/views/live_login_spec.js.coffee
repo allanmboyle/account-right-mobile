@@ -42,10 +42,13 @@ describe("LiveLoginView", () ->
 
       initialActions = {}
       successSpy = null
+      failSpy = null
 
       beforeEach(() ->
         initialActions["success"] = LiveLoginView.prototype.success
+        initialActions["fail"] = LiveLoginView.prototype.fail
         successSpy = LiveLoginView.prototype.success = jasmine.createSpy()
+        failSpy = LiveLoginView.prototype.fail = jasmine.createSpy()
 
         liveLoginView = new LiveLoginView()
         liveUser = liveLoginView.user
@@ -60,6 +63,12 @@ describe("LiveLoginView", () ->
         liveUser.trigger("login:success", response)
 
         expect(successSpy).toHaveBeenCalledWith(response)
+      )
+
+      it("should cause the fail action to be invoked when the users login:fail event occurs", () ->
+        liveUser.trigger("login:fail")
+
+        expect(failSpy).toHaveBeenCalled()
       )
 
     )
@@ -125,6 +134,32 @@ describe("LiveLoginView", () ->
             expect(location.hash).toBe("#customer_files")
           )
           
+        )
+
+        describe("#fail", () ->
+
+          beforeEach(() ->
+            location.hash = "#live_login"
+          )
+
+          it("should leave the user on the customer files page", () ->
+            liveLoginView.fail()
+
+            expect(location.hash).toMatch(/^#live_login/)
+          )
+
+          it("should make the login failure popup visible", () ->
+            liveLoginView.fail()
+
+            expect($("#live_login_fail_message-popup")).toHaveClass("ui-popup-active")
+          )
+
+          it("should display a popup with a message indicating the login attempt failed", () ->
+             liveLoginView.fail()
+
+             expect($("#live_login_fail_message")).toHaveText("The username or password you entered is incorrect")
+          )
+
         )
 
       )

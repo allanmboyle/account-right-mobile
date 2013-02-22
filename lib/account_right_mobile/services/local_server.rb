@@ -18,6 +18,7 @@ module AccountRightMobile
       ensure_directories_exist
       pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
       create_pid_file(pid)
+      AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
       @log.info "#{@name} started"
     end
 
@@ -39,7 +40,7 @@ module AccountRightMobile
     private
 
     def running?
-      !current_pid.nil?
+      !!Net::HTTP.get_response("localhost", "/", @port) rescue false
     end
 
     def current_pid
@@ -52,10 +53,6 @@ module AccountRightMobile
 
     def create_pid_file(pid)
       File.open(pid_file_path, "w") { |file| file.write(pid) }
-    end
-
-    def delete_pid_file(pid)
-      File.delete(pid_file_path)
     end
 
     def log_file_path

@@ -9,7 +9,6 @@ Feature: Authenticated AccountRight Live Access
     When the user attempts to login
     Then the Customer Files page should be shown
 
-  @wip
   Scenario: Error is shown when invalid credentials are provided
     Given the user visits the AccountRight Live Login page
     And the user enters invalid login credentials

@@ -1,16 +1,12 @@
 describe AccountRight::LiveUser, "integrating with an oAuth server" do
   include_context "integration with an oAuth stub server"
 
-  before(:all) do
-    force_server_start!
-  end
+  before(:all) {  force_server_start! }
 
-  let(:oauth_service) { AccountRightMobile::OAuthStubClient.new }
+  after(:all) { force_server_stop! }
+
+  let(:oauth_service) { AccountRightMobile::OAuthStubConfigurer.new }
   let(:live_user) { AccountRight::LiveUser.new(username: "someUsername", password: "somePassword") }
-
-  after(:all) do
-    force_server_stop!
-  end
 
   describe "#login" do
 

@@ -1,5 +1,5 @@
 require File.expand_path('../../../lib/account_right_mobile/services', __FILE__)
 
 Before do
-  @oauth_service = AccountRightMobile::OAuthStubClient.new
+  @oauth_service = AccountRightMobile::OAuthStubConfigurer.new
 end

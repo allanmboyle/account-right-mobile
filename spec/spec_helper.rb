@@ -2,6 +2,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require "#{Rails.root}/lib/account_right_mobile/services"
+require "#{Rails.root}/lib/account_right_mobile/wait"
 require 'rspec/rails'
 require 'rspec/autorun'
 

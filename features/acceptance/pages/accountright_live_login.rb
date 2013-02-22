@@ -25,11 +25,13 @@ module AccountRightMobile
           @session.click_link("live_login_submit")
         end
 
-        def shows_invalid_login_message!
-          @session.has_content?("User credentials were invalid")
+        def has_invalid_login_message?
+          @session.has_css?("#live_login_fail_message-popup.ui-popup-active",
+                            text: "The username or password you entered is incorrect",
+                            visible: true)
         end
 
-        def shows_application_unavailable_message!
+        def has_application_unavailable_message?
           @session.has_content?("application is temporarily unavailable")
         end
 

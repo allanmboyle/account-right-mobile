@@ -28,9 +28,9 @@ Given /^the AccountRight Live authentication service is unavailable$/ do
 end
 
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
-  @current_page.shows_invalid_login_message!
+  @current_page.should have_invalid_login_message
 end
 
 Then /^an error should be displayed indicating application is unavailable$/ do
-  @current_page.shows_application_unavailable_message!
+  @current_page.should have_application_unavailable_message
 end

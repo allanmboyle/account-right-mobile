@@ -14,6 +14,7 @@ define([ "backbone" ], (Backbone) ->
         url: "/live_login",
         data: user.attributes
         success: (response) -> user.trigger("login:success", response)
+        error: () -> user.trigger("login:fail")
       )
 
 )

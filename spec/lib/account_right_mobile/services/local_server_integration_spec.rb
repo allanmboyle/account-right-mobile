@@ -117,16 +117,48 @@ describe AccountRightMobile::LocalServer do
 
       after(:each) { force_stop! }
 
-      it "should return :started" do
-        server.status.should eql(:started)
+      describe "and the pid file exists" do
+
+        it "should return :started" do
+          server.status.should eql(:started)
+        end
+
+      end
+
+      describe "and the pid file does not exist" do
+
+        before(:each) { force_pid_file_deletion! }
+
+        after(:each) { restore_pid_file! }
+
+        it "should return :started" do
+          server.status.should eql(:started)
+        end
+
       end
 
     end
 
     describe "when the server is not running" do
 
-      it "should return :stopped" do
-        server.status.should eql(:stopped)
+      describe "and the pid file does not exist" do
+
+        it "should return :stopped" do
+          server.status.should eql(:stopped)
+        end
+
+      end
+
+      describe "and the pid file exists" do
+
+        before(:each) { force_pid_file_creation! }
+
+        after(:each) { force_pid_file_deletion! }
+
+        it "should return :stopped" do
+          server.status.should eql(:stopped)
+        end
+
       end
 
     end
