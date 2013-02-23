@@ -24,10 +24,13 @@ end
 gem 'jquery-rails'
 
 group :test do
+  gem 'immutable_struct', '~> 1.1.0'
+
+  gem 'rspec-rails', '~> 2.12.0'
+  gem 'simplecov', '~> 0.7.1'
+
   gem 'cucumber-rails', '~> 1.3', require: false
   gem 'selenium-webdriver', '~> 2.29'
-  gem 'immutable_struct', '~> 1.1.0'
-  gem 'rspec-rails', '~> 2.12.0'
 
   # For debugging purposes - should never be pushed
   # gem 'ruby-debug19'

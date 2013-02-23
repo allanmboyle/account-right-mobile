@@ -5,7 +5,7 @@ desc "Compile pipeline stage"
 task(:compile => "assets:precompile")
 
 desc "Unit & Integration test pipeline stage"
-task(:unit => [:jasmine, :spec])
+task(:unit => [:jasmine, :coverage])
 
 desc "Commit pipeline phase"
 task(:commit => %w{clean compile metrics unit})

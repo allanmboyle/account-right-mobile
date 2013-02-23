@@ -3,6 +3,7 @@
 .node
 *.log
 _SpecRunner.html
+coverage
 grunt
 grunt-jasmine-runner
 log
