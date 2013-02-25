@@ -30,9 +30,19 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
     end
 
-    describe "when the server call fails due to an unexpected error" do
+    describe "when the server call fails as the oauth service is unavailable" do
 
       before(:each) { oauth_service.unavailable }
+
+      it "should raise an exception indicating an error occurred during the login attempt" do
+        lambda { live_user.login }.should raise_error(AccountRight::AuthenticationError)
+      end
+
+    end
+
+    describe "when the server call fails as the oauth service is mis-configured" do
+
+      before(:each) { oauth_service.misconfigure }
 
       it "should raise an exception indicating an error occurred during the login attempt" do
         lambda { live_user.login }.should raise_error(AccountRight::AuthenticationError)

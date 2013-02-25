@@ -26,6 +26,10 @@ Given /^the AccountRight Live authentication service is unavailable$/ do
   @oauth_service.unavailable
 end
 
+Given /^the AccountRight Live authentication service is mis-configured/ do
+  @oauth_service.misconfigure
+end
+
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
   @current_page.should have_invalid_login_message
 end

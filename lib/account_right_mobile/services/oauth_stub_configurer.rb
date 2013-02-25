@@ -15,6 +15,8 @@ module AccountRightMobile
 
     stub_alias "/deny_access", URI, method: :post, response: { status: 400 }
 
+    stub_alias "/misconfigure", URI, method: :post, response: { status: 401 }
+
     stub_alias "/unavailable", URI, method: :post, response: { status: 503 }
 
     def grant_access
@@ -31,6 +33,10 @@ module AccountRightMobile
 
     def deny_access
       activate!("/deny_access")
+    end
+
+    def misconfigure
+      activate!("/misconfigure")
     end
 
     def unavailable
