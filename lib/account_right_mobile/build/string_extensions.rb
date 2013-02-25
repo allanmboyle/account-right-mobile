@@ -1,14 +1,18 @@
 module AccountRightMobile
-  module StringExtensions
+  module Build
 
-    def self.included(other_mod)
-      other_mod.send(:include, InstanceMethods)
-    end
+    module StringExtensions
 
-    module InstanceMethods
+      def self.included(other_mod)
+        other_mod.send(:include, InstanceMethods)
+      end
 
-      def contains_execution_error?
-        self =~ /no such file or directory/i || self =~ /command not found/
+      module InstanceMethods
+
+        def contains_execution_error?
+          self =~ /no such file or directory/i || self =~ /command not found/
+        end
+
       end
 
     end
@@ -16,4 +20,4 @@ module AccountRightMobile
   end
 end
 
-::String.send(:include, AccountRightMobile::StringExtensions)
+::String.send(:include, AccountRightMobile::Build::StringExtensions)

@@ -5,7 +5,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
   after(:all) { force_server_stop! }
 
-  let(:oauth_service) { AccountRightMobile::OAuthStubConfigurer.new }
+  let(:oauth_service) { AccountRightMobile::Services::OAuthStubConfigurer.new }
   let(:live_user) { AccountRight::LiveUser.new(username: "someUsername", password: "somePassword") }
 
   describe "#login" do

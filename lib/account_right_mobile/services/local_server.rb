@@ -1,66 +1,70 @@
 module AccountRightMobile
-  class LocalServer
+  module Services
 
-    PID_DIR = "#{Rails.root}/tmp/pids"
-    LOG_DIR = "#{Rails.root}/log"
+    class LocalServer
 
-    attr_writer :log
+      PID_DIR = "#{Rails.root}/tmp/pids"
+      LOG_DIR = "#{Rails.root}/log"
 
-    def initialize(options)
-      @name = options[:name]
-      @port = options[:port]
-      @log = AccountRightMobile::SimpleLog.new
-      @deletable_artefacts = [pid_file_path]
-    end
+      attr_writer :log
 
-    def start!
-      raise "#{@name} already running" if running?
-      ensure_directories_exist
-      pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
-      create_pid_file(pid)
-      AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
-      @log.info "#{@name} started"
-    end
+      def initialize(options)
+        @name = options[:name]
+        @port = options[:port]
+        @log = AccountRightMobile::Services::SimpleLog.new
+        @deletable_artefacts = [pid_file_path]
+      end
 
-    def stop!
-      raise "#{@name} not running" unless running?
-      ::Process.kill_tree(9, current_pid)
-      FileUtils.rm_f(@deletable_artefacts)
-      @log.info "#{@name} stopped"
-    end
+      def start!
+        raise "#{@name} already running" if running?
+        ensure_directories_exist
+        pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
+        create_pid_file(pid)
+        AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
+        @log.info "#{@name} started"
+      end
 
-    def status
-      running? ? :started : :stopped
-    end
+      def stop!
+        raise "#{@name} not running" unless running?
+        ::Process.kill_tree(9, current_pid)
+        FileUtils.rm_f(@deletable_artefacts)
+        @log.info "#{@name} stopped"
+      end
 
-    def to_s
-      "#{@name} on port #{@port}"
-    end
+      def status
+        running? ? :started : :stopped
+      end
 
-    private
+      def to_s
+        "#{@name} on port #{@port}"
+      end
 
-    def running?
-      !!Net::HTTP.get_response("localhost", "/", @port) rescue false
-    end
+      private
 
-    def current_pid
-      File.exists?(pid_file_path) ? File.read(pid_file_path).to_i : nil
-    end
+      def running?
+        !!Net::HTTP.get_response("localhost", "/", @port) rescue false
+      end
 
-    def pid_file_path
-      File.join(PID_DIR, "#{@name}.pid")
-    end
+      def current_pid
+        File.exists?(pid_file_path) ? File.read(pid_file_path).to_i : nil
+      end
 
-    def create_pid_file(pid)
-      File.open(pid_file_path, "w") { |file| file.write(pid) }
-    end
+      def pid_file_path
+        File.join(PID_DIR, "#{@name}.pid")
+      end
 
-    def log_file_path
-      File.join(LOG_DIR, "#{@name}_console.log")
-    end
+      def create_pid_file(pid)
+        File.open(pid_file_path, "w") { |file| file.write(pid) }
+      end
 
-    def ensure_directories_exist
-      FileUtils.mkdir_p([PID_DIR, LOG_DIR])
+      def log_file_path
+        File.join(LOG_DIR, "#{@name}_console.log")
+      end
+
+      def ensure_directories_exist
+        FileUtils.mkdir_p([PID_DIR, LOG_DIR])
+      end
+
     end
 
   end

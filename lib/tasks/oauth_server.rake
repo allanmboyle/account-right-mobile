@@ -20,7 +20,7 @@ namespace :oauth_stub_server do
   end
 
   def oauth_stub_server
-    AccountRightMobile::OAuthStubServer.new(port: 3002)
+    AccountRightMobile::Services::OAuthStubServer.new(port: 3002)
   end
 
 end

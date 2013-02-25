@@ -1,7 +1,7 @@
-describe AccountRightMobile::LocalServer do
+describe AccountRightMobile::Services::LocalServer do
   include_context "server lifecycle utilities"
 
-  class TestRackServer < AccountRightMobile::LocalServer
+  class TestRackServer < AccountRightMobile::Services::LocalServer
 
     def initialize(options)
       super({ name: "test_rack_server" }.merge(options))

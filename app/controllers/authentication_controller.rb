@@ -2,7 +2,7 @@ class AuthenticationController < ApplicationController
 
   def live_login
     for_json_requests do
-      if AccountRightMobile::Application.config.authenticated_live_login
+      if AccountRightMobile::Application.config.live_login["base_uri"]
         authenticate_live_login
       else
         render :json => "", :status => 200

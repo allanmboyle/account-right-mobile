@@ -29,8 +29,8 @@ namespace(:assets) do
   namespace(:compile) do
 
     task(:coffeescripts => %w{ tmp/assets/javascripts/compiled node:required npm:install }) do
-      AccountRightMobile::CoffeeScript.compile(src_dir: APP_JAVASCRIPTS_DIR,
-                                               dest_dir: COMPILED_JAVASCRIPTS_DIR)
+      AccountRightMobile::Build::CoffeeScript.compile(src_dir: APP_JAVASCRIPTS_DIR,
+                                                      dest_dir: COMPILED_JAVASCRIPTS_DIR)
     end
 
   end
@@ -41,7 +41,7 @@ namespace(:assets) do
 
     task(:prepare => "tmp/config") do
       cp("#{CONFIG_DIR}/require_js_build.js", BUILD_CONFIG_DIR)
-      cp(AccountRightMobile::Npm.root.join("requirejs", "bin", "r.js"), BUILD_CONFIG_DIR)
+      cp(AccountRightMobile::Build::Npm.root.join("requirejs", "bin", "r.js"), BUILD_CONFIG_DIR)
     end
 
     task(:javascripts => %w{ tmp/assets/javascripts/unoptimized

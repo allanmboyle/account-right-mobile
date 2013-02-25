@@ -1,8 +1,8 @@
 shared_examples_for "a local server" do
   include_context "server lifecycle utilities"
 
-  it "should be an AccountRightMobile::LocalServer" do
-    server.should be_an(AccountRightMobile::LocalServer)
+  it "should be an AccountRightMobile::Services::LocalServer" do
+    server.should be_an(AccountRightMobile::Services::LocalServer)
   end
 
   describe "#start!" do

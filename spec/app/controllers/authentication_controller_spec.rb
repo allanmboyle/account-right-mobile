@@ -9,13 +9,11 @@ describe AuthenticationController, type: :controller do
         describe "and credentials are provided" do
 
           before(:each) do
-            @initial_authenticated_live_login_setting =
-                AccountRightMobile::Application.config.authenticated_live_login
+            @initial_live_login_base_uri_setting = AccountRightMobile::Application.config.live_login["base_uri"]
           end
 
           after(:each) do
-            AccountRightMobile::Application.config.authenticated_live_login =
-                @initial_authenticated_live_login_setting
+            AccountRightMobile::Application.config.live_login["base_uri"] = @initial_live_login_base_uri_setting
           end
 
           describe "and authentication is enabled" do
@@ -27,7 +25,7 @@ describe AuthenticationController, type: :controller do
             let(:live_user) { double("LiveUser").as_null_object }
 
             before(:each) do
-              AccountRightMobile::Application.config.authenticated_live_login = true
+              AccountRightMobile::Application.config.live_login["base_uri"] = "some uri"
 
               AccountRight::LiveUser.stub!(:new).and_return(live_user)
             end
@@ -94,7 +92,7 @@ describe AuthenticationController, type: :controller do
               {}
             end
 
-            before(:each) { AccountRightMobile::Application.config.authenticated_live_login = false }
+            before(:each) { AccountRightMobile::Application.config.live_login.delete("base_uri") }
 
             it "should respond with status of 200" do
               post_live_login

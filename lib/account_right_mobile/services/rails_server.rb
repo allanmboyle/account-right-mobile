@@ -1,23 +1,27 @@
 module AccountRightMobile
-  class RailsServer < AccountRightMobile::LocalServer
+  module Services
 
-    DEFAULT_PID_FILE_PATH = "#{PID_DIR}/server.pid"
+    class RailsServer < AccountRightMobile::Services::LocalServer
 
-    def initialize(options)
-      super(options.merge(name: "rails_#{options[:environment]}_server"))
-      @environment = options[:environment]
-    end
+      DEFAULT_PID_FILE_PATH = "#{PID_DIR}/server.pid"
 
-    def start_command
-      "rails s -e #{@environment} -p #{@port}"
-    end
+      def initialize(options)
+        super(options.merge(name: "rails_#{options[:environment]}_server"))
+        @environment = options[:environment]
+      end
 
-    def pid_file_path
-      DEFAULT_PID_FILE_PATH
-    end
+      def start_command
+        "rails s -e #{@environment} -p #{@port}"
+      end
 
-    def create_pid_file(pid)
-      # Intentionally blank as Rails creates pid file
+      def pid_file_path
+        DEFAULT_PID_FILE_PATH
+      end
+
+      def create_pid_file(pid)
+        # Intentionally blank as Rails creates pid file
+      end
+
     end
 
   end

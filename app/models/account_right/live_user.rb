@@ -3,7 +3,7 @@ module AccountRight
   class LiveUser < AccountRight::Base
     include ::HTTParty
 
-    base_uri "http://localhost:3002"
+    base_uri AccountRightMobile::Application.config.live_login["base_uri"]
 
     attr_accessor :username, :password
 
@@ -12,7 +12,8 @@ module AccountRight
     end
 
     def login
-      response = self.class.post("/oauth2/v1/authorise", body: { username: username, password: password })
+      response = self.class.post(AccountRightMobile::Application.config.live_login["path"],
+                                 body: { username: username, password: password })
       raise AccountRight::AuthenticationFailure if response.code == 400
       raise AccountRight::AuthenticationError if response.code > 400
       JSON.parse(response.body).symbolize_keys

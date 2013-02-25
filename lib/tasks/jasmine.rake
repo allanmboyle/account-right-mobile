@@ -12,8 +12,8 @@ namespace(:jasmine) do
   task(:clean) { rm_rf(SPEC_COMPILED_JAVASCRIPTS_DIR) }
 
   task(:compile => [SPEC_COMPILED_JAVASCRIPTS_DIR.to_s, "node:required", "npm:install"]) do
-    AccountRightMobile::CoffeeScript.compile(src_dir: SPEC_COFFEESCRIPTS_DIR,
-                                             dest_dir: SPEC_COMPILED_JAVASCRIPTS_DIR)
+    AccountRightMobile::Build::CoffeeScript.compile(src_dir: SPEC_COFFEESCRIPTS_DIR,
+                                                    dest_dir: SPEC_COMPILED_JAVASCRIPTS_DIR)
   end
 
   desc "Exercises Jasmine specifications"
@@ -24,7 +24,7 @@ namespace(:jasmine) do
     def generate_jasmine_spec_task(task_name, node_target)
       desc "Exercises Jasmine specifications via node target #{node_target}"
       task(task_name => %w{ jasmine:compile }) do
-        output = execute_with_logging "node #{AccountRightMobile::Npm.root.join("grunt", "bin", "grunt")} -v #{node_target}"
+        output = execute_with_logging "node #{AccountRightMobile::Build::Npm.root.join("grunt", "bin", "grunt")} -v #{node_target}"
         results_match = output.match(/\d* specs, (\d) failure/) || [nil, 0]
         fail "Jasmine specs failed" if results_match[1].to_i > 0
       end

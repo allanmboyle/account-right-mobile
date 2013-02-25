@@ -55,6 +55,7 @@ GEM
       capybara (>= 1.1.2)
       cucumber (>= 1.1.8)
       nokogiri (>= 1.5.0)
+    deep_merge (1.0.0)
     diff-lcs (1.1.3)
     erubis (2.7.0)
     execjs (1.4.0)
@@ -175,6 +176,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (~> 1.3)
+  deep_merge (~> 1.0.0)
   http_stub (~> 0.2.1)
   httparty (~> 0.10.2)
   immutable_struct (~> 1.1.0)

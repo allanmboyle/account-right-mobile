@@ -1,6 +1,6 @@
 require 'simplecov'
 SimpleCov.start "rails" do
-  minimum_coverage 93.9
+  minimum_coverage 94.7
   refuse_coverage_drop
 end if ENV["coverage"]
 

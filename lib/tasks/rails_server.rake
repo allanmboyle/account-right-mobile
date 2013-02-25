@@ -16,7 +16,7 @@ namespace :rails_server do
   end
 
   def rails_server
-    AccountRightMobile::RailsServer.new(environment: ENV["e"] || "test", port: 3001)
+    AccountRightMobile::Services::RailsServer.new(environment: ENV["e"] || "test", port: 3001)
   end
 
 end

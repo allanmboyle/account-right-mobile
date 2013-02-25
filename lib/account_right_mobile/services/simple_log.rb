@@ -1,9 +1,11 @@
 module AccountRightMobile
-  class SimpleLog
+  module Services
+    class SimpleLog
 
-    def info(message)
-      puts message
+      def info(message)
+        puts message
+      end
+
     end
-
   end
 end
