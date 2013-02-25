@@ -2,14 +2,22 @@ class AuthenticationController < ApplicationController
 
   def live_login
     for_json_requests do
-      live_user = AccountRight::LiveUser.new(username: params[:username], password: params[:password])
-      begin
-        render :json => live_user.login.to_json
-      rescue AccountRight::AuthenticationFailure
-        render :json => "", :status => 400
-      rescue AccountRight::AuthenticationError
-        render :json => "", :status => 500
+      if AccountRightMobile::Application.config.authenticated_live_login
+        authenticate_live_login
+      else
+        render :json => "", :status => 200
       end
+    end
+  end
+
+  def authenticate_live_login
+    live_user = AccountRight::LiveUser.new(username: params[:username], password: params[:password])
+    begin
+      render :json => live_user.login.to_json
+    rescue AccountRight::AuthenticationFailure
+      render :json => "", :status => 400
+    rescue AccountRight::AuthenticationError
+      render :json => "", :status => 500
     end
   end
 
