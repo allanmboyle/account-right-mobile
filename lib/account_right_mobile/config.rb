@@ -14,11 +14,6 @@ module AccountRightMobile
         environment_settings.deeper_merge(default_settings)
       end
 
-      def merge_into_rails_config!
-        settings = self.load
-        settings.each { |key, value| AccountRightMobile::Application.config.send("#{key}=".to_sym, value) }
-      end
-      
     end
 
   end

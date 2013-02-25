@@ -1,4 +1,4 @@
-describe AccountRightMobile::Config, "effects on the Rails configuration" do
+describe "config_customizations initializer" do
 
   it "should alter the Rails configuration so that it includes the top level settings from the custom configuration" do
     expected_test_live_login_settings = { "base_uri" => "http://localhost:3002",

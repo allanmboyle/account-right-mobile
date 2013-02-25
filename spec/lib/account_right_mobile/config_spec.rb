@@ -99,18 +99,4 @@ describe AccountRightMobile::Config do
 
   end
 
-  describe "#merge_into_rails_config!" do
-
-    it "should include in the Rails configuration the top level settings from the custom configuration" do
-      AccountRightMobile::Application.config.should_receive(:key1=).with("value1")
-      AccountRightMobile::Application.config.should_receive(:key2=).with({ "nestedkey1" => "nestedvalue1",
-                                                                           "nestedkey2" => "nestedvalue2.2",
-                                                                           "nestedkey3" => "nestedvalue3" })
-      AccountRightMobile::Application.config.should_receive(:key3=).with("value3")
-
-      AccountRightMobile::Config.merge_into_rails_config!
-    end
-
-  end
-
 end

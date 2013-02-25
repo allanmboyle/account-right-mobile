@@ -1,19 +1,23 @@
+module Jasmine
+
+  COFFEESCRIPTS_DIR = "#{Rails.root}/spec/javascripts"
+  COMPILED_JAVASCRIPTS_DIR = "#{Rails.root}/tmp/spec/javascripts"
+
+end
+
 desc "Exercises Jasmine specifications"
 task(:jasmine => %w{ jasmine:spec })
 
 namespace(:jasmine) do
 
-  SPEC_COFFEESCRIPTS_DIR = Rails.root.join("spec", "javascripts")
-  SPEC_COMPILED_JAVASCRIPTS_DIR = Rails.root.join("tmp", "spec", "javascripts")
-
-  directory SPEC_COMPILED_JAVASCRIPTS_DIR.to_s
+  directory Jasmine::COMPILED_JAVASCRIPTS_DIR
 
   desc "Deletes generated Jasmine artifacts"
-  task(:clean) { rm_rf(SPEC_COMPILED_JAVASCRIPTS_DIR) }
+  task(:clean) { rm_rf(Jasmine::COMPILED_JAVASCRIPTS_DIR) }
 
-  task(:compile => [SPEC_COMPILED_JAVASCRIPTS_DIR.to_s, "node:required", "npm:install"]) do
-    AccountRightMobile::Build::CoffeeScript.compile(src_dir: SPEC_COFFEESCRIPTS_DIR,
-                                                    dest_dir: SPEC_COMPILED_JAVASCRIPTS_DIR)
+  task(:compile => [Jasmine::COMPILED_JAVASCRIPTS_DIR, "node:required", "npm:install"]) do
+    AccountRightMobile::Build::CoffeeScript.compile(src_dir: Jasmine::COFFEESCRIPTS_DIR,
+                                                    dest_dir: Jasmine::COMPILED_JAVASCRIPTS_DIR)
   end
 
   desc "Exercises Jasmine specifications"

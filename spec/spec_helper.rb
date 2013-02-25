@@ -1,8 +1,4 @@
-require 'simplecov'
-SimpleCov.start "rails" do
-  minimum_coverage 94.7
-  refuse_coverage_drop
-end if ENV["coverage"]
+require File.expand_path("../simplecov_helper", __FILE__)
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'

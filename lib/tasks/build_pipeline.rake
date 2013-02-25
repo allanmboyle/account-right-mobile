@@ -1,5 +1,5 @@
 desc "Deletes generated artifacts"
-task(:clean => %w{ assets:clean jasmine:clean })
+task(:clean => %w{ assets:clean jasmine:clean coverage:clean })
 
 desc "Compile pipeline stage"
 task(:compile => "assets:precompile")
