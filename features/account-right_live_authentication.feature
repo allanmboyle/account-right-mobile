@@ -16,7 +16,6 @@ Feature: Authenticated AccountRight Live Access
     Then the AccountRight Live Login page should be shown
     And an error should be displayed indicating the provided credentials were invalid
 
-  @wip
   Scenario: Error is shown when authentication provider is unavailable
     Given the AccountRight Live authentication service is unavailable
     And the user visits the AccountRight Live Login page

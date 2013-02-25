@@ -14,7 +14,9 @@ define([ "backbone" ], (Backbone) ->
         url: "/live_login",
         data: user.attributes
         success: (response) -> user.trigger("login:success", response)
-        error: () -> user.trigger("login:fail")
+        error: (jqXHR) ->
+          eventToTrigger = if jqXHR.status == 400 then "fail" else "error"
+          user.trigger("login:#{eventToTrigger}")
       )
 
 )

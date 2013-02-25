@@ -10,8 +10,12 @@ namespace :rails_server do
     rails_server.stop!
   end
 
+  desc "Displays the status of a Rails server process"
+  task :status do
+    puts "rails server is #{rails_server.status}"
+  end
+
   def rails_server
-    ENV["app_host"] = "localhost:3001"
     AccountRightMobile::RailsServer.new(environment: ENV["e"] || "test", port: 3001)
   end
 

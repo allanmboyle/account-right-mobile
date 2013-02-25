@@ -14,6 +14,11 @@ namespace :oauth_stub_server do
     oauth_stub_server.stop!
   end
 
+  desc "Displays the status of a stub oAuth server process"
+  task :status do
+    puts "oauth_stub_server is #{oauth_stub_server.status}"
+  end
+
   def oauth_stub_server
     AccountRightMobile::OAuthStubServer.new(port: 3002)
   end

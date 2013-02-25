@@ -24,8 +24,18 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
       before(:each) { oauth_service.deny_access }
 
-      it "should raise an exception indicating the credentials were invalid" do
-        lambda { live_user.login }.should raise_error("Invalid credentials")
+      it "should raise an exception indicating the login failed" do
+        lambda { live_user.login }.should raise_error(AccountRight::AuthenticationFailure)
+      end
+
+    end
+
+    describe "when the server call fails due to an unexpected error" do
+
+      before(:each) { oauth_service.unavailable }
+
+      it "should raise an exception indicating an error occurred during the login attempt" do
+        lambda { live_user.login }.should raise_error(AccountRight::AuthenticationError)
       end
 
     end

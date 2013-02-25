@@ -47,7 +47,7 @@ describe("LiveUser", () ->
     describe("when the login is unsuccessful", () ->
 
       beforeEach(() ->
-        spyOn(Backbone, "ajax").andCallFake((options) -> options.error())
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 400))
       )
 
       it("should trigger a login:fail event", () ->
@@ -56,6 +56,22 @@ describe("LiveUser", () ->
         liveUser.login()
 
         expect(liveUser.trigger).toHaveBeenCalledWith("login:fail")
+      )
+
+    )
+
+    describe("when the login fails due to an unexpected error", () ->
+
+      beforeEach(() ->
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 500))
+      )
+
+      it("should trigger a login:error event", () ->
+        spyOn(liveUser, "trigger")
+
+        liveUser.login()
+
+        expect(liveUser.trigger).toHaveBeenCalledWith("login:error")
       )
 
     )

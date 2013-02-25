@@ -5,8 +5,10 @@ class AuthenticationController < ApplicationController
       live_user = AccountRight::LiveUser.new(username: params[:username], password: params[:password])
       begin
         render :json => live_user.login.to_json
-      rescue
+      rescue AccountRight::AuthenticationFailure
         render :json => "", :status => 400
+      rescue AccountRight::AuthenticationError
+        render :json => "", :status => 500
       end
     end
   end

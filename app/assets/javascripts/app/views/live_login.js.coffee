@@ -12,6 +12,7 @@ define([ "backbone",
       @user = new LiveUser()
       @user.on("login:success", @success, this)
       @user.on("login:fail", @fail, this)
+      @user.on("login:error", @error, this)
       @$el.html(_.template(Template, title : "AccountRight Live Login", type : "live"))
       @$el.on("pageshow", () -> $("#live_username").focus())
 
@@ -34,6 +35,9 @@ define([ "backbone",
 
     fail: () ->
       $("#live_login_fail_message").popup().popup("open")
+
+    error: () ->
+      $("#live_login_error_message").popup().popup("open")
 
     syncUser: () ->
       @user.set(username: $("#live_username").val(), password: $("#live_password").val())

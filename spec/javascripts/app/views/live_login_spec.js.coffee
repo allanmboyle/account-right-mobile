@@ -43,12 +43,15 @@ describe("LiveLoginView", () ->
       initialActions = {}
       successSpy = null
       failSpy = null
+      errorSpy = null
 
       beforeEach(() ->
         initialActions["success"] = LiveLoginView.prototype.success
         initialActions["fail"] = LiveLoginView.prototype.fail
+        initialActions["error"] = LiveLoginView.prototype.error
         successSpy = LiveLoginView.prototype.success = jasmine.createSpy()
         failSpy = LiveLoginView.prototype.fail = jasmine.createSpy()
+        errorSpy = LiveLoginView.prototype.error = jasmine.createSpy()
 
         liveLoginView = new LiveLoginView()
         liveUser = liveLoginView.user
@@ -69,6 +72,12 @@ describe("LiveLoginView", () ->
         liveUser.trigger("login:fail")
 
         expect(failSpy).toHaveBeenCalled()
+      )
+
+      it("should cause the error action to be invoked when the users login:error event occurs", () ->
+        liveUser.trigger("login:error")
+
+        expect(errorSpy).toHaveBeenCalled()
       )
 
     )
@@ -158,6 +167,32 @@ describe("LiveLoginView", () ->
              liveLoginView.fail()
 
              expect($("#live_login_fail_message")).toHaveText("The username or password you entered is incorrect")
+          )
+
+        )
+
+        describe("#error", () ->
+
+          beforeEach(() ->
+            location.hash = "#live_login"
+          )
+
+          it("should leave the user on the customer files page", () ->
+            liveLoginView.error()
+
+            expect(location.hash).toMatch(/^#live_login/)
+          )
+
+          it("should make the login error popup visible", () ->
+            liveLoginView.error()
+
+            expect($("#live_login_error_message-popup")).toHaveClass("ui-popup-active")
+          )
+
+          it("should display a popup with a message indicating an error occurred during the login attempt", () ->
+             liveLoginView.error()
+
+             expect($("#live_login_error_message")).toHaveText("We can't confirm your details at the moment, try again shortly")
           )
 
         )

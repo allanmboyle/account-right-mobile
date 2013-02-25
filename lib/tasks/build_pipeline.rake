@@ -11,4 +11,4 @@ desc "Commit pipeline phase"
 task(:commit => %w{clean compile metrics unit})
 
 desc "Acceptance pipeline stage"
-generate_acceptance_task(:acceptance, :cucumber)
+task(:acceptance => "acceptance:with_servers:ok")

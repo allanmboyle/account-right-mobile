@@ -47,13 +47,27 @@ describe AuthenticationController, type: :controller do
           describe "when the live user login is unsuccessful" do
 
             before(:each) do
-              live_user.stub!(:login).and_raise("Invalid credentials")
+              live_user.stub!(:login).and_raise(AccountRight::AuthenticationFailure)
             end
 
             it "should respond with a status of 400" do
               post_live_login
 
               response.status.should eql(400)
+            end
+
+          end
+
+          describe "when an error occurs during the live user login" do
+
+            before(:each) do
+              live_user.stub!(:login).and_raise(AccountRight::AuthenticationError)
+            end
+
+            it "should respond with a status of 500" do
+              post_live_login
+
+              response.status.should eql(500)
             end
 
           end

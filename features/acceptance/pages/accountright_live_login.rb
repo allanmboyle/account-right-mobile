@@ -32,7 +32,9 @@ module AccountRightMobile
         end
 
         def has_application_unavailable_message?
-          @session.has_content?("application is temporarily unavailable")
+          @session.has_css?("#live_login_error_message-popup.ui-popup-active",
+                            text: "We can't confirm your details at the moment, try again shortly",
+                            visible: true)
         end
 
       end
