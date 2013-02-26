@@ -22,7 +22,7 @@ module AccountRightMobile
         end
 
         def login
-          @session.click_link("customer_file_login_submit")
+          @session.click_button("customer_file_login_submit")
         end
 
       end

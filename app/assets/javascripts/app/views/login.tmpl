@@ -1,9 +1,10 @@
-<div data-role="header"><h1><%= title %></h1></div>
-<div data-role="content">
-    <fieldset data-role="controlgroup">
-        <label for="<%= type %>_username" class="ui-hidden-accessible">Username</label><input id="<%= type %>_username" type="text" name="username" placeholder="Username"/>
+<div data-role="header" class="myob_header"><img src="/assets/Logo_Myob.png"><img src="/assets/Contacts.png"></div>
+<div data-role="content" class="myob">
+    SIMON AINT  'EREG no more!
+    <fieldset data-role="controlgroup" data-theme="a">
+        <label for="<%= type %>_username" class="ui-hidden-accessible">Username</label><input data-theme="b" id="<%= type %>_username" type="text" name="username" placeholder="Username"/>
         <label for="<%= type %>_password" class="ui-hidden-accessible">Password</label><input id="<%= type %>_password" type="password" name="password" placeholder="Password"/>
-        <a id="<%= type %>_login_submit" data-role="button" href="#">Login</a>
+        <input type="button" data-theme="a" id="<%= type %>_login_submit" data-role="button" value="Login"/>
         <div id="<%= type %>_login_fail_message" data-role="popup" data-overlay-theme="a">
             <p>The username or password you entered is incorrect</p>
         </div>

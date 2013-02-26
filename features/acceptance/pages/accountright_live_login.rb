@@ -22,7 +22,7 @@ module AccountRightMobile
         end
 
         def login
-          @session.click_link("live_login_submit")
+          @session.click_button("live_login_submit")
         end
 
         def has_invalid_login_message?
