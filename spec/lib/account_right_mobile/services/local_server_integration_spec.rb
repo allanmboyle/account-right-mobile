@@ -61,8 +61,10 @@ describe AccountRightMobile::Services::LocalServer do
         wait_until_started!
       end
 
-      it "should raise an exception indicating the server is already running" do
-        lambda { server.start! }.should raise_error(/already running/)
+      it "should log that the server is already running" do
+        log.should_receive(:info).with(/already running/)
+
+        server.start!
       end
 
     end
@@ -101,8 +103,10 @@ describe AccountRightMobile::Services::LocalServer do
 
     describe "when the server is not running" do
 
-      it "should raise an exception indicating the server is not running" do
-        lambda { server.stop! }.should raise_error(/not running/)
+      it "should log that the server is not running" do
+        log.should_receive(:info).with(/not running/)
+
+        server.stop!
       end
 
     end

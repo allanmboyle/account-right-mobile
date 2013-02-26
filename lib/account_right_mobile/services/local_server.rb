@@ -16,19 +16,25 @@ module AccountRightMobile
       end
 
       def start!
-        raise "#{@name} already running" if running?
-        ensure_directories_exist
-        pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
-        create_pid_file(pid)
-        AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
-        @log.info "#{@name} started"
+        if running?
+          @log.info "#{@name} already running"
+        else
+          ensure_directories_exist
+          pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
+          create_pid_file(pid)
+          AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
+          @log.info "#{@name} started"
+        end
       end
 
       def stop!
-        raise "#{@name} not running" unless running?
-        ::Process.kill_tree(9, current_pid)
-        FileUtils.rm_f(@deletable_artefacts)
-        @log.info "#{@name} stopped"
+        if running?
+          ::Process.kill_tree(9, current_pid)
+          FileUtils.rm_f(@deletable_artefacts)
+          @log.info "#{@name} stopped"
+        else
+          @log.info "#{@name} not running"
+        end
       end
 
       def status
