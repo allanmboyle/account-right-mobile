@@ -8,4 +8,6 @@ require File.expand_path('../lib/account_right_mobile/services', __FILE__)
 
 AccountRightMobile::Application.load_tasks
 
-task :default => [:commit, :acceptance]
+task :default => [:commit, :acceptance] do
+  Rake::Task["assets:clean"].execute
+end
