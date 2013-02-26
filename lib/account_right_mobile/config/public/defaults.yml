@@ -1,3 +1,4 @@
 live_login:
-  path: /oauth2/v1/authorise
+  base_uri: http://localhost:3002
   grant_type: password
+  path: /oauth2/v1/authorise
