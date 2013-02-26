@@ -14,6 +14,16 @@ Build:
 * jsl (metrics check dependency)
 * Firefox (acceptance testing dependency - default browser)
 
+Simon's Command Cheat Sheet
+===========================
+rake acceptance:ok
+rake assets:clean
+rake servers:stop
+rake servers:start
+rake commit acceptance:ok
+http://localhost:3001
+http://localhost:3002
+
 License
 =======
 
