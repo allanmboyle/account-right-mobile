@@ -1,3 +1,4 @@
+source ENV['GEMFURY_URL']
 source 'http://rubygems.org'
 
 ruby '1.9.3'
@@ -7,8 +8,9 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'json'
+gem 'account-right-mobile-configuration', '0.0.1'
 gem 'deep_merge', '~> 1.0.0', :require => 'deep_merge/rails_compat'
+gem 'json'
 
 # Gems used only for assets and not required
 # in production environments by default.
