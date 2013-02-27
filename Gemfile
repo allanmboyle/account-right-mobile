@@ -1,4 +1,4 @@
-source ENV['GEMFURY_URL']
+source ENV['GEMFURY_URL'] if ENV['GEMFURY_URL']
 source 'http://rubygems.org'
 
 ruby '1.9.3'
