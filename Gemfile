@@ -8,8 +8,8 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'account-right-mobile-configuration', '0.0.1'
-gem 'deep_merge', '~> 1.0.0', :require => 'deep_merge/rails_compat'
+gem 'account-right-mobile-configuration', '0.0.1' if ENV['GEMFURY_URL']
+gem 'deep_merge', '~> 1.0.0', require: 'deep_merge/rails_compat'
 gem 'json'
 
 # Gems used only for assets and not required
@@ -29,7 +29,7 @@ gem 'jquery-rails'
 group :test do
   gem 'immutable_struct', '~> 1.1.0'
 
-  gem 'rspec-rails', '~> 2.12.0'
+  gem 'rspec-rails', '~> 2.13.0'
   gem 'simplecov', '~> 0.7.1'
 
   gem 'cucumber-rails', '~> 1.3', require: false

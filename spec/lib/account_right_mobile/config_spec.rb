@@ -13,111 +13,112 @@ describe AccountRightMobile::Config do
   end
 
   let(:environment) { "test" }
-  let(:default_file_path) { "#{Rails.root}/lib/account_right_mobile/config/public/defaults.yml" }
-  let(:environment_file_path) { "#{Rails.root}/lib/account_right_mobile/config/public/#{environment}.yml" }
+  let(:default_file_path) { "#{Rails.root}/lib/account_right_mobile/config/defaults.yml" }
+  let(:configuration_gem_installed) { defined? AccountRightMobileConfiguration::Configuration }
 
   before(:each) do
     Rails.stub!(:env).and_return(environment)
-
-    File.stub!(:exists?).with(default_file_path).and_return(true)
-    File.stub!(:exists?).with(environment_file_path).and_return(true)
     YAML.stub!(:load_file).with(default_file_path).and_return(default_settings)
-    YAML.stub!(:load_file).with(environment_file_path).and_return(environment_settings)
   end
 
   describe "#load" do
 
-    describe "when the Rails environment is development" do
-
-      let(:environment) { "development" }
-
-      it "should load the development yaml file from a publicly accessible directory" do
-        YAML.should_receive(:load_file).with(environment_file_path)
-
-        AccountRightMobile::Config.load
-      end
-
-    end
-
-    describe "when the Rails environment is test" do
-
-      let(:environment) { "test" }
-
-      it "should load the test yaml file from a publicly accessible directory" do
-        YAML.should_receive(:load_file).with(environment_file_path)
-
-        AccountRightMobile::Config.load
-      end
-
-    end
-
-    describe "when the Rails environment is production" do
-
-      let(:environment) { "production" }
-      let(:environment_file_path) { "#{Rails.root}/lib/account_right_mobile/config/private/production.yml" }
-
-      it "should load the production yaml file from a privately accessible directory" do
-        YAML.should_receive(:load_file).with(environment_file_path)
-
-        AccountRightMobile::Config.load
-      end
-
-    end
-
-    describe "when the environment file is empty" do
-
-      before(:each) { YAML.stub!(:load_file).with(environment_file_path).and_return(false) }
-
-      it "should return the default settings" do
-        AccountRightMobile::Config.load.should eql(default_settings)
-      end
-
-    end
-
-    describe "when the environment file does not exist" do
-
-      before(:each) { File.stub!(:exists?).with(environment_file_path).and_return(false) }
-
-      it "should return the default settings" do
-        AccountRightMobile::Config.load.should eql(default_settings)
-      end
-
-    end
-
-    describe "when the default file is empty" do
+    describe "when the configuration gem has been installed" do
 
       before(:each) do
-        YAML.stub!(:load_file).with(default_file_path).and_return(false)
+        module AccountRightMobileConfiguration
+          class Configuration
+          end
+        end unless configuration_gem_installed
+
+        AccountRightMobileConfiguration::Configuration.stub!(:load_for).and_return(environment_settings)
       end
 
-      it "should return the environment specific settings" do
-        AccountRightMobile::Config.load.should include(environment_settings)
+      after(:each) do
+        Object.send(:remove_const, :AccountRightMobileConfiguration) unless configuration_gem_installed
+      end
+
+      describe "and the configuration gem returns settings" do
+
+        it "should return a hash that contains default settings" do
+          AccountRightMobile::Config.load.should include("key1" => "value1")
+        end
+
+        it "should return a hash that contains the configuration gems settings" do
+          AccountRightMobile::Config.load.should include("key3" => "value3")
+        end
+
+        it "should override the default settings with configuration gems settings" do
+          AccountRightMobile::Config.load.should include("key2" => { "nestedkey1" => "nestedvalue1",
+                                                                     "nestedkey2" => "nestedvalue2.2",
+                                                                     "nestedkey3" => "nestedvalue3" })
+        end
+
+      end
+
+      describe "when the configuration gem returns empty settings" do
+
+        before(:each) { AccountRightMobileConfiguration::Configuration.stub!(:load_for).and_return({}) }
+
+        it "should return the default settings" do
+          AccountRightMobile::Config.load.should eql(default_settings)
+        end
+
+      end
+
+      describe "when the Rails environment is development" do
+
+        let(:environment) { "development" }
+
+        it "should load the development environments settings from the configuration gem" do
+          AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
+
+          AccountRightMobile::Config.load
+        end
+
+      end
+
+      describe "when the Rails environment is test" do
+
+        let(:environment) { "test" }
+
+        it "should load the test environments settings from the configuration gem" do
+          AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
+
+          AccountRightMobile::Config.load
+        end
+
+      end
+
+      describe "when the Rails environment is production" do
+
+        let(:environment) { "production" }
+
+        it "should load the production environments settings from the configuration gem" do
+          AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
+
+          AccountRightMobile::Config.load
+        end
+
       end
 
     end
 
-    describe "when the default file does not exist" do
+    describe "when the configuration gem has not been installed" do
 
-      before(:each) { File.stub!(:exists?).with(default_file_path).and_return(false) }
-
-      it "should return the environment settings" do
-        AccountRightMobile::Config.load.should eql(environment_settings)
+      before(:each) do
+        @initial_configuration_module = configuration_gem_installed ? ::AccountRightMobileConfiguration : nil
+        Object.send(:remove_const, :AccountRightMobileConfiguration) if configuration_gem_installed
       end
 
-    end
+      after(:each) do
+        ::AccountRightMobileConfiguration = @initial_configuration_module if configuration_gem_installed
+      end
 
-    it "should return a hash that contains default settings" do
-      AccountRightMobile::Config.load.should include("key1" => "value1")
-    end
+      it "should return the default settings" do
+        AccountRightMobile::Config.load.should eql(default_settings)
+      end
 
-    it "should return a hash that contains environment specific settings" do
-      AccountRightMobile::Config.load.should include("key3" => "value3")
-    end
-
-    it "should override the default settings with environment specific settings" do
-      AccountRightMobile::Config.load.should include("key2" => { "nestedkey1" => "nestedvalue1",
-                                                                 "nestedkey2" => "nestedvalue2.2",
-                                                                 "nestedkey3" => "nestedvalue3" })
     end
 
   end
