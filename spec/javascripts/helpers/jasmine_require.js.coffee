@@ -28,9 +28,12 @@ jasmineRequire = (executionContext, modulesToRequire, callback) ->
   async.beforeEach((done) ->
     unless (executionContext.requireContext?)
       context = executionContext.requireContext = jasmineContext()
+      context.require([ "jquery" ], ($) ->
+        $(document).on("mobileinit", () -> done())
+      )
       context.require(modulesToRequire, () ->
         callback.apply(executionContext, arguments)
-        done()
+        context.require([ "jquerymobile" ])
       )
     else
       done()

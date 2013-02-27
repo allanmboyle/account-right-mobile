@@ -7,10 +7,9 @@ describe("LiveLoginView", () ->
   LiveLoginView = null
   LiveUser = null
 
-  jasmineRequire(this, [ "jquerymobile",
-                         "underscore",
+  jasmineRequire(this, [ "underscore",
                          "app/views/live_login",
-                         "app/models/live_user" ], (jqm, Underscore, LoadedLiveLoginView, LoadedLiveUser) ->
+                         "app/models/live_user" ], (Underscore, LoadedLiveLoginView, LoadedLiveUser) ->
     _ = Underscore
     LiveLoginView = LoadedLiveLoginView
     LiveUser = LoadedLiveUser

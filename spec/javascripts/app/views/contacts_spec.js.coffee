@@ -4,10 +4,9 @@ describe("ContactsView", () ->
   ContactsView = null
   Contact = null
 
-  jasmineRequire(this, [ "jquerymobile",
-                         "backbone",
+  jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
-                         "app/models/contact" ], (jqm, LoadedBackbone, LoadedContactsView, LoadedContact) ->
+                         "app/models/contact" ], (LoadedBackbone, LoadedContactsView, LoadedContact) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
     Contact = LoadedContact
