@@ -8,7 +8,7 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'account-right-mobile-configuration', '0.0.2' if ENV['GEMFURY_URL']
+gem 'account-right-mobile-configuration', '0.0.3' if ENV['GEMFURY_URL']
 gem 'deep_merge', '~> 1.0.0', require: 'deep_merge/rails_compat'
 gem 'json'
 
