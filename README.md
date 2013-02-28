@@ -25,6 +25,7 @@ rake acceptance:ok			<--- Run without restarting the servers
 rake assets:clean
 rake servers:stop
 rake servers:start
+rails s 					<--- use this to start the servers in test mode so no caching will occur
 rake commit acceptance:ok
 http://127.0.0.1:8888/tmp/spec/javascripts/_SpecRunner.html
 http://localhost:3002/stubs/aliases
