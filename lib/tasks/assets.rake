@@ -49,6 +49,7 @@ namespace(:assets) do
                              node:required
                              npm:install
                              assets:optimize:prepare }) do
+      puts "**** GEMFURY_URL: #{ENV['GEMFURY_URL']}"
       cp_r("#{COMPILED_JAVASCRIPTS_DIR}/.", UNOPTIMIZED_JAVASCRIPTS_DIR)
       cp_r_preserving_directory_structure(Dir.glob("#{APP_JAVASCRIPTS_DIR}/**/*.tmpl"),
                                           replace_dir: APP_JAVASCRIPTS_DIR, with_dir: UNOPTIMIZED_JAVASCRIPTS_DIR)
