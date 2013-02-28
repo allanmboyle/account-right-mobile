@@ -5,14 +5,27 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
   after(:all) { force_server_stop! }
 
+  let(:client_id) { "some_client_id" }
+  let(:client_secret) { "some_client_secret" }
   let(:oauth_service) { AccountRightMobile::Services::OAuthStubConfigurer.new }
-  let(:live_user) { AccountRight::LiveUser.new(username: "someUsername", password: "somePassword") }
+  let(:live_user) { AccountRight::LiveUser.new(username: "some_username", password: "some_password") }
+
+  before(:each) do
+    @original_live_login_config = AccountRightMobile::Application.config.live_login
+    AccountRightMobile::Application.config.live_login["client_id"] = client_id
+    AccountRightMobile::Application.config.live_login["client_secret"] = client_secret
+  end
+
+  after(:each) { AccountRightMobile::Application.config.live_login = @original_live_login_config }
 
   describe "#login" do
 
-    describe "when the server allows the log-in attempt for a specific user" do
+    describe "when the server allows the log-in attempt for a given client and user" do
 
-      before(:each) { oauth_service.grant_access_for(username: live_user.username, password: live_user.password) }
+      before(:each) do
+        oauth_service.grant_access_for(client_id: client_id, client_secret: client_secret,
+                                       username: live_user.username, password: live_user.password)
+      end
 
       it "should return the access and refresh token returned by the oAuth service" do
         live_user.login.should eql(access_token: "test_access_token", refresh_token: "test_refresh_token")

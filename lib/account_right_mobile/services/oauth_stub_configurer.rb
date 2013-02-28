@@ -4,7 +4,7 @@ module AccountRightMobile
     class OAuthStubConfigurer
       include ::HttpStub::Configurer
 
-      URI = "/oauth2/v1/authorise"
+      URI = "/oauth2/v1/authorize"
 
       host "localhost"
       port 3002
