@@ -1,3 +1,5 @@
+puts "**** GEMFURY_URL: #{ENV['GEMFURY_URL']}"
+
 source ENV['GEMFURY_URL'] if ENV['GEMFURY_URL']
 source 'http://rubygems.org'
 
