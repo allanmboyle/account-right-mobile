@@ -4,8 +4,9 @@
 }
 
 @media handheld, only screen and (min-width: 480px) {
-	.ui-btn {
+	.myob-button {
 		width: 450px;
+		margin: 0 auto;
 	}
 }
 @media handheld, only screen and (max-width: 400px) {
