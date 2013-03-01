@@ -1,0 +1,12 @@
+/*	Responsive Styles	*/
+
+@media handheld, only screen and (max-width: 1024px) {
+}
+
+@media handheld, only screen and (min-width: 480px) {
+	.ui-btn {
+		width: 450px;
+	}
+}
+@media handheld, only screen and (max-width: 400px) {
+}
