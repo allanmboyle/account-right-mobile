@@ -2,11 +2,10 @@
 <div id="customer-files-list" data-role="collapsible-set"  data-theme="b" data-content-theme="a" >
     <% customerFiles.each(function(customerFile) { %> 
 	    <div data-role="collapsible" data-theme="b" >
-	    	<h3><%= customerFile.get('name') %></h3>
-	    	<!-- <a class="customer_file" href="#customer_file_login"></a> -->
+	    	<h3><%= customerFile.get('name') %><div style="font: -9"> Small text goes under here</div></h3>
 	    	<fieldset data-role="controlgroup">
-		        <label>Username</label><input type="text" name="username" placeholder="Email Address"/>
-	        	<label>Password</label><input type="password" name="password" placeholder="Password"/>
+		        <input type="text" name="username" placeholder="Email Address"/>
+	        	<input type="password" name="password" placeholder="Password"/>
 			</fieldset>
 	    	<div class="myob-button">
 	        	<input class="file_login_submit" type="button" data-theme="a" data-role="button" value="Login"/>
