@@ -1,3 +1,7 @@
+body {
+	font-weight: normal;
+}
+
 /*	Responsive Styles	*/
 
 @media handheld, only screen and (max-width: 1024px) {

@@ -17,6 +17,13 @@ define([ "backbone",
 
     el: $("#customer_files")
 
+    events: () ->
+      "click .file_login_submit": "login"
+
+    login: (event) ->
+      location.hash = "contacts"
+      event.preventDefault()
+
     update: () ->
       @customerFiles.fetch()
 
