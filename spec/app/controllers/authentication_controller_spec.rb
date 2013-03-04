@@ -92,7 +92,10 @@ describe AuthenticationController, type: :controller do
               {}
             end
 
-            before(:each) { AccountRightMobile::Application.config.live_login.delete("base_uri") }
+            before(:each) do
+              AccountRightMobile::Application.config.live_login.delete("base_uri")
+              puts "**** AccountRightMobile::Application.config.live_login['base_uri']: #{AccountRightMobile::Application.config.live_login["base_uri"]}"
+            end
 
             it "should respond with status of 200" do
               post_live_login

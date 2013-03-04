@@ -12,8 +12,10 @@ module AccountRight
     end
 
     def login
+      puts "*** login_config: #{login_config.inspect}"
       response = self.class.post(login_config["path"], body: { client_id: login_config["client_id"],
                                                                client_secret: login_config["client_secret"],
+                                                               grant_type: login_config["grant_type"],
                                                                scope: login_config["scope"],
                                                                username: username,
                                                                password: password })
