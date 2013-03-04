@@ -7,6 +7,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
 
   let(:client_id) { "some_client_id" }
   let(:client_secret) { "some_client_secret" }
+  let(:scope) { "some_scope" }
   let(:oauth_service) { AccountRightMobile::Services::OAuthStubConfigurer.new }
   let(:live_user) { AccountRight::LiveUser.new(username: "some_username", password: "some_password") }
 
@@ -14,6 +15,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
     @original_live_login_config = AccountRightMobile::Application.config.live_login
     AccountRightMobile::Application.config.live_login["client_id"] = client_id
     AccountRightMobile::Application.config.live_login["client_secret"] = client_secret
+    AccountRightMobile::Application.config.live_login["scope"] = scope
   end
 
   after(:each) { AccountRightMobile::Application.config.live_login = @original_live_login_config }
@@ -23,7 +25,7 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
     describe "when the server allows the log-in attempt for a given client and user" do
 
       before(:each) do
-        oauth_service.grant_access_for(client_id: client_id, client_secret: client_secret,
+        oauth_service.grant_access_for(client_id: client_id, client_secret: client_secret, scope: scope,
                                        username: live_user.username, password: live_user.password)
       end
 

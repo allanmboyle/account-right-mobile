@@ -4,3 +4,4 @@ live_login:
   client_secret: test
   grant_type: password
   path: /oauth2/v1/authorize
+  scope: CustomerFile

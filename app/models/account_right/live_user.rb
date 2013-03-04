@@ -14,6 +14,7 @@ module AccountRight
     def login
       response = self.class.post(login_config["path"], body: { client_id: login_config["client_id"],
                                                                client_secret: login_config["client_secret"],
+                                                               scope: login_config["scope"],
                                                                username: username,
                                                                password: password })
       raise AccountRight::AuthenticationFailure if response.code == 400
