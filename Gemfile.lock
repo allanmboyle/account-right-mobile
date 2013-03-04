@@ -69,7 +69,7 @@ GEM
     haml (4.0.0)
       tilt
     hike (1.2.1)
-    http_stub (0.3.1)
+    http_stub (0.4.0)
       haml (~> 4.0.0)
       sass (~> 3.2.6)
       sinatra (~> 1.3.4)
@@ -97,7 +97,7 @@ GEM
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-protection (1.3.2)
+    rack-protection (1.4.0)
       rack
     rack-ssl (1.3.3)
       rack
@@ -183,7 +183,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (~> 1.3)
   deep_merge (~> 1.0.0)
-  http_stub (~> 0.3.1)
+  http_stub (~> 0.4.0)
   httparty (~> 0.10.2)
   immutable_struct (~> 1.1.0)
   jquery-rails

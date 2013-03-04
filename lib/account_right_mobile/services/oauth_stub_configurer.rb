@@ -9,16 +9,17 @@ module AccountRightMobile
       host "localhost"
       port 3002
 
-      stub_alias "/grant_access", URI,
-                 method: :post,
-                 response: { status: 200,
-                             body: { access_token: "test_access_token", refresh_token: "test_refresh_token" }.to_json }
+      stub_activator "/grant_access", URI,
+                     method: :post,
+                     response: { status: 200,
+                                 body: { access_token: "test_access_token",
+                                         refresh_token: "test_refresh_token" }.to_json }
 
-      stub_alias "/deny_access", URI, method: :post, response: { status: 400 }
+      stub_activator "/deny_access", URI, method: :post, response: { status: 400 }
 
-      stub_alias "/misconfigure", URI, method: :post, response: { status: 401 }
+      stub_activator "/misconfigure", URI, method: :post, response: { status: 401 }
 
-      stub_alias "/unavailable", URI, method: :post, response: { status: 503 }
+      stub_activator "/unavailable", URI, method: :post, response: { status: 503 }
 
       def grant_access
         activate!("/grant_access")
