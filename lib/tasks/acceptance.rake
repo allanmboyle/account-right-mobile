@@ -4,13 +4,9 @@ end
 
 namespace :acceptance do
 
-  task :setup do
-    ENV["app_host"] = "localhost:3001"
-  end
-
   Acceptance::CUCUMBER_TARGETS.each do |cucumber_task|
     desc "cucumber:#{cucumber_task} with test environment configured"
-    task cucumber_task => ["acceptance:setup", "cucumber:#{cucumber_task}"]
+    task cucumber_task => "cucumber:#{cucumber_task}"
   end
 
   namespace :with_servers do

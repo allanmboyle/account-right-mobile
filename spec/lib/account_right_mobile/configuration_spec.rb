@@ -1,4 +1,4 @@
-describe AccountRightMobile::Config do
+describe AccountRightMobile::Configuration do
 
   let(:default_settings) do
     { "key1" => "value1",
@@ -41,17 +41,17 @@ describe AccountRightMobile::Config do
       describe "and the configuration gem returns settings" do
 
         it "should return a hash that contains default settings" do
-          AccountRightMobile::Config.load.should include("key1" => "value1")
+          AccountRightMobile::Configuration.load.should include("key1" => "value1")
         end
 
         it "should return a hash that contains the configuration gems settings" do
-          AccountRightMobile::Config.load.should include("key3" => "value3")
+          AccountRightMobile::Configuration.load.should include("key3" => "value3")
         end
 
         it "should override the default settings with configuration gems settings" do
-          AccountRightMobile::Config.load.should include("key2" => { "nestedkey1" => "nestedvalue1",
-                                                                     "nestedkey2" => "nestedvalue2.2",
-                                                                     "nestedkey3" => "nestedvalue3" })
+          AccountRightMobile::Configuration.load.should include("key2" => { "nestedkey1" => "nestedvalue1",
+                                                                            "nestedkey2" => "nestedvalue2.2",
+                                                                            "nestedkey3" => "nestedvalue3" })
         end
 
       end
@@ -61,7 +61,7 @@ describe AccountRightMobile::Config do
         before(:each) { AccountRightMobileConfiguration::Configuration.stub!(:load_for).and_return({}) }
 
         it "should return the default settings" do
-          AccountRightMobile::Config.load.should eql(default_settings)
+          AccountRightMobile::Configuration.load.should eql(default_settings)
         end
 
       end
@@ -73,7 +73,7 @@ describe AccountRightMobile::Config do
         it "should load the development environments settings from the configuration gem" do
           AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
 
-          AccountRightMobile::Config.load
+          AccountRightMobile::Configuration.load
         end
 
       end
@@ -85,7 +85,7 @@ describe AccountRightMobile::Config do
         it "should load the test environments settings from the configuration gem" do
           AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
 
-          AccountRightMobile::Config.load
+          AccountRightMobile::Configuration.load
         end
 
       end
@@ -97,7 +97,7 @@ describe AccountRightMobile::Config do
         it "should load the production environments settings from the configuration gem" do
           AccountRightMobileConfiguration::Configuration.should_receive(:load_for).with(environment)
 
-          AccountRightMobile::Config.load
+          AccountRightMobile::Configuration.load
         end
 
       end
@@ -116,7 +116,7 @@ describe AccountRightMobile::Config do
       end
 
       it "should return the default settings" do
-        AccountRightMobile::Config.load.should eql(default_settings)
+        AccountRightMobile::Configuration.load.should eql(default_settings)
       end
 
     end

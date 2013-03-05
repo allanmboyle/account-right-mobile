@@ -8,8 +8,8 @@ module AccountRightMobile
           "Contacts"
         end
 
-        def initialize(session)
-          super(session)
+        def initialize(session, configuration)
+          super(session, configuration)
         end
 
         def url

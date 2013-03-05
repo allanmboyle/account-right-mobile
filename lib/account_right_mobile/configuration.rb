@@ -1,6 +1,6 @@
 module AccountRightMobile
 
-  class Config
+  class Configuration
     
     DEFAULT_CONFIG_FILE = "#{Rails.root}/lib/account_right_mobile/config/defaults.yml"
 

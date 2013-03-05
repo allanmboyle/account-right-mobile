@@ -8,8 +8,8 @@ module AccountRightMobile
           "AccountRight Live Login"
         end
 
-        def initialize(session)
-          super(session)
+        def initialize(session, configuration)
+          super(session, configuration)
         end
 
         def url
@@ -17,8 +17,9 @@ module AccountRightMobile
         end
 
         def enter_credentials
-          @session.fill_in("live_username", :with => "arl_user")
-          @session.fill_in("live_password", :with => "arl_password")
+          credentials = @configuration["live_user"]
+          @session.fill_in("live_username", :with => credentials["username"])
+          @session.fill_in("live_password", :with => credentials["password"])
         end
 
         def login

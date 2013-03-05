@@ -5,3 +5,8 @@ live_login:
   grant_type: password
   path: /oauth2/v1/authorize
   scope: CustomerFile
+acceptance:
+  app_uri: http://localhost:3001
+  live_user:
+    username: arl_user
+    password: arl_password

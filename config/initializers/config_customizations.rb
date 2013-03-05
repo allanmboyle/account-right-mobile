@@ -1,4 +1,4 @@
-require File.expand_path('../../../lib/account_right_mobile/config', __FILE__)
+require File.expand_path('../../../lib/account_right_mobile/configuration', __FILE__)
 
-settings = AccountRightMobile::Config.load
+settings = AccountRightMobile::Configuration.load
 settings.each { |key, value| AccountRightMobile::Application.config.send("#{key}=".to_sym, value) }

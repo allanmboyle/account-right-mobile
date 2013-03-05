@@ -3,6 +3,7 @@ Feature: Authenticated AccountRight Live Access
   As a user
   I want access to AccountRight Live to be authenticated
 
+  @smoke
   Scenario: Access is granted when valid credentials are provided
     Given the user visits the AccountRight Live Login page
     And the user enters valid login credentials

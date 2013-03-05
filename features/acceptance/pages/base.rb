@@ -19,8 +19,9 @@ module AccountRightMobile
 
         end
 
-        def initialize(session)
+        def initialize(session, configuration)
           @session = session
+          @configuration = configuration
         end
 
         def visit
