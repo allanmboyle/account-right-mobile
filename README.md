@@ -25,13 +25,15 @@ rake acceptance:ok			<--- Run without restarting the servers
 rake assets:clean
 rake servers:stop
 rake servers:start
-rails s 					<--- use this to start the servers in test mode so no caching will occur
+rails s 					<--- use this to start the servers in test mode (no caching). Port 3000.
 rake commit acceptance:ok
-http://127.0.0.1:8888/tmp/spec/javascripts/_SpecRunner.html
+
+The oAuth stub server:
 http://localhost:3002/stubs/aliases
 http://localhost:3002/grant_access
 http://localhost:3002/unavailable
-http://localhost:3001 		<--- The main app.
+http://localhost:3001 		<--- The main app started with servers:start
+http://127.0.0.1:8888/tmp/spec/javascripts/_SpecRunner.html
 
 License
 =======
