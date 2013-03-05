@@ -4,7 +4,7 @@ module AccountRightMobile
 
       class CustomerFileLogin < Pages::Base
 
-        def self.name
+        def self.title
           "Customer File Login"
         end
 

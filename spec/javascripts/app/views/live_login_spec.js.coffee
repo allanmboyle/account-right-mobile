@@ -61,10 +61,9 @@ describe("LiveLoginView", () ->
       )
 
       it("should cause the success action to be invoked when the users login:success event occurs", () ->
-        response = { key: "value" }
-        liveUser.trigger("login:success", response)
+        liveUser.trigger("login:success")
 
-        expect(successSpy).toHaveBeenCalledWith(response)
+        expect(successSpy).toHaveBeenCalled()
       )
 
       it("should cause the fail action to be invoked when the users login:fail event occurs", () ->

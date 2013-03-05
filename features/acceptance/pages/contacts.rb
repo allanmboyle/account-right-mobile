@@ -4,7 +4,7 @@ module AccountRightMobile
 
       class Contacts < Pages::Base
 
-        def self.name
+        def self.title
           "Contacts"
         end
 

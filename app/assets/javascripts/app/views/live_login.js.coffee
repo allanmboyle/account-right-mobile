@@ -30,7 +30,7 @@ define([ "backbone",
       @user.login()
       event.preventDefault()
 
-    success: (response) ->
+    success: () ->
       location.hash = "customer_files"
 
     fail: () ->

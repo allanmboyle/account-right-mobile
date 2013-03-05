@@ -48,10 +48,16 @@ describe AuthenticationController, type: :controller do
                 response.status.should eql(200)
               end
 
-              it "should respond with body containing the access and refresh token" do
+              it "should establish the access token in the users session" do
                 post_live_login
 
-                response.body.should eql({ access_token: "someAccessToken", refresh_token: "someRefreshToken" }.to_json)
+                session[:access_token].should eql("someAccessToken")
+              end
+
+              it "should respond with an empty json body" do
+                post_live_login
+
+                response.body.should eql({}.to_json)
               end
 
             end

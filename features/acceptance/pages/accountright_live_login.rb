@@ -4,7 +4,7 @@ module AccountRightMobile
 
       class AccountRightLiveLogin < Pages::Base
 
-        def self.name
+        def self.title
           "AccountRight Live Login"
         end
 

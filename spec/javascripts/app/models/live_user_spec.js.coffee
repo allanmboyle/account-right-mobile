@@ -27,19 +27,16 @@ describe("LiveUser", () ->
 
     describe("when the login is successful", () ->
 
-      response = null
-
       beforeEach(() ->
-        response = { accessToken: "123", refreshToken: "456" }
-        spyOn(Backbone, "ajax").andCallFake((options) -> options.success(response))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.success())
       )
 
-      it("should trigger a login:success event containing the servers response", () ->
+      it("should trigger a login:success event", () ->
         spyOn(liveUser, "trigger")
 
         liveUser.login()
 
-        expect(liveUser.trigger).toHaveBeenCalledWith("login:success", response)
+        expect(liveUser.trigger).toHaveBeenCalledWith("login:success")
       )
 
     )

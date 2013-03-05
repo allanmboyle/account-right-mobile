@@ -11,9 +11,9 @@ module AccountRightMobile
             @page_classes << subclass
           end
 
-          def page_class_with_name(name)
-            @page_classes.find { |page_class| page_class.name == name }.tap do |page_class|
-              raise "Page with name '#{name}' not found" unless page_class
+          def page_class_with_title(title)
+            @page_classes.find { |page_class| page_class.title == title }.tap do |page_class|
+              raise "Page with title '#{title}' not found" unless page_class
             end
           end
 
@@ -28,12 +28,12 @@ module AccountRightMobile
           @session.visit(url)
         end
 
-        def shown!
-          @session.has_content?(self.class.name)
+        def shown?
+          @session.has_selector?('title', text: self.class.title)
         end
 
-        def shown_without_error!
-          shown! && @session.has_no_content?("error")
+        def shown_without_error?
+          shown? && @session.has_no_content?("error")
         end
 
       end
