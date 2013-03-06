@@ -44,7 +44,7 @@ define([ "backbone",
       if @customerFiles.length == 1
         $('.customer-file:first-child').trigger('expand')
       else if @customerFiles.length == 0
-        $('.no-files').removeClass("myob-hidden");
+        $('.no-files').removeClass("myob-hidden")
 
     _loginContent: () ->
       $("#customer-file-login-content")
