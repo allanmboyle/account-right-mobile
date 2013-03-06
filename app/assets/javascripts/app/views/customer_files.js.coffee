@@ -22,6 +22,7 @@ define([ "backbone",
 
     events: () ->
       "click #customer_file_login_submit": "login"
+      "pageshow": "maybeShowLogin"
 
     update: () ->
       @customerFiles.fetch()
@@ -38,6 +39,10 @@ define([ "backbone",
     login: (event) ->
       location.hash = "contacts"
       event.preventDefault()
+
+    maybeShowLogin: () ->
+      if @customerFiles.length == 1
+        $('.customer-file:first-child').trigger('expand')
 
     _loginContent: () ->
       $("#customer-file-login-content")
