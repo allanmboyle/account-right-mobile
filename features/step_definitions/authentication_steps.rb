@@ -34,6 +34,6 @@ Then /^an error should be displayed indicating the provided credentials were inv
   @current_page.should have_invalid_login_message
 end
 
-Then /^an error should be displayed indicating application is unavailable$/ do
+Then /^an error should be displayed indicating the application is unavailable$/ do
   @current_page.should have_application_unavailable_message
 end

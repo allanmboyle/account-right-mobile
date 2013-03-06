@@ -25,7 +25,7 @@ jasmineContext = (stubs = {}) ->
 
 jasmineRequire = (executionContext, modulesToRequire, callback) ->
   new AsyncSpec(executionContext).beforeEach((done) ->
-    context = executionContext.requireContext = jasmineContext()
+    context = jasmineContext()
     context.require([ "jquery" ], ($) ->
       $(document).on("mobileinit", () -> done())
     )
@@ -33,6 +33,9 @@ jasmineRequire = (executionContext, modulesToRequire, callback) ->
       callback.apply(executionContext, arguments)
       context.require([ "jquerymobile" ])
     )
+  )
+  afterEach(() ->
+    $(".ui-loader").remove()
   )
 
 window.jasmineRequire = jasmineRequire

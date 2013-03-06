@@ -23,7 +23,7 @@ Feature: Authenticated AccountRight Live Access
     And the user enters valid login credentials
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
-    And an error should be displayed indicating application is unavailable
+    And an error should be displayed indicating the application is unavailable
 
   Scenario: Error is shown when integration with the provider is mis-configured
     Given the AccountRight Live authentication service is mis-configured
@@ -31,4 +31,4 @@ Feature: Authenticated AccountRight Live Access
     And the user enters valid login credentials
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
-    And an error should be displayed indicating application is unavailable
+    And an error should be displayed indicating the application is unavailable

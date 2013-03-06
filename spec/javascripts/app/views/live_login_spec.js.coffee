@@ -15,6 +15,10 @@ describe("LiveLoginView", () ->
     LiveUser = LoadedLiveUser
   )
 
+  afterEach(() ->
+    $("#live_login").remove()
+  )
+
   describe("when loaded", () ->
 
     it("should add a page placeholder to the dom", () ->
@@ -31,10 +35,6 @@ describe("LiveLoginView", () ->
     beforeEach(() ->
       liveLoginView = new LiveLoginView()
       liveUser = liveLoginView.user
-    )
-
-    afterEach(() ->
-      $("#live_login").html("")
     )
 
     describe("model event configuration", () ->

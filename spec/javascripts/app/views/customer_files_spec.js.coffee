@@ -10,6 +10,11 @@ describe("CustomerFilesView", () ->
     CustomerFile = LoadedCustomerFile
   )
 
+  afterEach(() ->
+    $("#customer_files").remove()
+    $("#live_login").remove()
+  )
+
   describe("when loaded", () ->
 
     it("should add a page placeholder to the dom", () ->
@@ -24,10 +29,6 @@ describe("CustomerFilesView", () ->
 
     beforeEach(() ->
       customerFilesView = new CustomerFilesView()
-    )
-
-    afterEach(() ->
-      $("#customer_files").html("")
     )
 
     it("should add customer file login content to the page which is initially hidden", () ->
@@ -58,8 +59,10 @@ describe("CustomerFilesView", () ->
         )
 
         it("should show the login content within the clicked customer files area", () ->
-          expect(customerFileElement.find("#customer-file-login-content")).toExist()
-          expect(customerFileElement.find("#customer-file-login-content")).toBeVisible()
+          customerFileLoginToBeVisible = () ->
+            customerFileElement.find("#customer-file-login-content").is(":visible")
+
+          waitsFor(customerFileLoginToBeVisible, "Customer File Login content was hidden", 5000)
         )
         
         describe("and another customer file is clicked", () ->
@@ -73,8 +76,10 @@ describe("CustomerFilesView", () ->
           )
 
           it("should show the login content within the most recently clicked customer files area", () ->
-            expect(otherCustomerFileElement.find("#customer-file-login-content")).toExist()
-            expect(otherCustomerFileElement.find("#customer-file-login-content")).toBeVisible()
+             customerFileLoginToBeVisible = () ->
+               otherCustomerFileElement.find("#customer-file-login-content").is(":visible")
+
+             waitsFor(customerFileLoginToBeVisible, "Customer File Login content was hidden", 5000)
           )
 
         )

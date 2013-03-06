@@ -12,6 +12,10 @@ describe("ContactsView", () ->
     Contact = LoadedContact
   )
 
+  afterEach(() ->
+    $("#contacts").remove()
+  )
+
   describe("when loaded", () ->
 
     it("should add a page placeholder to the dom", () ->
@@ -28,10 +32,6 @@ describe("ContactsView", () ->
     beforeEach(() ->
       contactsView = new ContactsView()
       contact = new Contact()
-    )
-
-    afterEach(() ->
-      $("#contacts").html("")
     )
 
     describe("#update", () ->
