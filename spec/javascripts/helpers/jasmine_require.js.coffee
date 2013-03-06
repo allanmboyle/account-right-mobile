@@ -7,8 +7,8 @@ jasmineContext = (stubs = {}) ->
     baseUrl: "/tmp/assets/javascripts/unoptimized/lib"
     paths:
       app: "../app"
-      jquery: "jquery-1.8.3.min"
-      jquerymobile: "jquery.mobile-1.2.0.min"
+      jquery: "jquery-1.9.1.min"
+      jquerymobile: "jquery.mobile-1.3.0.min"
       underscore: "lodash-0.10.0.min"
       backbone: "backbone-0.9.9.min"
       text : "text-2.0.3"
@@ -24,19 +24,15 @@ jasmineContext = (stubs = {}) ->
   require: newRequire
 
 jasmineRequire = (executionContext, modulesToRequire, callback) ->
-  async = new AsyncSpec(executionContext)
-  async.beforeEach((done) ->
-    unless (executionContext.requireContext?)
-      context = executionContext.requireContext = jasmineContext()
-      context.require([ "jquery" ], ($) ->
-        $(document).on("mobileinit", () -> done())
-      )
-      context.require(modulesToRequire, () ->
-        callback.apply(executionContext, arguments)
-        context.require([ "jquerymobile" ])
-      )
-    else
-      done()
+  new AsyncSpec(executionContext).beforeEach((done) ->
+    context = executionContext.requireContext = jasmineContext()
+    context.require([ "jquery" ], ($) ->
+      $(document).on("mobileinit", () -> done())
+    )
+    context.require(modulesToRequire, () ->
+      callback.apply(executionContext, arguments)
+      context.require([ "jquerymobile" ])
+    )
   )
 
 window.jasmineRequire = jasmineRequire

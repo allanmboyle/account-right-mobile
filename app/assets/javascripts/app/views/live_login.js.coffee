@@ -1,8 +1,9 @@
 define([ "backbone",
          "jquery",
          "underscore",
-         "text!./login.tmpl",
-         "app/models/live_user" ], (Backbone, $, _, Template, LiveUser) ->
+         "text!./live_login_layout.tmpl",
+         "text!./login_content.tmpl",
+         "app/models/live_user" ], (Backbone, $, _, LayoutTemplate, ContentTemplate, LiveUser) ->
 
   $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live Login'></div>")
 
@@ -13,7 +14,8 @@ define([ "backbone",
       @user.on("login:success", @success, this)
       @user.on("login:fail", @fail, this)
       @user.on("login:error", @error, this)
-      @$el.html(_.template(Template, title : "AccountRight Live Login", type : "live"))
+      @$el.html(_.template(LayoutTemplate))
+      $("#live-login-content").html(_.template(ContentTemplate, type : "live"))
       @$el.on("pageshow", () -> $("#live_username").focus())
 
     el: $("#live_login")
@@ -22,7 +24,7 @@ define([ "backbone",
       "click #live_login_submit": "login"
 
     render: () ->
-      $.mobile.changePage("#live_login" , reverse: false, changeHash: false)
+      $.mobile.changePage("#live_login", reverse: false, changeHash: false)
       this
 
     login: (event) ->

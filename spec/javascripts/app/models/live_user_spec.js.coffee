@@ -15,7 +15,6 @@ describe("LiveUser", () ->
 
       liveUser.login()
 
-      console.log("Backbone.ajax.mostRecentCall: " + JSON.stringify(Backbone.ajax.mostRecentCall))
       requestType = Backbone.ajax.mostRecentCall.args[0]["type"]
       requestUrl = Backbone.ajax.mostRecentCall.args[0]["url"]
       requestData = Backbone.ajax.mostRecentCall.args[0]["data"]

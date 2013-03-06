@@ -2,8 +2,7 @@ define([ "jquery",
          "backbone",
          "./views/live_login",
          "./views/customer_files",
-         "./views/customer_file_login",
-         "./views/contacts" ], ($, Backbone, LiveLoginView, CustomerFilesView, CustomerFileLoginView, ContactsView) ->
+         "./views/contacts" ], ($, Backbone, LiveLoginView, CustomerFilesView, ContactsView) ->
 
   class AccountRightRouter extends Backbone.Router
 
@@ -14,7 +13,6 @@ define([ "jquery",
     routes:
       "live_login": "live_login"
       "customer_files": "customer_files"
-      "customer_file_login": "customer_file_login"
       "contacts": "contacts"
       "": "live_login"
 
@@ -25,10 +23,6 @@ define([ "jquery",
     customer_files: () ->
       @customerFilesView ?= new CustomerFilesView()
       @customerFilesView.update()
-
-    customer_file_login: () ->
-      @customerFileLoginView ?= new CustomerFileLoginView()
-      @customerFileLoginView.render()
 
     contacts: () ->
       @contactsView ?= new ContactsView()

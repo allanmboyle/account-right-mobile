@@ -30,6 +30,10 @@ describe("ContactsView", () ->
       contact = new Contact()
     )
 
+    afterEach(() ->
+      $("#contacts").html("")
+    )
+
     describe("#update", () ->
 
       it("should place the retrieved contacts in the dom", () ->
