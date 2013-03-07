@@ -28,6 +28,11 @@ rake servers:start
 rails s 					<--- use this to start the servers in test mode (no caching). Port 3000.
 rake commit acceptance:ok
 
+The API stub server:
+http://localhost:3003/stubs/aliases
+http://localhost:3003/grant_access
+http://localhost:3003/unavailable
+
 The oAuth stub server:
 http://localhost:3002/stubs/aliases
 http://localhost:3002/grant_access

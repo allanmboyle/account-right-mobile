@@ -1,5 +1,5 @@
 module Stubs
-  ALL = %w{ oauth_stub_server }
+  ALL = %w{ oauth_stub_server api_stub_server }
 end
 
 namespace :stubs do
