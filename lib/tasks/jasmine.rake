@@ -21,23 +21,19 @@ namespace(:jasmine) do
   end
 
   desc "Exercises Jasmine specifications"
-  task :spec => "jasmine:spec:headless"
+  task :spec => "jasmine:headless"
 
-  namespace :spec do
-
-    def generate_jasmine_spec_task(task_name, node_target)
-      desc "Exercises Jasmine specifications via node target #{node_target}"
-      task(task_name => %w{ jasmine:compile }) do
-        output = execute_with_logging "node #{AccountRightMobile::Build::Npm.root.join("grunt", "bin", "grunt")} -v #{node_target}"
-        results_match = output.match(/\d* specs, (\d) failure/) || [nil, 0]
-        fail "Jasmine specs failed" if results_match[1].to_i > 0
-      end
+  def generate_jasmine_spec_task(task_name, node_target)
+    desc "Exercises Jasmine specifications via node target #{node_target}"
+    task(task_name => %w{ jasmine:compile }) do
+      output = execute_with_logging "node #{AccountRightMobile::Build::Npm.root.join("grunt", "bin", "grunt")} -v #{node_target}"
+      results_match = output.match(/\d* specs, (\d) failure/) || [nil, 0]
+      fail "Jasmine specs failed" if results_match[1].to_i > 0
     end
-
-    generate_jasmine_spec_task(:headless, :jasmine)
-
-    generate_jasmine_spec_task(:browser, "jasmine-server")
-
   end
+
+  generate_jasmine_spec_task(:headless, :jasmine)
+
+  generate_jasmine_spec_task(:browser, "jasmine-server")
 
 end
