@@ -17,7 +17,16 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.find('#customer-files-list').all('a').first.click
+          @session.find("#customer-files-list").all("a").first.click
+        end
+
+        def customer_files
+          @session.find(".customer-file-name").map { |node| node.text() }
+        end
+
+        def shows_login_within?(file_name)
+          node = @session.find(".customer-file").find { |node| node.text().trim() =~ /^#{Regexp.escape(file_name)}/ }
+          node && node.has_selector?(".customer-file-login-content")
         end
 
         def enter_credentials
@@ -27,6 +36,18 @@ module AccountRightMobile
 
         def login
           @session.click_button("customer_file_login_submit")
+        end
+
+        def no_customer_files_available_message?
+          @session.has_css?("#customer-files-content",
+                            text: "No customer files are available to access",
+                            visible: true)
+        end
+
+        def has_application_unavailable_message?
+          @session.has_css?("#customer-files-content",
+                            text: APPLICATION_UNAVAILABLE_MESSAGE,
+                            visible: true)
         end
 
       end

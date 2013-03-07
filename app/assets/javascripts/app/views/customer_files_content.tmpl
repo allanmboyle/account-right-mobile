@@ -1,7 +1,10 @@
 <div id="customer-files-list" data-role="collapsible-set" data-theme="b" data-content-theme="a">
-    <% customerFiles.each(function(customerFile) { %> 
-	    <div class="customer-file" data-role="collapsible" data-theme="b">
-	    	<h3><%= customerFile.get('name') %><div style="font: -9"> Small text goes under here</div></h3>
-	    </div>
+    <% customerFiles.each(function(customerFile) { %>
+        <div class="customer-file" data-role="collapsible" data-theme="b">
+            <h3>
+                <div class="customer-file-name"><%= customerFile.get('name') %></div>
+                <div style="font: -9"> Small text goes under here</div>
+            </h3>
+        </div>
     <% }); %>
 </div>

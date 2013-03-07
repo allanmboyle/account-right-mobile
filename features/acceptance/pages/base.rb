@@ -2,6 +2,8 @@ module AccountRightMobile
   module Acceptance
     module Pages
 
+      APPLICATION_UNAVAILABLE_MESSAGE = "We can't confirm your details at the moment, try again shortly"
+
       class Base
 
         class << self
