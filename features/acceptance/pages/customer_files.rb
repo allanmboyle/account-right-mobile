@@ -21,11 +21,11 @@ module AccountRightMobile
         end
 
         def customer_files
-          @session.find(".customer-file-name").map { |node| node.text() }
+          @session.all(".customer-file-name").map { |node| node.text() }
         end
 
         def shows_login_within?(file_name)
-          node = @session.find(".customer-file").find { |node| node.text().trim() =~ /^#{Regexp.escape(file_name)}/ }
+          node = @session.all(".customer-file").find { |node| node.text().trim() =~ /^#{Regexp.escape(file_name)}/ }
           node && node.has_selector?(".customer-file-login-content")
         end
 
