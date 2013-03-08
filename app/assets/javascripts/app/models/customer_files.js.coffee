@@ -4,6 +4,6 @@ define([ "backbone", "./customer_file" ], (Backbone, CustomerFile) ->
 
     model: CustomerFile,
 
-    url: "/customer_files"
+    url: "/accountright"
 
 )
