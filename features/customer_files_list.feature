@@ -3,7 +3,6 @@ Feature: List Customer Files
   As a user
   I want to be able to choose a customer file to access
 
-@wip
 Scenario: User has access to multiple Customer Files
   Given the user has access to multiple Customer Files
   When the user logs-in to AccountRight Live

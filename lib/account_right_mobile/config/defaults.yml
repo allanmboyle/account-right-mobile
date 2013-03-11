@@ -1,7 +1,10 @@
+api:
+  key: test_key
+  uri: http://localhost:3003
 live_login:
   base_uri: http://localhost:3002
-  client_id: test
-  client_secret: test
+  client_id: test_client_id
+  client_secret: test_client_secret
   grant_type: password
   path: /oauth2/v1/authorize
   scope: CustomerFile

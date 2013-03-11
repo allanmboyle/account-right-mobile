@@ -1,9 +1,8 @@
 class CustomerFilesController < ApplicationController
 
   def index
-    @customer_files = (1..3).map { |i| AccountRight::CustomerFile.new(name: "Mock File #{i}") }
     respond_to do |format|
-      format.json  { render :json => @customer_files.to_json }
+      format.json  { render :json => AccountRight::API.customer_files(session[:access_token]) }
     end
   end
 

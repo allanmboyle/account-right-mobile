@@ -8,6 +8,7 @@ Before do
   api_service_class = CUCUMBER_CONFIGURATION.filters.include?("@smoke") ?
       AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::ApiStubConfigurer
   @api_service = api_service_class.new
+  @api_service.return_some_files
 end
 
 Before do

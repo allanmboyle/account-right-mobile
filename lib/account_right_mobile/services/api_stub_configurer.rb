@@ -9,22 +9,38 @@ module AccountRightMobile
       host "localhost"
       port 3003
 
+      stub_activator("/return_some_files", COMPANY_FILE_URI,
+                     method: :get,
+                     response: { status: 200, body: [ { "Name" => "Clearwater" },
+                                                      { "Name" => "Muddywater" },
+                                                      { "Name" => "Busyizzy" } ].to_json })
+
       stub_activator("/return_no_files", COMPANY_FILE_URI,
                      method: :get,
-                     response: { status: 200,
-                                 body: [].to_json })
+                     response: { status: 200, body: [].to_json })
 
       stub_activator("/return_error", COMPANY_FILE_URI,
                      method: :get,
-                     response: { status: 500,
-                                 body: "A general error occurred" })
+                     response: { status: 500, body: "A general error occurred" })
+
+      def initialize(headers={})
+        @headers = headers
+      end
+
+      def self.with(headers)
+        ApiStubConfigurer.new(headers)
+      end
+
+      def return_some_files
+        activate!("/return_some_files")
+      end
 
       def return_files(file_names)
         json = file_names.map { |name| { "Name" => name } }.to_json
         stub!(COMPANY_FILE_URI,
               method: :get,
-              response: { status: 200,
-                          body: json })
+              headers: @headers,
+              response: { status: 200, body: json })
       end
 
       def return_no_files
