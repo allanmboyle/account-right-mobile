@@ -52,6 +52,12 @@ describe("CustomerFilesView", () ->
           expect($("#customer-file-login-content")).toBeHidden()
         )
 
+        it("should not show a message indicating no files are available", () ->
+           customerFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
+
+           waitsFor(customerFilesAvailableMessageToBeHidden, "No Customer Files available message is shown", 5000)
+        )
+
         describe("and a customer file is clicked", () ->
 
           customerFileElement = null
@@ -115,6 +121,12 @@ describe("CustomerFilesView", () ->
             $(".customer-file #customer-file-login-content").is(":visible")
 
           waitsFor(customerFileLoginToBeVisible, "Customer File Login content was hidden", 5000)
+        )
+
+        it("should not show a message indicating no files are available", () ->
+          customerFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
+
+          waitsFor(customerFilesAvailableMessageToBeHidden, "No Customer Files available message is shown", 5000)
         )
 
       )
