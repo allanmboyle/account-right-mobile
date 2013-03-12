@@ -38,9 +38,9 @@ module AccountRightMobile
           @session.click_button("customer_file_login_submit")
         end
 
-        def no_customer_files_available_message?
+        def has_no_customer_files_available_message?
           @session.has_css?("#customer-files-content",
-                            text: "No customer files are available to access",
+                            text: "No customer files are available to access at this time",
                             visible: true)
         end
 

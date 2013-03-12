@@ -16,7 +16,6 @@ Scenario: User has access to one Customer File
   And the Customer File is shown
   And the Customer File login is shown
 
-@wip
 Scenario: User does not have access to a Customer File
   Given the user does not have access to any Customer File
   When the user logs-in to AccountRight Live

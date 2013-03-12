@@ -22,17 +22,13 @@ define([ "backbone",
 
     events: () ->
       "click #customer_file_login_submit": "login"
-      "pageshow": "show_login_if_necessary"
+      "pagebeforeshow": "pageBeforeShow"
 
     update: () ->
       @customerFiles.fetch()
 
     render: () ->
-      view = this
       $("#customer-files-content").html(@compiledContentTemplate(customerFiles: @customerFiles))
-      $(".customer-file").on("expand", (event) ->
-        view._collapsibleContentFor(event).append(view._loginContent().show())
-      )
       $.mobile.changePage("#customer_files", reverse: false, changeHash: false)
       this
 
@@ -40,12 +36,33 @@ define([ "backbone",
       location.hash = "contacts"
       event.preventDefault()
 
-    show_login_if_necessary: () ->
-      $('.customer-file:first-child').trigger('expand') if @customerFiles.length == 1
+    pageBeforeShow: () ->
+      @_showLoginWhenFileIsExpanded()
+      @_showInitialLoginIfNecessary()
+      @_showNoFilesMessageIfNecessary()
+
+    _showLoginWhenFileIsExpanded: () ->
+      view = this
+      $(".customer-file").on("expand", (event) ->
+        view._collapsibleContentFor(event).append(view._loginContent().show())
+      )
+
+    _showInitialLoginIfNecessary: () ->
+      $(".customer-file:first-child").trigger("expand") if @customerFiles.length == 1
+
+    _showNoFilesMessageIfNecessary: () ->
+      if (@customerFiles.length == 0)
+        @_noFilesMessage().show()
+      else
+        @_noFilesMessage().hide()
 
     _loginContent: () ->
       $("#customer-file-login-content")
 
+    _noFilesMessage: () ->
+      $("#no-customer-files-message")
+
     _collapsibleContentFor: (event) ->
       $(event.target).find(".ui-collapsible-content")
+
 )

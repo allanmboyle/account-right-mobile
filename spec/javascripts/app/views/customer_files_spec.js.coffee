@@ -2,12 +2,14 @@ describe("CustomerFilesView", () ->
 
   CustomerFilesView = null
   CustomerFile = null
+  LiveLoginView = null
 
   jasmineRequire(this, [ "app/views/customer_files",
                          "app/models/customer_file",
-                         "app/views/live_login" ], (LoadedCustomerFilesView, LoadedCustomerFile) ->
+                         "app/views/live_login" ], (LoadedCustomerFilesView, LoadedCustomerFile, LoadedLiveLoginView) ->
     CustomerFilesView = LoadedCustomerFilesView
     CustomerFile = LoadedCustomerFile
+    LiveLoginView = LoadedLiveLoginView
   )
 
   afterEach(() ->
@@ -41,7 +43,7 @@ describe("CustomerFilesView", () ->
       describe("with multiple customer files", () ->
 
         beforeEach(() ->
-          customerFilesView.customerFiles.add([new CustomerFile(name: "File 1"), new CustomerFile(name: "File 2")])
+          customerFilesView.customerFiles.add([new CustomerFile(Name: "File 1"), new CustomerFile(Name: "File 2")])
 
           customerFilesView.render()
         )
@@ -103,16 +105,30 @@ describe("CustomerFilesView", () ->
       describe("with one customer file", () ->
 
         beforeEach(() ->
-          customerFilesView.customerFiles.add([new CustomerFile(name: "File 1")])
+          customerFilesView.customerFiles.add(new CustomerFile(Name: "File 1"))
 
           customerFilesView.render()
         )
 
         it("should show the login content within the customer file", () ->
           customerFileLoginToBeVisible = () ->
-           otherCustomerFileElement.find(".customer-file #customer-file-login-content").is(":visible")
+            $(".customer-file #customer-file-login-content").is(":visible")
 
-           waitsFor(customerFileLoginToBeVisible, "Customer File Login content was hidden", 5000)
+          waitsFor(customerFileLoginToBeVisible, "Customer File Login content was hidden", 5000)
+        )
+
+      )
+
+      describe("with no customer files", () ->
+
+        beforeEach(() ->
+          customerFilesView.render()
+        )
+
+        it("should show a message indicating no files are available", () ->
+          noCustomerFilesAvailableMessageToBeVisible = () -> $("#no-customer-files-message").is(":visible")
+
+          waitsFor(noCustomerFilesAvailableMessageToBeVisible, "No Customer Files available message not shown", 5000)
         )
 
       )

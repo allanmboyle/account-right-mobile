@@ -25,7 +25,7 @@ jasmineContext = (stubs = {}) ->
 
 jasmineRequire = (executionContext, modulesToRequire, callback) ->
   new AsyncSpec(executionContext).beforeEach((done) ->
-    context = jasmineContext("app/router")
+    context = jasmineContext()
     context.require([ "jquery" ], ($) ->
       $(document).on("mobileinit", () ->
         $.mobile.ajaxEnabled = false
