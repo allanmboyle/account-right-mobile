@@ -4,7 +4,8 @@ Given /^the user has access to multiple Customer Files$/ do
 end
 
 Given /^the user has access to one Customer File$/ do
-  @api_service.return_one_file
+  @customer_file = "Clearwater Pty Ltd"
+  @api_service.return_files([@customer_file])
 end
 
 Given /^the user does not have access to any Customer File$/ do

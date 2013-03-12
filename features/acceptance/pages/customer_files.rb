@@ -25,8 +25,8 @@ module AccountRightMobile
         end
 
         def shows_login_within?(file_name)
-          node = @session.all(".customer-file").find { |node| node.text().trim() =~ /^#{Regexp.escape(file_name)}/ }
-          node && node.has_selector?(".customer-file-login-content")
+          node = @session.all(".customer-file").find { |node| node.text().strip() =~ /^#{Regexp.escape(file_name)}/ }
+          node && node.has_selector?("#customer-file-login-content")
         end
 
         def enter_credentials

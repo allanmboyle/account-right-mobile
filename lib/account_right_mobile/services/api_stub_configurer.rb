@@ -9,11 +9,15 @@ module AccountRightMobile
       host "localhost"
       port 3003
 
-      stub_activator("/return_some_files", COMPANY_FILE_URI,
+      stub_activator("/return_many_files", COMPANY_FILE_URI,
                      method: :get,
                      response: { status: 200, body: [ { "Name" => "Clearwater" },
                                                       { "Name" => "Muddywater" },
                                                       { "Name" => "Busyizzy" } ].to_json })
+
+      stub_activator("/return_one_file", COMPANY_FILE_URI,
+                     method: :get,
+                     response: { status: 200, body: [ { "Name" => "Clearwater" } ].to_json })
 
       stub_activator("/return_no_files", COMPANY_FILE_URI,
                      method: :get,
@@ -31,8 +35,12 @@ module AccountRightMobile
         ApiStubConfigurer.new(headers)
       end
 
-      def return_some_files
-        activate!("/return_some_files")
+      def return_many_files
+        activate!("/return_many_files")
+      end
+
+      def return_one_file
+        activate!("/return_one_file")
       end
 
       def return_files(file_names)

@@ -22,7 +22,7 @@ define([ "backbone",
 
     events: () ->
       "click #customer_file_login_submit": "login"
-      "pageshow": "showDataDependantElements"
+      "pageshow": "show_login_if_necessary"
 
     update: () ->
       @customerFiles.fetch()
@@ -40,11 +40,8 @@ define([ "backbone",
       location.hash = "contacts"
       event.preventDefault()
 
-    showDataDependantElements: () ->
-      if @customerFiles.length == 1
-        $('.customer-file:first-child').trigger('expand')
-      else if @customerFiles.length == 0
-        $('.no-files').removeClass("myob-hidden")
+    show_login_if_necessary: () ->
+      $('.customer-file:first-child').trigger('expand') if @customerFiles.length == 1
 
     _loginContent: () ->
       $("#customer-file-login-content")
