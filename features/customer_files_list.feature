@@ -9,6 +9,7 @@ Scenario: User has access to multiple Customer Files
   Then the Customer Files page should be shown
   And all the Customer Files are shown
 
+@smoke
 Scenario: User has access to one Customer File
   Given the user has access to one Customer File
   When the user logs-in to AccountRight Live

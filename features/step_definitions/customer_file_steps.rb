@@ -4,7 +4,7 @@ Given /^the user has access to multiple Customer Files$/ do
 end
 
 Given /^the user has access to one Customer File$/ do
-  @customer_file = "Clearwater Pty Ltd"
+  @customer_file = configuration["customer_file"]
   @api_service.return_files([@customer_file])
 end
 

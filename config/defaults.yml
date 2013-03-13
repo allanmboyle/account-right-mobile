@@ -13,3 +13,4 @@ acceptance:
   live_user:
     username: arl_user
     password: arl_password
+  customer_file: Clearwater Pty Ltd
