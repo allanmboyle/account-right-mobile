@@ -13,7 +13,7 @@ describe AccountRightMobile::Configuration do
   end
 
   let(:environment) { "test" }
-  let(:default_file_path) { "#{Rails.root}/lib/account_right_mobile/config/defaults.yml" }
+  let(:default_file_path) { "#{Rails.root}/config/defaults.yml" }
   let(:configuration_gem_installed) { defined? AccountRightMobileConfiguration::Configuration }
 
   before(:each) do

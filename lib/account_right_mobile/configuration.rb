@@ -2,7 +2,7 @@ module AccountRightMobile
 
   class Configuration
     
-    DEFAULT_CONFIG_FILE = "#{Rails.root}/lib/account_right_mobile/config/defaults.yml"
+    DEFAULT_CONFIG_FILE = "#{Rails.root}/config/defaults.yml"
 
     def self.load
       default_settings = YAML.load_file(DEFAULT_CONFIG_FILE)

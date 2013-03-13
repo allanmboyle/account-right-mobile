@@ -1,8 +1,0 @@
-development:
-  host: http://localhost:3000
-
-test:
-  host: http://account-right-mobile-test.herokuapp.com
-
-production:
-  host: http://account-right-mobile.herokuapp.com
