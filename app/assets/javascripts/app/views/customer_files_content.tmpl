@@ -1,9 +1,8 @@
-<div id="customer-files-list" data-role="collapsible-set" data-theme="b" data-content-theme="a">
+<div id="customer-files-list" data-role="collapsible-set" data-theme="d">
     <% customerFiles.each(function(customerFile) { %>
-        <div class="customer-file" data-role="collapsible" data-theme="b">
+        <div class="customer-file" data-role="collapsible" data-iconpos="right" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
             <h3>
                 <div class="customer-file-name"><%= customerFile.get('Name') %></div>
-                <div style="font: -9"> Small text goes under here</div>
             </h3>
         </div>
     <% }); %>

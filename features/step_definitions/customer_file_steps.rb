@@ -20,7 +20,7 @@ When /^the user has chosen to access a Customer File$/ do
   @current_page.access_a_file
 end
 
-When /^a message should be displayed indicating no customer files are available to access$/ do
+Then /^a message should be displayed indicating no customer files are available to access$/ do
   @current_page.should have_no_customer_files_available_message
 end
 
