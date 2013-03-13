@@ -14,7 +14,6 @@ define([ "backbone",
     initialize: () ->
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles()
-      @customerFiles.on('reset', @render, this)
       @$el.html(_.template(LayoutTemplate))
       @_loginContent().hide().append(_.template(LoginContentTemplate, type : "customer_file"))
 
@@ -23,23 +22,33 @@ define([ "backbone",
     events: () ->
       "click #customer_file_login_submit": "login"
       "pagebeforeshow": "pageBeforeShow"
+      "pageshow": "showErrorIfNecessary"
 
     update: () ->
+      @customerFiles.error = false
+      @customerFiles.on("reset", @render, this).on("error", @error, this)
       @customerFiles.fetch()
+
+    error: () ->
+      @customerFiles.error = true
+      @render()
 
     render: () ->
       $("#customer-files-content").html(@compiledContentTemplate(customerFiles: @customerFiles))
       $.mobile.changePage("#customer_files", reverse: false, changeHash: false)
       this
 
-    login: (event) ->
-      location.hash = "contacts"
-      event.preventDefault()
-
     pageBeforeShow: () ->
       @_showLoginWhenFileIsExpanded()
       @_showInitialLoginIfNecessary()
       @_showNoFilesMessageIfNecessary()
+
+    showErrorIfNecessary: () ->
+      $("#general_error_message").popup().popup("open") if @customerFiles.error
+
+    login: (event) ->
+      location.hash = "contacts"
+      event.preventDefault()
 
     _showLoginWhenFileIsExpanded: () ->
       view = this

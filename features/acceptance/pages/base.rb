@@ -2,7 +2,7 @@ module AccountRightMobile
   module Acceptance
     module Pages
 
-      APPLICATION_UNAVAILABLE_MESSAGE = "We can't confirm your details at the moment, try again shortly"
+      GENERAL_ERROR_MESSAGE = "An unexpected error has occurred"
 
       class Base
 
@@ -35,7 +35,7 @@ module AccountRightMobile
         end
 
         def shown_without_error?
-          shown? && @session.has_no_content?("error")
+          shown? && @session.has_no_selector?(".ui-popup-active", text: /error/i)
         end
 
       end

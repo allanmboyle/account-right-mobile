@@ -45,8 +45,8 @@ module AccountRightMobile
         end
 
         def has_application_unavailable_message?
-          @session.has_css?("#customer-files-content",
-                            text: APPLICATION_UNAVAILABLE_MESSAGE,
+          @session.has_css?("#general_error_message-popup.ui-popup-active",
+                            text: GENERAL_ERROR_MESSAGE,
                             visible: true)
         end
 

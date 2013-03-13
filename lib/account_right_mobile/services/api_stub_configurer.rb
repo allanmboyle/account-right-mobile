@@ -27,6 +27,8 @@ module AccountRightMobile
                      method: :get,
                      response: { status: 500, body: "A general error occurred" })
 
+      activate!("/return_many_files")
+
       def initialize(headers={})
         @headers = headers
       end

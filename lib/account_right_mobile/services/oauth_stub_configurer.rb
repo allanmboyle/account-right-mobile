@@ -21,6 +21,8 @@ module AccountRightMobile
 
       stub_activator "/unavailable", URI, method: :post, response: { status: 503 }
 
+      activate!("/grant_access")
+
       def grant_access
         activate!("/grant_access")
       end

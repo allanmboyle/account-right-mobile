@@ -2,19 +2,20 @@ describe("CustomerFilesView", () ->
 
   CustomerFilesView = null
   CustomerFile = null
-  LiveLoginView = null
 
   jasmineRequire(this, [ "app/views/customer_files",
-                         "app/models/customer_file",
-                         "app/views/live_login" ], (LoadedCustomerFilesView, LoadedCustomerFile, LoadedLiveLoginView) ->
+                         "app/models/customer_file" ], (LoadedCustomerFilesView, LoadedCustomerFile) ->
     CustomerFilesView = LoadedCustomerFilesView
     CustomerFile = LoadedCustomerFile
-    LiveLoginView = LoadedLiveLoginView
+  )
+
+  beforeEach(() ->
+    # TODO Compensate for pageshow not being triggered
+    $("#customer_files").on("pagebeforeshow", () -> $("#customer_files").trigger("pageshow"))
   )
 
   afterEach(() ->
     $("#customer_files").remove()
-    $("#live_login").remove()
   )
 
   describe("when loaded", () ->
@@ -141,6 +142,58 @@ describe("CustomerFilesView", () ->
           noCustomerFilesAvailableMessageToBeVisible = () -> $("#no-customer-files-message").is(":visible")
 
           waitsFor(noCustomerFilesAvailableMessageToBeVisible, "No Customer Files available message not shown", 5000)
+        )
+
+      )
+
+    )
+
+    describe("#update", () ->
+
+      describe("when customer files are successfully fetched", () ->
+
+        beforeEach(() ->
+          spyOn(Backbone, "ajax").andCallFake((options) -> options.success([{ Name: "File Name" }]))
+        )
+
+        it("should render the view", () ->
+          spyOn(customerFilesView, "render")
+
+          customerFilesView.update()
+
+          renderToBeCalled = () -> customerFilesView.render.callCount == 1
+          waitsFor(renderToBeCalled, "Render was not called", 5000)
+        )
+
+        it("should not show a message indicating an error occurred", () ->
+          customerFilesView.update()
+
+          expect($("#general_error_message-popup")).not.toHaveClass("ui-popup-active")
+        )
+
+      )
+
+      describe("when an error occurs fetching the customer files", () ->
+
+        beforeEach(() ->
+          spyOn(Backbone, "ajax").andCallFake((options) -> options.error())
+        )
+
+        it("should render the view", () ->
+          spyOn(customerFilesView, "render")
+
+          customerFilesView.update()
+
+          renderToBeCalled = () -> customerFilesView.render.callCount == 1
+          waitsFor(renderToBeCalled, "Render was not called", 5000)
+        )
+
+        it("should show a message indicating an error occurred", () ->
+          customerFilesView.update()
+
+          generalErrorMessageToBeVisible = () -> $("#general_error_message-popup").hasClass("ui-popup-active")
+
+          waitsFor(generalErrorMessageToBeVisible, "General error message not shown", 5000)
         )
 
       )
