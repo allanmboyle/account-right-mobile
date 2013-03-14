@@ -17,10 +17,11 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.find("#customer-files-list").all("a").first.click
+          @session.all("#customer-files-list a").first.click
         end
 
         def customer_files
+          wait_for_customer_files_to_have_text
           @session.all(".customer-file-name").map { |node| node.text() }
         end
 
@@ -48,6 +49,14 @@ module AccountRightMobile
           @session.has_css?("#general_error_message-popup.ui-popup-active",
                             text: GENERAL_ERROR_MESSAGE,
                             visible: true)
+        end
+
+        private
+
+        def wait_for_customer_files_to_have_text
+          AccountRightMobile::Wait.until_true!("all customer files contain text") do
+            @session.all(".customer-file-name").reduce(true) { |result, node| result && !node.text().empty? }
+          end
         end
 
       end
