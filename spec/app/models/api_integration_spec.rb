@@ -1,12 +1,18 @@
 describe AccountRight::API, "integrating with an API server" do
   include_context "integration with an API stub server"
 
-  before(:all) {  force_server_start! }
+  before(:all) do
+    force_server_start!
+    AccountRightMobile::Services::ApiStubConfigurer.initialize!
+  end
 
   after(:all) { force_server_stop! }
 
   let(:api_key) { "some_api_key" }
   let(:authorization_token) { "some_oauth_token" }
+  let(:resource_path) { "a_resource" }
+  let(:json_response) { { "Key" => "Value" }.to_json }
+  let(:stub_options) { { method: :get, response: { status: 200, body: json_response } } }
   let(:api_service) { AccountRightMobile::Services::ApiStubConfigurer }
 
   before(:each) do
@@ -17,27 +23,32 @@ describe AccountRight::API, "integrating with an API server" do
 
   after(:each) { AccountRightMobile::Application.config.api = @original_api_config }
 
-  it "should request compressed data" do
-    api_service.with("Accept-Encoding" => "gzip,deflate").return_files(["A file"])
+  describe "#invoke" do
 
-    AccountRight::API.customer_files(authorization_token).should_not be_empty
-  end
+    describe "when the server responds with json" do
 
-  describe "#customer_files" do
+      it "should request compressed data" do
+        api_service.with("Accept-Encoding" => "gzip,deflate").stub_response!("/#{resource_path}", stub_options)
 
-    describe "when the server responds with multiple customer files" do
-
-      let(:customer_file_names) { ["File 1", "File 2", "File 3"] }
-
-      before(:each) do
-        api_service.with("Authorization" => authorization_token, "x-myobapi-key" => api_key)
-                   .return_files(customer_file_names)
+        AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
-      it "should return the json representation of the files" do
-        expected_result = customer_file_names.map { |name| { "Name" => name } }.to_json
+      it "should issue requests with an authorization header that includes the oAuth token" do
+        api_service.with("Authorization" => authorization_token).stub_response!("/#{resource_path}", stub_options)
 
-        AccountRight::API.customer_files(authorization_token).should eql(expected_result)
+        AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
+      end
+
+      it "should issue requests the configured API key" do
+        api_service.with("x-myobapi-key" => api_key).stub_response!("/#{resource_path}", stub_options)
+
+        AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
+      end
+
+      it "should return the API's json response" do
+        api_service.stub_response!("/#{resource_path}", stub_options)
+
+        AccountRight::API.invoke(resource_path, authorization_token).should eql(json_response)
       end
 
     end

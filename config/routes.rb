@@ -7,7 +7,7 @@ AccountRightMobile::Application.routes.draw do
   # Keep in mind you can assign values other than :controller and :action
   match 'live_login' => 'authentication#live_login'
 
-  match 'accountright' => 'customer_files#index'
+  match 'api/:resource_path' => 'api#invoke'
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase

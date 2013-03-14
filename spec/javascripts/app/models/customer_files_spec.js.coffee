@@ -18,7 +18,7 @@ describe("CustomerFiles", () ->
       requestType = Backbone.ajax.mostRecentCall.args[0]["type"]
       requestUrl = Backbone.ajax.mostRecentCall.args[0]["url"]
       expect(requestType).toEqual("GET")
-      expect(requestUrl).toEqual("/accountright")
+      expect(requestUrl).toEqual("/api/accountright")
     )
 
     it("should be populated by the servers response", () ->

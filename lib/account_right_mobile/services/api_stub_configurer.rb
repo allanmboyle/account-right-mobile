@@ -49,7 +49,6 @@ module AccountRightMobile
         json = file_names.map { |name| { "Name" => name } }.to_json
         stub!(COMPANY_FILE_URI,
               method: :get,
-              headers: @headers,
               response: { status: 200, body: json })
       end
 
@@ -59,6 +58,12 @@ module AccountRightMobile
 
       def return_error
         activate!("/return_error")
+      end
+
+      alias_method :stub_without_headers!, :stub!
+
+      def stub!(uri, options)
+        stub_without_headers!(uri, options.merge(headers: @headers))
       end
 
     end
