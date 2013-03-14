@@ -3,6 +3,10 @@ module AccountRightMobile
 
     class NoOpService
 
+      def self.method_missing(*args)
+        # Intentionally blank
+      end
+
       def method_missing(*args)
         # Intentionally blank
       end
