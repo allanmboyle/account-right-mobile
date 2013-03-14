@@ -9,7 +9,30 @@ only screen and (min-resolution: 200dpi) {
     .ui-icon-grid, .ui-icon-star, .ui-icon-alert, .ui-icon-info, .ui-icon-home, .ui-icon-bars, .ui-icon-edit,
     .ui-icon-search, .ui-icon-searchfield:after,
     .ui-icon-checkbox-off, .ui-icon-checkbox-on, .ui-icon-radio-off, .ui-icon-radio-on {
-        background-image: url(images/icons-36-black.png);
+        background-image: url(images/icons-36-grey.png);
     }
 
 }
+
+.ui-icon,
+.ui-icon-searchfield:after {
+    background-color: #666666 /*{global-icon-color}*/;
+    background-color: transparent /*{global-icon-disc}*/;
+    background-image: url(images/icons-18-grey.png) /*{global-icon-set}*/;
+    background-repeat: no-repeat;
+    -webkit-border-radius: 				9px;
+    border-radius: 						9px;
+}
+
+.ui-icon-alt .ui-icon,
+.ui-icon-alt .ui-icon-searchfield:after {
+    background-color: 						#fff;
+    background-color: 						rgba(255,255,255,.3);
+    background-image: url(images/icons-18-grey.png);
+    background-repeat: no-repeat;
+}
+
+.ui-icon-alt .ui-icon {
+    background-image: url(images/icons-36-grey.png);
+}
+
