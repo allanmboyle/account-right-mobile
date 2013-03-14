@@ -18,8 +18,10 @@ describe AuthenticationController, type: :controller do
 
           describe "and authentication is enabled" do
 
+            let(:email_address) { "some@email.address" }
+            let(:password) { "some_password" }
             let(:credentials) do
-              { username: "someUsername", password: "somePassword" }
+              { emailAddress: email_address, password: password }
             end
 
             let(:live_user) { double("LiveUser").as_null_object }
@@ -31,7 +33,8 @@ describe AuthenticationController, type: :controller do
             end
 
             it "should create a live user with the credentials" do
-              AccountRight::LiveUser.should_receive(:new).with(credentials).and_return(live_user)
+              AccountRight::LiveUser.should_receive(:new).with(username: email_address, password: password)
+                                                         .and_return(live_user)
 
               post_live_login
             end

@@ -12,7 +12,7 @@ class AuthenticationController < ApplicationController
 
   def authenticate_live_login
     begin
-      result = AccountRight::LiveUser.new(username: params[:username], password: params[:password]).login
+      result = AccountRight::LiveUser.new(username: params[:emailAddress], password: params[:password]).login
       session[:access_token] = result[:access_token]
       render :json => {}.to_json
     rescue AccountRight::AuthenticationFailure

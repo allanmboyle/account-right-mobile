@@ -18,7 +18,7 @@ module AccountRightMobile
 
         def enter_credentials
           credentials = @configuration["live_user"]
-          @session.fill_in("live_username", :with => credentials["username"])
+          @session.fill_in("live_email_address", :with => credentials["username"])
           @session.fill_in("live_password", :with => credentials["password"])
         end
 

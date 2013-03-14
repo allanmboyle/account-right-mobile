@@ -89,7 +89,7 @@ describe("LiveLoginView", () ->
       describe("and crendentials have been entered", () ->
 
         beforeEach(() ->
-          $("#live_username").val("some username")
+          $("#live_email_address").val("some@email.address")
           $("#live_password").val("some password")
         )
 
@@ -98,7 +98,7 @@ describe("LiveLoginView", () ->
           it("should update the users username and password with form field values", () ->
             liveLoginView.syncUser()
 
-            expect(liveUser.get("username")).toEqual("some username")
+            expect(liveUser.get("emailAddress")).toEqual("some@email.address")
             expect(liveUser.get("password")).toEqual("some password")
           )
 

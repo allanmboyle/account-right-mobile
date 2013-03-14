@@ -4,8 +4,8 @@ define([ "backbone",
          "../models/customer_files",
          "text!./customer_files_layout.tmpl",
          "text!./customer_files_content.tmpl",
-         "text!./login_content.tmpl" ], (Backbone, $, _, CustomerFiles, LayoutTemplate,
-                                         ContentTemplate, LoginContentTemplate) ->
+         "text!./customer_files_login.tmpl" ], (Backbone, $, _, CustomerFiles, LayoutTemplate,
+                                                ContentTemplate, LoginTemplate) ->
 
   $("body").append("<div id='customer_files' data-role='page' data-title='Customer Files'></div>")
 
@@ -15,7 +15,7 @@ define([ "backbone",
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles()
       @$el.html(_.template(LayoutTemplate))
-      @_loginContent().hide().append(_.template(LoginContentTemplate, type : "customer_file"))
+      @_loginContent().hide().append(_.template(LoginTemplate))
 
     el: $("#customer_files")
 
