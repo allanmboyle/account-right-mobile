@@ -1,8 +1,4 @@
 /* MYOB Styles */
-h1, h2, h3 {
-    font-weight: 100;
-}
-
 .myob-hidden {
     visibility: hidden;
 }
@@ -29,6 +25,13 @@ h1, h2, h3 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* JQueryMobile Overriddes */
+.ui-header .ui-title, .ui-footer .ui-title {
+    font-size: 18px;
+    font-weight: 100;
+    margin: 0.4em 10% 0.5em;
 }
 
 .ui-collapsible-content {
