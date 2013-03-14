@@ -27,6 +27,10 @@ h1, h2, h3 {
     white-space: nowrap;
 }
 
+.ui-content {
+    padding: 0;
+}
+
 .ui-collapsible-content {
     background-color: #C1C1C1;
 }
