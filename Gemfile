@@ -40,7 +40,7 @@ group :test do
 end
 
 gem 'sys-proctree', '~> 0.0.4', require: 'sys/proctree'
-gem 'http_stub', '~> 0.5.4'
+gem 'http_stub', '~> 0.5.6'
 gem 'httparty', '~> 0.10.2'
 
 # To use ActiveModel has_secure_password

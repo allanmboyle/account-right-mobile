@@ -1,7 +1,7 @@
 describe AccountRight::LiveUser, "integrating with an oAuth server" do
   include_context "integration with an oAuth stub server"
 
-  before(:all) {  force_server_start! }
+  before(:all) { force_server_start! }
 
   after(:all) { force_server_stop! }
 

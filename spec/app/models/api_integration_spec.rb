@@ -1,10 +1,7 @@
 describe AccountRight::API, "integrating with an API server" do
   include_context "integration with an API stub server"
 
-  before(:all) do
-    force_server_start!
-    AccountRightMobile::Services::ApiStubConfigurer.initialize!
-  end
+  before(:all) { force_server_start! }
 
   after(:all) { force_server_stop! }
 
