@@ -1,13 +1,13 @@
 shared_context "server lifecycle utilities" do
 
-  let(:log) { double("Log").as_null_object }
+  let(:log) { AccountRightMobile::Services::SilentLog.new }
   let(:pid_file_path) { "#{Rails.root}/tmp/pids/#{pid_file_name}"}
   let(:pid_file_backup_directory) { "#{Rails.root}/tmp/backup/pids" }
   let(:pid_file_backup_path) { "#{pid_file_backup_directory}/#{pid_file_name}"}
 
   before(:all) { ensure_pid_file_backup_directory_exists! }
 
-  before(:each) { server.log = log }
+  before(:each) { log.stub!(:info) }
 
   def force_start!
     server.start!

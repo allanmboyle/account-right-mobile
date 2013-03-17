@@ -4,5 +4,5 @@ shared_context "integration with an oAuth stub server" do
   let(:description) { "oAuth Stub Server" }
   let(:port) { 3002 }
   let(:pid_file_name) { "oauth_stub_server.pid" }
-  let(:server) { AccountRightMobile::Services::OAuthStubServer.new(port: port) }
+  let(:server) { AccountRightMobile::Services::OAuthStubServer.new(port: port, log: log) }
 end

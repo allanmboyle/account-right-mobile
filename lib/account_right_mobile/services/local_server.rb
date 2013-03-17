@@ -6,12 +6,10 @@ module AccountRightMobile
       PID_DIR = "#{Rails.root}/tmp/pids"
       LOG_DIR = "#{Rails.root}/log"
 
-      attr_writer :log
-
       def initialize(options)
         @name = options[:name]
         @port = options[:port]
-        @log = AccountRightMobile::Services::SimpleLog.new
+        @log = options[:log] || AccountRightMobile::Services::StdOutLog.new
         @deletable_artefacts = [pid_file_path]
       end
 

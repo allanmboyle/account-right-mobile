@@ -16,7 +16,7 @@ describe AccountRightMobile::Services::LocalServer do
   let(:description) { "Test Rack Server" }
   let(:port) { 4001 }
   let(:pid_file_name) { "test_rack_server.pid" }
-  let(:server) { TestRackServer.new(port: port) }
+  let(:server) { TestRackServer.new(port: port, log: log) }
 
   describe "#start!" do
 

@@ -1,6 +1,6 @@
 module AccountRightMobile
   module Services
-    class SimpleLog
+    class StdOutLog
 
       def info(message)
         puts message

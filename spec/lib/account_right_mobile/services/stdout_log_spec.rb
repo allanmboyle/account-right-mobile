@@ -1,6 +1,6 @@
-describe AccountRightMobile::Services::SimpleLog do
+describe AccountRightMobile::Services::StdOutLog do
 
-  let(:log) { AccountRightMobile::Services::SimpleLog.new }
+  let(:log) { AccountRightMobile::Services::StdOutLog.new }
 
   describe "#info" do
 
