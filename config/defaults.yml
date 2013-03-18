@@ -9,6 +9,7 @@ live_login:
   path: /oauth2/v1/authorize
   scope: CompanyFile
 acceptance:
+  timeout_in_seconds: 3
   app_uri: http://localhost:3001
   live_user:
     username: arl_user
