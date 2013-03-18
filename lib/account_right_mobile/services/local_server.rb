@@ -15,13 +15,13 @@ module AccountRightMobile
 
       def start!
         if running?
-          @log.info "#{@name} already running"
+          @log.info "#{@name} already running on port #{@port}"
         else
           ensure_directories_exist
           pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
           create_pid_file(pid)
           AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
-          @log.info "#{@name} started"
+          @log.info "#{@name} started on port #{@port}"
         end
       end
 

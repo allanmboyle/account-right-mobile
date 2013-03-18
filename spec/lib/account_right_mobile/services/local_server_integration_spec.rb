@@ -46,8 +46,8 @@ describe AccountRightMobile::Services::LocalServer do
         end
       end
 
-      it "should log that the server started" do
-        log.should_receive(:info).with(/started/)
+      it "should log that the server started on the configured port" do
+        log.should_receive(:info).with(/started on port #{port}/)
 
         server.start!
       end
@@ -61,8 +61,8 @@ describe AccountRightMobile::Services::LocalServer do
         wait_until_started!
       end
 
-      it "should log that the server is already running" do
-        log.should_receive(:info).with(/already running/)
+      it "should log that the server is already running on the configured port" do
+        log.should_receive(:info).with(/already running on port #{port}/)
 
         server.start!
       end
