@@ -7,7 +7,7 @@ live_login:
   client_secret: test_client_secret
   grant_type: password
   path: /oauth2/v1/authorize
-  scope: CustomerFile
+  scope: CompanyFile
 acceptance:
   app_uri: http://localhost:3001
   live_user:
