@@ -7,8 +7,9 @@ module AccountRight
       def invoke(resource_path, authorization_token)
         uri = "#{config["uri"]}/#{resource_path}"
         response = HTTParty.get(uri, headers: { "Authorization" => authorization_token,
-                                                "Accept-Encoding" => "gzip,deflate",
-                                                "x-myobapi-key" => config["key"] })
+                                                "x-myobapi-key" => config["key"],
+                                                "Accept-Encoding" => "gzip,deflate"})
+        Rails.logger.info("API:: #{uri} response: #{response.body}")
         response.body
       end
 
