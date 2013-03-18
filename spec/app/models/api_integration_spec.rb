@@ -31,7 +31,8 @@ describe AccountRight::API, "integrating with an API server" do
       end
 
       it "should issue requests with an authorization header that includes the oAuth token" do
-        api_service.with("Authorization" => authorization_token).stub_response!("/#{resource_path}", stub_options)
+        api_service.with("Authorization" => "Bearer #{authorization_token}")
+                   .stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
