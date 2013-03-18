@@ -8,8 +8,9 @@ module AccountRight
         uri = "#{config["uri"]}/#{resource_path}"
         response = HTTParty.get(uri, headers: { "Authorization" => authorization_token,
                                                 "x-myobapi-key" => config["key"],
-                                                "Accept-Encoding" => "gzip,deflate"})
-        Rails.logger.info("API:: #{uri} response: #{response.body}")
+                                                "Accept-Encoding" => "gzip,deflate" })
+        Rails.logger.info("API:: #{uri} response: #{response.code} #{response.body}")
+        raise AccountRight::ApiError.new(response.body) unless response.code == 200
         response.body
       end
 
