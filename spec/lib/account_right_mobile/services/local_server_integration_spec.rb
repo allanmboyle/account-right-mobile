@@ -35,13 +35,13 @@ describe AccountRightMobile::Services::LocalServer do
       it "should create a pid file for the server" do
         server.start!
 
-        AccountRightMobile::Wait.until_true!("test rack server pid created") { pid_file_exists? }
+        ::Wait.until_true!("test rack server pid created") { pid_file_exists? }
       end
 
       it "should create a log file capturing the stdout and stderr of the server" do
         server.start!
 
-        AccountRightMobile::Wait.until_true!("test rack server log file created") do
+        ::Wait.until_true!("test rack server log file created") do
           File.exists?("#{Rails.root}/log/test_rack_server_console.log")
         end
       end
@@ -88,8 +88,8 @@ describe AccountRightMobile::Services::LocalServer do
       it "should delete the servers pid file" do
         server.stop!
 
-        AccountRightMobile::Wait.until_true!("test rack server pid is deleted") do
-          !File.exists?("#{Rails.root}/tmp/pids/test_rack_server.pid")
+        ::Wait.until_false!("test rack server pid is deleted") do
+          File.exists?("#{Rails.root}/tmp/pids/test_rack_server.pid")
         end
       end
 

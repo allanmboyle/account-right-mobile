@@ -54,7 +54,7 @@ module AccountRightMobile
         private
 
         def wait_for_customer_files_to_have_text
-          AccountRightMobile::Wait.until_true!("all customer files contain text") do
+          ::Wait.until_true!("all customer files contain text") do
             @session.all(".customer-file-name").reduce(true) { |result, node| result && !node.text().empty? }
           end
         end

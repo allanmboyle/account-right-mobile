@@ -30,7 +30,7 @@ shared_context "server lifecycle utilities" do
 
   def force_pid_file_deletion!
     FileUtils.rm_f(pid_file_path)
-    AccountRightMobile::Wait.until_true!("#{pid_file_path} is deleted") { !pid_file_exists? }
+    ::Wait.until_false!("#{pid_file_path} is deleted") { pid_file_exists? }
   end
 
   def restore_pid_file!
@@ -39,14 +39,14 @@ shared_context "server lifecycle utilities" do
   end
 
   def wait_until_started!
-    AccountRightMobile::Wait.until_true!("#{description} starts") do
+    ::Wait.until_true!("#{description} starts") do
       !!Net::HTTP.get_response("localhost", "/", port) && pid_file_exists?
     end
     FileUtils.cp(pid_file_path, pid_file_backup_path)
   end
 
   def wait_until_stopped!
-    AccountRightMobile::Wait.until_true!("#{description} stops") do
+    ::Wait.until_true!("#{description} stops") do
       begin
         Net::HTTP.get_response("localhost", "/", port)
         false
@@ -57,7 +57,7 @@ shared_context "server lifecycle utilities" do
   end
 
   def wait_until_file_exists!(file)
-    AccountRightMobile::Wait.until_true!("#{file} exists") { File.exists?(file) }
+    ::Wait.until_true!("#{file} exists") { File.exists?(file) }
   end
 
   def ensure_pid_file_backup_directory_exists!

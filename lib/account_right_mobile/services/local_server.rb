@@ -20,7 +20,7 @@ module AccountRightMobile
           ensure_directories_exist
           pid = ::Process.spawn(start_command, { [:out, :err] => [log_file_path, "w"] })
           create_pid_file(pid)
-          AccountRightMobile::Wait.until_true!("#{@name} is running") { running? }
+          ::Wait.until_true!("#{@name} is running") { running? }
           @log.info "#{@name} started on port #{@port}"
         end
       end
