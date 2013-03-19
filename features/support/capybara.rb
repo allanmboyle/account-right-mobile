@@ -1,4 +1,4 @@
-configuration = AccountRightMobile::Application.config.acceptance
+configuration = AccountRightMobile::Application.config.test
 
 Capybara.run_server = false
 Capybara.app_host = configuration["app_uri"]

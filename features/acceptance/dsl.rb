@@ -8,7 +8,7 @@ module AccountRightMobile
       end
 
       def configuration
-        AccountRightMobile::Application.config.acceptance
+        AccountRightMobile::Application.config.test
       end
 
     end
