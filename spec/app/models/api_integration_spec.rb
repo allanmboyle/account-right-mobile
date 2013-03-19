@@ -1,16 +1,14 @@
 describe AccountRight::API, "integrating with an API server" do
   include_context "integration with an API stub server"
 
-  before(:all) { force_server_start! }
-
-  after(:all) { force_server_stop! }
-
   let(:api_key) { "some_api_key" }
   let(:authorization_token) { "some_oauth_token" }
   let(:resource_path) { "a_resource" }
   let(:json_response) { { "Key" => "Value" }.to_json }
   let(:stub_options) { { method: :get, response: { status: 200, body: json_response } } }
   let(:api_service) { AccountRightMobile::Services::ApiStubConfigurer }
+
+  before(:each) { force_server_start! }
 
   before(:each) do
     @original_api_config = AccountRightMobile::Application.config.api.clone
@@ -19,6 +17,8 @@ describe AccountRight::API, "integrating with an API server" do
   end
 
   after(:each) { AccountRightMobile::Application.config.api = @original_api_config }
+
+  after(:each) { force_server_stop! }
 
   describe "#invoke" do
 

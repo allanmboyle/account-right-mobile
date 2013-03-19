@@ -5,7 +5,7 @@ shared_context "server lifecycle utilities" do
   let(:pid_file_backup_directory) { "#{Rails.root}/tmp/backup/pids" }
   let(:pid_file_backup_path) { "#{pid_file_backup_directory}/#{pid_file_name}"}
 
-  before(:all) { ensure_pid_file_backup_directory_exists! }
+  before(:each) { ensure_pid_file_backup_directory_exists! }
 
   before(:each) { log.stub!(:info) }
 

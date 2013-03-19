@@ -1,16 +1,14 @@
 describe AccountRight::LiveUser, "integrating with an oAuth server" do
   include_context "integration with an oAuth stub server"
 
-  before(:all) { force_server_start! }
-
-  after(:all) { force_server_stop! }
-
   let(:client_id) { "some_client_id" }
   let(:client_secret) { "some_client_secret" }
   let(:grant_type) { "some_grant_type" }
   let(:scope) { "some_scope" }
   let(:oauth_service) { AccountRightMobile::Services::OAuthStubConfigurer.new }
   let(:live_user) { AccountRight::LiveUser.new(username: "some_username", password: "some_password") }
+
+  before(:each) { force_server_start! }
 
   before(:each) do
     @original_live_login_config = AccountRightMobile::Application.config.live_login.clone
@@ -22,6 +20,8 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
   end
 
   after(:each) { AccountRightMobile::Application.config.live_login = @original_live_login_config }
+
+  after(:each) { force_server_stop! }
 
   describe "#login" do
 
