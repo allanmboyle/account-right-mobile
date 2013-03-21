@@ -1,9 +1,9 @@
 module AccountRightMobile
   module Services
 
-    class RailsServer < AccountRightMobile::Services::LocalServer
+    class RailsServer < HttpServerManager::Server
 
-      DEFAULT_PID_FILE_PATH = "#{PID_DIR}/server.pid"
+      DEFAULT_PID_FILE_PATH = "#{HttpServerManager.pid_dir}/server.pid"
 
       def initialize(options)
         super(options.merge(name: "rails_#{options[:environment]}_server"))

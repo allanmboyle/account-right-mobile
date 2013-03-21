@@ -1,7 +1,7 @@
 module AccountRightMobile
   module Services
 
-    class OAuthStubServer < AccountRightMobile::Services::LocalServer
+    class OAuthStubServer < HttpServerManager::Server
 
       def initialize(options)
         super({ name: "oauth_stub_server" }.merge(options))
@@ -10,7 +10,7 @@ module AccountRightMobile
       def start!
         super
         AccountRightMobile::Services::OAuthStubConfigurer.initialize!
-        @log.info "#{@name} initialized"
+        logger.info "#{@name} initialized"
       end
 
       def start_command

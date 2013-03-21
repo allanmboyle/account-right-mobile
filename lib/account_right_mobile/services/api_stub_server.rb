@@ -1,7 +1,7 @@
 module AccountRightMobile
   module Services
 
-    class ApiStubServer < AccountRightMobile::Services::LocalServer
+    class ApiStubServer < HttpServerManager::Server
 
       def initialize(options)
         super({ name: "api_stub_server" }.merge(options))
@@ -10,7 +10,7 @@ module AccountRightMobile
       def start!
         super
         AccountRightMobile::Services::ApiStubConfigurer.initialize!
-        @log.info "#{@name} initialized"
+        logger.info "#{@name} initialized"
       end
 
       def start_command

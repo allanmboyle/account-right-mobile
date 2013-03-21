@@ -6,7 +6,7 @@ describe AccountRightMobile::Services::RailsServer do
   let(:pid_file_name) { "server.pid" }
   let(:server) { AccountRightMobile::Services::RailsServer.new(environment: "test", port: port, log: log) }
 
-  it_should_behave_like "a local server"
+  it_should_behave_like "a managed http server"
 
   describe "#stop!" do
 

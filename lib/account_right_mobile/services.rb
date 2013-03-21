@@ -1,5 +1,6 @@
-require File.expand_path('../services/stdout_log', __FILE__)
-require File.expand_path('../services/local_server', __FILE__)
+HttpServerManager.pid_dir = "#{Rails.root}/tmp/pids"
+HttpServerManager.log_dir = "#{Rails.root}/log"
+
 require File.expand_path('../services/rails_server', __FILE__)
 require File.expand_path('../services/oauth_stub_server', __FILE__)
 require File.expand_path('../services/oauth_stub_configurer', __FILE__)

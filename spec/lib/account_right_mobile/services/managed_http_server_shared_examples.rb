@@ -1,8 +1,8 @@
-shared_examples_for "a local server" do
+shared_examples_for "a managed http server" do
   include_context "server lifecycle utilities"
 
-  it "should be an AccountRightMobile::Services::LocalServer" do
-    server.should be_an(AccountRightMobile::Services::LocalServer)
+  it "should be a HttpServerManager::Server" do
+    server.should be_an(HttpServerManager::Server)
   end
 
   describe "#start!" do
