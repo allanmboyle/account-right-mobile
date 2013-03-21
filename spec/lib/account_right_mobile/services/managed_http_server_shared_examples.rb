@@ -1,5 +1,5 @@
 shared_examples_for "a managed http server" do
-  include_context "server lifecycle utilities"
+  include_context "managed http server integration utilities"
 
   it "should be a HttpServerManager::Server" do
     server.should be_an(HttpServerManager::Server)
