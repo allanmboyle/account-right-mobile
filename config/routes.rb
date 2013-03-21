@@ -6,6 +6,7 @@ AccountRightMobile::Application.routes.draw do
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
   match 'live_login' => 'authentication#live_login'
+  match 'customer_file_login' => 'authentication#customer_file_login'
 
   match 'api/:resource_path' => 'api#invoke'
 

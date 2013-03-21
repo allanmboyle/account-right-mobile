@@ -24,29 +24,41 @@ describe AccountRight::API, "integrating with an API server" do
 
     describe "when the server responds with json" do
 
-      it "should request compressed data" do
+      it "should request compressed data from the api" do
         api_service.with("Accept-Encoding" => "gzip,deflate").stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
-      it "should issue requests with an authorization header that includes the oAuth token" do
+      it "should issue requests to the api with an authorization header that includes the oAuth token" do
         api_service.with("Authorization" => "Bearer #{authorization_token}")
-                   .stub_response!("/#{resource_path}", stub_options)
+        .stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
-      it "should issue requests the configured API key" do
+      it "should issue requests to the api with the configured API key" do
         api_service.with("x-myobapi-key" => api_key).stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
-      it "should return the API's json response" do
+      it "should return the API's JSON response" do
         api_service.stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should eql(json_response)
+      end
+
+    end
+
+    describe "and a customer file token is provided" do
+
+      let(:customer_file_token) { "some_customer_file_token" }
+
+      it "should issue requests to the api with a customer file token header that includes the token" do
+        api_service.with("x-myobapi-cftoken" => customer_file_token).stub_response!("/#{resource_path}", stub_options)
+
+        AccountRight::API.invoke(resource_path, authorization_token, customer_file_token).should_not be_empty
       end
 
     end

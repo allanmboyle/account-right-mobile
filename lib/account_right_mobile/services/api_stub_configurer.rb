@@ -11,9 +11,12 @@ module AccountRightMobile
 
       stub_activator("/return_many_files", COMPANY_FILE_URI,
                      method: :get,
-                     response: { status: 200, body: [ { "Name" => "Clearwater" },
-                                                      { "Name" => "Muddywater" },
-                                                      { "Name" => "Busyizzy" } ].to_json })
+                     response: { status: 200, body: [ { "Name" => "Clearwater",
+                                                        "Id" => "13dc8751-7431-4b55-bc72-01b5fc2a07f0" },
+                                                      { "Name" => "Muddywater",
+                                                        "Id" => "23dc8751-7431-4b55-bc72-01b5fc2a07f0" },
+                                                      { "Name" => "Busyizzy",
+                                                        "Id" => "33dc8751-7431-4b55-bc72-01b5fc2a07f0" } ].to_json })
 
       stub_activator("/return_one_file", COMPANY_FILE_URI,
                      method: :get,
@@ -27,7 +30,12 @@ module AccountRightMobile
                      method: :get,
                      response: { status: 500, body: "A general error occurred" })
 
+      stub_activator("/grant_all_file_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
+                     method: :get,
+                     response: { status: 200, body: [].to_json })
+
       activate!("/return_many_files")
+      activate!("/grant_all_file_access")
 
       def initialize(headers={})
         @headers = headers
@@ -65,6 +73,8 @@ module AccountRightMobile
       def stub!(uri, options)
         stub_without_headers!(uri, options.merge(headers: @headers))
       end
+
+      alias_method :stub_response!, :stub!
 
     end
 

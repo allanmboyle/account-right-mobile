@@ -9,10 +9,9 @@ define([ "backbone",
   class LiveLoginView extends Backbone.View
 
     initialize: () ->
-      @user = new LiveUser()
-      @user.on("login:success", @success, this)
-      @user.on("login:fail", @fail, this)
-      @user.on("login:error", @error, this)
+      @user = new LiveUser().on("login:success", @success, this)
+                            .on("login:fail", @fail, this)
+                            .on("login:error", @error, this)
       @$el.html(_.template(Template))
       @$el.on("pageshow", () -> $("#live_email_address").focus())
 

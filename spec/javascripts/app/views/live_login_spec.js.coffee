@@ -1,8 +1,5 @@
 describe("LiveLoginView", () ->
 
-  class StubEvent
-    preventDefault: () ->
-
   _ = null
   LiveLoginView = null
   LiveUser = null
@@ -125,6 +122,14 @@ describe("LiveLoginView", () ->
             liveLoginView.login(event)
 
             expect(liveUser.login).toHaveBeenCalled()
+          )
+
+          it("should prevent propogation of the event", () ->
+            spyOn(event, "preventDefault")
+
+            liveLoginView.login(event)
+
+            expect(event.preventDefault).toHaveBeenCalled()
           )
 
         )

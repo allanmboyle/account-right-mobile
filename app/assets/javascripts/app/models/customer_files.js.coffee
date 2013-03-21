@@ -6,4 +6,10 @@ define([ "backbone", "./customer_file" ], (Backbone, CustomerFile) ->
 
     url: "/api/accountright"
 
+    expandedFile: () ->
+      @at(@expandedPosition)
+
+    login: (customerFileUser) ->
+      customerFileUser.loginTo(@expandedFile())
+
 )

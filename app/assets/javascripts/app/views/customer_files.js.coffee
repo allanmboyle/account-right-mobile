@@ -2,10 +2,11 @@ define([ "backbone",
          "jquery",
          "underscore",
          "../models/customer_files",
+         "../models/customer_file_user",
          "text!./customer_files_layout.tmpl",
          "text!./customer_files_content.tmpl",
-         "text!./customer_files_login.tmpl" ], (Backbone, $, _, CustomerFiles, LayoutTemplate,
-                                                ContentTemplate, LoginTemplate) ->
+         "text!./customer_files_login.tmpl" ], (Backbone, $, _, CustomerFiles, CustomerFileUser,
+                                                LayoutTemplate, ContentTemplate, LoginTemplate) ->
 
   $("body").append("<div id='customer_files' data-role='page' data-title='Customer Files'></div>")
 
@@ -14,6 +15,7 @@ define([ "backbone",
     initialize: () ->
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles()
+      @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
       @$el.html(_.template(LayoutTemplate))
       @_loginContent().hide().append(_.template(LoginTemplate))
 
@@ -29,17 +31,17 @@ define([ "backbone",
       @customerFiles.on("reset", @render, this).on("error", @error, this)
       @customerFiles.fetch()
 
-    error: () ->
-      @customerFiles.error = true
-      @render()
-
     render: () ->
       $("#customer-files-content").html(@compiledContentTemplate(customerFiles: @customerFiles))
       $.mobile.changePage("#customer_files", reverse: false, changeHash: false)
       this
 
+    error: () ->
+      @customerFiles.error = true
+      @render()
+
     pageBeforeShow: () ->
-      @_showLoginWhenFileIsExpanded()
+      @_showLoginAndUpdateModelWhenFileIsExpanded()
       @_showInitialLoginIfNecessary()
       @_showNoFilesMessageIfNecessary()
 
@@ -47,13 +49,23 @@ define([ "backbone",
       $("#general_error_message").popup().popup("open") if @customerFiles.error
 
     login: (event) ->
-      location.hash = "contacts"
+      console.log("***** login: entry")
+      @syncUser()
+      @customerFiles.login(@customerFileUser)
       event.preventDefault()
 
-    _showLoginWhenFileIsExpanded: () ->
+    syncUser: () ->
+      @customerFileUser.set(username: $("#customer_file_username").val(), password: $("#customer_file_password").val())
+
+    loginSuccess: () ->
+      location.hash = "contacts"
+
+    _showLoginAndUpdateModelWhenFileIsExpanded: () ->
       view = this
       $(".customer-file").on("expand", (event) ->
-        view._collapsibleContentFor(event).append(view._loginContent().show())
+        collapsible_content_element = $(event.target).find(".ui-collapsible-content")
+        collapsible_content_element.append(view._loginContent().show())
+        view.customerFiles.expandedPosition = $(".ui-collapsible-content").index(collapsible_content_element)
       )
 
     _showInitialLoginIfNecessary: () ->
@@ -70,8 +82,5 @@ define([ "backbone",
 
     _noFilesMessage: () ->
       $("#no-customer-files-message")
-
-    _collapsibleContentFor: (event) ->
-      $(event.target).find(".ui-collapsible-content")
 
 )

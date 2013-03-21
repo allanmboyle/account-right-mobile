@@ -40,7 +40,7 @@ group :test do
 end
 
 gem 'sys-proctree', '~> 0.0.4', require: 'sys/proctree'
-gem 'http_stub', '~> 0.5.7'
+gem 'http_stub', '~> 0.6.0'
 gem 'http_server_manager', '~> 0.1.1'
 gem 'wait_until', '~> 0.0.1'
 gem 'httparty', '~> 0.10.2'

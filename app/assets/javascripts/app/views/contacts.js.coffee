@@ -11,8 +11,7 @@ define([ "backbone",
 
     initialize: () ->
       @compiledContentTemplate = _.template(ContentTemplate)
-      @contacts = new Contacts()
-      @contacts.on("reset", @render, this)
+      @contacts = new Contacts().on("reset", @render, this)
       @$el.html(_.template(LayoutTemplate))
       @$el.bind("pagebeforeshow", () ->
         $("#contacts-list").listview(autodividers: true, autodividersSelector: (li) -> $(li).find(".name").text()[0])

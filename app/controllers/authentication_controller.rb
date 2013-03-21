@@ -1,33 +1,32 @@
 class AuthenticationController < ApplicationController
 
   def live_login
-    for_json_requests do
-      if AccountRightMobile::Application.config.live_login["base_uri"]
-        authenticate_live_login
-      else
-        render :json => "", :status => 200
-      end
+    respond_to_authentication do
+      user = AccountRight::LiveUser.new(username: params[:emailAddress], password: params[:password])
+      result = user.login
+      session[:access_token] = result[:access_token]
     end
   end
 
-  def authenticate_live_login
-    begin
-      result = AccountRight::LiveUser.new(username: params[:emailAddress], password: params[:password]).login
-      session[:access_token] = result[:access_token]
-      render :json => {}.to_json
-    rescue AccountRight::AuthenticationFailure
-      render :json => "", :status => 400
-    rescue AccountRight::AuthenticationError
-      render :json => "", :status => 500
+  def customer_file_login
+    respond_to_authentication do
+      user = AccountRight::CustomerFileUser.new(username: params[:username], password: params[:password])
+      user.login(params[:fileId], session[:access_token])
+      session[:cftoken] = user.cftoken
     end
   end
 
   private
 
-  def for_json_requests
-    respond_to do |format|
-      format.json do
-        yield
+  def respond_to_authentication(&block)
+    respond_to_json do
+      begin
+        block.call
+        render :json => {}.to_json
+      rescue AccountRight::AuthenticationFailure
+        render :json => "", :status => 400
+      rescue AccountRight::AuthenticationError
+        render :json => "", :status => 500
       end
     end
   end
