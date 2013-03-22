@@ -10,11 +10,11 @@ Feature: Authenticated Customer File Access
     When the user attempts to login
     Then the Contacts page should be shown
 
-  @wip
   Scenario: Error is shown when invalid credentials are provided
     Given the user has logged-in to AccountRight Live
     And the user has chosen to access a Customer File
-    When the user enters invalid login credentials
+    And the user enters invalid login credentials
+    When the user attempts to login
     Then the Customer Files page should be shown
     And an error should be displayed indicating the provided credentials were invalid
 

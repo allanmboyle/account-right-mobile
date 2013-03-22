@@ -15,5 +15,5 @@ Before do
   oauth_service_class = CUCUMBER_CONFIGURATION.filters.include?("@smoke") ?
       AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::OAuthStubConfigurer
   oauth_service_class.initialize!
-  @oauth_service = oauth_service_class.new
+  @oauth_service = @authentication_service = oauth_service_class.new
 end

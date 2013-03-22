@@ -9,7 +9,7 @@ jasmineContext = (stubs = {}) ->
       app: "../app"
       jquery: "jquery-1.9.1.min"
       jquerymobile: "jquery.mobile-1.3.0.min"
-      underscore: "lodash-0.10.0.min"
+      underscore: "lodash.underscore-0.10.0.min"
       backbone: "backbone-0.9.9.min"
       text : "text-2.0.3"
     shim:
@@ -41,7 +41,7 @@ jasmineRequire = (executionContext, modulesToRequire, callback) ->
     )
   )
   afterEach(() ->
-    $(".ui-loader").remove()
+    $(".ui-loader, .ui-popup-screen, .ui-popup-container").remove()
   )
 
 window.jasmineRequire = jasmineRequire

@@ -45,10 +45,10 @@ describe("customerFileUser", () ->
 
     )
 
-    describe("when the login is unsuccessful", () ->
+    describe("when the login is fails due to invalid credentials", () ->
 
       beforeEach(() ->
-        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 400))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 401))
       )
 
       it("should trigger a login:fail event", () ->
@@ -61,7 +61,7 @@ describe("customerFileUser", () ->
 
     )
 
-    describe("when the login fails due to the the login service being unavailable", () ->
+    describe("when the login fails due to an arbitrary error", () ->
 
       beforeEach(() ->
         spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 500))

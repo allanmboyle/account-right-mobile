@@ -3,7 +3,7 @@ Given /^the user enters valid login credentials$/ do
 end
 
 Given /^the user enters invalid login credentials$/ do
-  @oauth_service.deny_access
+  @authentication_service.deny_access
   @current_page.enter_credentials
 end
 

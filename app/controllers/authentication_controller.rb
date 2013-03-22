@@ -24,7 +24,7 @@ class AuthenticationController < ApplicationController
         block.call
         render :json => {}.to_json
       rescue AccountRight::AuthenticationFailure
-        render :json => "", :status => 400
+        render :json => "", :status => 401
       rescue AccountRight::AuthenticationError
         render :json => "", :status => 500
       end

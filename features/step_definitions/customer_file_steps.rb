@@ -18,6 +18,7 @@ end
 
 When /^the user has chosen to access a Customer File$/ do
   @current_page.access_a_file
+  @authentication_service = @api_service
 end
 
 Then /^a message should be displayed indicating no customer files are available to access$/ do

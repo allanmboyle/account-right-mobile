@@ -8,10 +8,10 @@ describe AuthenticationController, type: :controller do
         user.stub!(:login).and_raise(AccountRight::AuthenticationFailure)
       end
 
-      it "should respond with a status of 400" do
+      it "should respond with a status of 401" do
         post_login
 
-        response.status.should eql(400)
+        response.status.should eql(401)
       end
 
     end

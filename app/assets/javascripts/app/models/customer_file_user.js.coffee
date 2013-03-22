@@ -15,7 +15,7 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
         data: _.extend({ fileId: customerFile.get("Id") }, user.attributes)
         success: () -> user.trigger("login:success")
         error: (jqXHR) ->
-          eventToTrigger = if jqXHR.status == 400 then "fail" else "error"
+          eventToTrigger = if jqXHR.status == 401 then "fail" else "error"
           user.trigger("login:#{eventToTrigger}")
       )
 

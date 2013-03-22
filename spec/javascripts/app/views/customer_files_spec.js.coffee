@@ -51,10 +51,13 @@ describe("CustomerFilesView", () ->
 
       initialActions = {}
       loginSuccessSpy = null
+      loginFailSpy = null
 
       beforeEach(() ->
         initialActions["loginSuccess"] = CustomerFilesView.prototype.loginSuccess
+        initialActions["loginFail"] = CustomerFilesView.prototype.loginFail
         loginSuccessSpy = CustomerFilesView.prototype.loginSuccess = jasmine.createSpy()
+        loginFailSpy = CustomerFilesView.prototype.loginFail = jasmine.createSpy()
 
         customerFilesView = new CustomerFilesView()
         customerFileUser = customerFilesView.customerFileUser
@@ -68,6 +71,12 @@ describe("CustomerFilesView", () ->
         customerFileUser.trigger("login:success")
 
         expect(loginSuccessSpy).toHaveBeenCalled()
+      )
+
+      it("should trigger the loginFail action when the customer file user's login:fail event occurs", () ->
+        customerFileUser.trigger("login:fail")
+
+        expect(loginFailSpy).toHaveBeenCalled()
       )
 
     )
@@ -305,6 +314,32 @@ describe("CustomerFilesView", () ->
         customerFilesView.loginSuccess({})
 
         expect(location.hash).toBe("#contacts")
+      )
+
+    )
+
+    describe("#loginFail", () ->
+
+      beforeEach(() ->
+        location.hash = "#customer_files"
+      )
+
+      it("should leave the user on the customer files page", () ->
+        customerFilesView.loginFail()
+
+        expect(location.hash).toMatch(/^#customer_files/)
+      )
+
+      it("should make the login failure popup visible", () ->
+        customerFilesView.loginFail()
+
+        expect($("#customer_file_login_fail_message-popup")).toHaveClass("ui-popup-active")
+      )
+
+      it("should display a popup with a message indicating the login attempt failed", () ->
+        customerFilesView.loginFail()
+
+        expect($("#customer_file_login_fail_message")).toHaveText("The username or password you entered is incorrect")
       )
 
     )

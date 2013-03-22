@@ -30,12 +30,16 @@ module AccountRightMobile
                      method: :get,
                      response: { status: 500, body: "A general error occurred" })
 
-      stub_activator("/grant_all_file_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
+      stub_activator("/grant_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
                      method: :get,
                      response: { status: 200, body: [].to_json })
 
+      stub_activator("/deny_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
+                     method: :get,
+                     response: { status: 401, body: [].to_json })
+
       activate!("/return_many_files")
-      activate!("/grant_all_file_access")
+      activate!("/grant_access")
 
       def initialize(headers={})
         @headers = headers
@@ -66,6 +70,10 @@ module AccountRightMobile
 
       def return_error
         activate!("/return_error")
+      end
+
+      def deny_access
+        activate!("/deny_access")
       end
 
       alias_method :stub_without_headers!, :stub!

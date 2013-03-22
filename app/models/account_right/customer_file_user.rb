@@ -15,8 +15,10 @@ module AccountRight
     def login(customer_file_id, access_token)
       begin
         AccountRight::API.invoke("accountright/#{customer_file_id}/AccountingProperties", access_token, cftoken)
-      rescue AccountRight::ApiError
-        raise AccountRight::AuthenticationError
+      rescue AccountRight::ApiError => api_error
+        error_type = api_error.response_code == 401 ? AccountRight::AuthenticationFailure :
+                                                      AccountRight::AuthenticationError
+        raise error_type
       end
     end
 

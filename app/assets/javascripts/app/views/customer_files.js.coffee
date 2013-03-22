@@ -16,6 +16,7 @@ define([ "backbone",
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles()
       @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
+                                                .on("login:fail", @loginFail, this)
       @$el.html(_.template(LayoutTemplate))
       @_loginContent().hide().append(_.template(LoginTemplate))
 
@@ -49,7 +50,6 @@ define([ "backbone",
       $("#general_error_message").popup().popup("open") if @customerFiles.error
 
     login: (event) ->
-      console.log("***** login: entry")
       @syncUser()
       @customerFiles.login(@customerFileUser)
       event.preventDefault()
@@ -59,6 +59,9 @@ define([ "backbone",
 
     loginSuccess: () ->
       location.hash = "contacts"
+
+    loginFail: () ->
+      $("#customer_file_login_fail_message").popup().popup("open")
 
     _showLoginAndUpdateModelWhenFileIsExpanded: () ->
       view = this

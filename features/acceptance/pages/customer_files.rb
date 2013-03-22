@@ -51,6 +51,12 @@ module AccountRightMobile
                             visible: true)
         end
 
+        def has_invalid_login_message?
+          @session.has_css?("#customer_file_login_fail_message-popup.ui-popup-active",
+                            text: "The username or password you entered is incorrect",
+                            visible: true)
+        end
+
         private
 
         def wait_for_customer_files_to_have_text
