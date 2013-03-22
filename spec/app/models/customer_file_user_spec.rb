@@ -14,8 +14,8 @@ describe AccountRight::CustomerFileUser do
 
   describe "#cftoken" do
 
-    it "should return the username and password encoded in base64" do
-      customer_file_user.cftoken.should eql(Base64.encode64("#{username}:#{password}"))
+    it "should return the username and password encoded in RFC 4648 compliant base64" do
+      customer_file_user.cftoken.should eql(Base64.strict_encode64("#{username}:#{password}"))
     end
 
   end

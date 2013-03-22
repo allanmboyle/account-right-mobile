@@ -9,7 +9,7 @@ module AccountRight
     end
 
     def cftoken
-      Base64.encode64("#{username}:#{password}")
+      Base64.strict_encode64("#{username}:#{password}")
     end
 
     def login(customer_file_id, access_token)
