@@ -12,8 +12,8 @@ Given /^the user does not have access to any Customer File$/ do
   @api_service.return_no_files
 end
 
-Given /^the API is unable to return data due to an expected error$/ do
-  @api_service.return_error
+Given /^the API is unable to return data due to an arbitrary problem$/ do
+  @api_service.return_errors
 end
 
 When /^the user has chosen to access a Customer File$/ do

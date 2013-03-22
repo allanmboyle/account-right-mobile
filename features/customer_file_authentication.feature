@@ -18,12 +18,11 @@ Feature: Authenticated Customer File Access
     Then the Customer Files page should be shown
     And an error should be displayed indicating the provided credentials were invalid
 
-  @wip
   Scenario: Error is shown when an unexpected API error occurs
-    Given the API is unable to return data due to an expected error
-    And the user has logged-in to AccountRight Live
+    Given the user has logged-in to AccountRight Live
     And the user has chosen to access a Customer File
     And the user enters valid login credentials
+    And the API is unable to return data due to an arbitrary problem
     When the user attempts to login
     Then the Customer Files page should be shown
-    And an error should be displayed indicating the application is unavailable
+    And an error should be displayed indicating an error occurred during authentication

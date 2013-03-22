@@ -52,12 +52,15 @@ describe("CustomerFilesView", () ->
       initialActions = {}
       loginSuccessSpy = null
       loginFailSpy = null
+      loginErrorSpy = null
 
       beforeEach(() ->
         initialActions["loginSuccess"] = CustomerFilesView.prototype.loginSuccess
         initialActions["loginFail"] = CustomerFilesView.prototype.loginFail
+        initialActions["loginError"] = CustomerFilesView.prototype.loginError
         loginSuccessSpy = CustomerFilesView.prototype.loginSuccess = jasmine.createSpy()
         loginFailSpy = CustomerFilesView.prototype.loginFail = jasmine.createSpy()
+        loginErrorSpy = CustomerFilesView.prototype.loginError = jasmine.createSpy()
 
         customerFilesView = new CustomerFilesView()
         customerFileUser = customerFilesView.customerFileUser
@@ -77,6 +80,12 @@ describe("CustomerFilesView", () ->
         customerFileUser.trigger("login:fail")
 
         expect(loginFailSpy).toHaveBeenCalled()
+      )
+
+      it("should trigger the loginError action when the customer file user's login:error event occurs", () ->
+        customerFileUser.trigger("login:error")
+
+        expect(loginErrorSpy).toHaveBeenCalled()
       )
 
     )
@@ -340,6 +349,32 @@ describe("CustomerFilesView", () ->
         customerFilesView.loginFail()
 
         expect($("#customer_file_login_fail_message")).toHaveText("The username or password you entered is incorrect")
+      )
+
+    )
+
+    describe("#loginError", () ->
+
+      beforeEach(() ->
+        location.hash = "#customer_files"
+      )
+
+      it("should leave the user on the customer files page", () ->
+        customerFilesView.loginError()
+
+        expect(location.hash).toMatch(/^#customer_files/)
+      )
+
+      it("should make the login error popup visible", () ->
+        customerFilesView.loginError()
+
+        expect($("#customer_file_login_error_message-popup")).toHaveClass("ui-popup-active")
+      )
+
+      it("should display a popup with a message indicating an error occurred during the login attempt", () ->
+        customerFilesView.loginError()
+
+        expect($("#customer_file_login_error_message")).toHaveText("We can't confirm your details at the moment, try again shortly")
       )
 
     )

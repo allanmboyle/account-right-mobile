@@ -26,10 +26,6 @@ module AccountRightMobile
                      method: :get,
                      response: { status: 200, body: [].to_json })
 
-      stub_activator("/return_error", COMPANY_FILE_URI,
-                     method: :get,
-                     response: { status: 500, body: "A general error occurred" })
-
       stub_activator("/grant_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
                      method: :get,
                      response: { status: 200, body: [].to_json })
@@ -37,6 +33,10 @@ module AccountRightMobile
       stub_activator("/deny_access", /#{COMPANY_FILE_URI}\/[^\/]+\/AccountingProperties/,
                      method: :get,
                      response: { status: 401, body: [].to_json })
+
+      stub_activator("/return_errors", /#{COMPANY_FILE_URI}.*/,
+                     method: :get,
+                     response: { status: 500, body: "A general error occurred" })
 
       activate!("/return_many_files")
       activate!("/grant_access")
@@ -68,12 +68,12 @@ module AccountRightMobile
         activate!("/return_no_files")
       end
 
-      def return_error
-        activate!("/return_error")
-      end
-
       def deny_access
         activate!("/deny_access")
+      end
+
+      def return_errors
+        activate!("/return_errors")
       end
 
       alias_method :stub_without_headers!, :stub!

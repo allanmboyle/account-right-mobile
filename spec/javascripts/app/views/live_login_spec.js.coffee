@@ -180,7 +180,7 @@ describe("LiveLoginView", () ->
             location.hash = "#live_login"
           )
 
-          it("should leave the user on the customer files page", () ->
+          it("should leave the user on the live login page", () ->
             liveLoginView.error()
 
             expect(location.hash).toMatch(/^#live_login/)

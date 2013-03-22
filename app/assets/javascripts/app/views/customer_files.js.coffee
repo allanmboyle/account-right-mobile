@@ -17,6 +17,7 @@ define([ "backbone",
       @customerFiles = new CustomerFiles()
       @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
                                                 .on("login:fail", @loginFail, this)
+                                                .on("login:error", @loginError, this)
       @$el.html(_.template(LayoutTemplate))
       @_loginContent().hide().append(_.template(LoginTemplate))
 
@@ -62,6 +63,9 @@ define([ "backbone",
 
     loginFail: () ->
       $("#customer_file_login_fail_message").popup().popup("open")
+
+    loginError: () ->
+      $("#customer_file_login_error_message").popup().popup("open")
 
     _showLoginAndUpdateModelWhenFileIsExpanded: () ->
       view = this

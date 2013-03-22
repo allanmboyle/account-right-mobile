@@ -51,9 +51,15 @@ module AccountRightMobile
                             visible: true)
         end
 
-        def has_invalid_login_message?
+        def has_invalid_credentials_message?
           @session.has_css?("#customer_file_login_fail_message-popup.ui-popup-active",
                             text: "The username or password you entered is incorrect",
+                            visible: true)
+        end
+
+        def has_authentication_error_message?
+          @session.has_css?("#customer_file_login_error_message-popup.ui-popup-active",
+                            text: "We can't confirm your details at the moment, try again shortly",
                             visible: true)
         end
 

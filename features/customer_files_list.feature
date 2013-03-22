@@ -24,7 +24,7 @@ Scenario: User does not have access to a Customer File
   And a message should be displayed indicating no customer files are available to access
 
 Scenario: Error is shown when an unexpected API error occurs
-  Given the API is unable to return data due to an expected error
+  Given the API is unable to return data due to an arbitrary problem
   When the user logs-in to AccountRight Live
   Then the Customer Files page should be shown
   And an error should be displayed indicating the application is unavailable

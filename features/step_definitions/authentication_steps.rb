@@ -35,5 +35,9 @@ When /^the user logs-in to AccountRight Live$/ do
 end
 
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
-  @current_page.should have_invalid_login_message
+  @current_page.should have_invalid_credentials_message
+end
+
+Then /^an error should be displayed indicating an error occurred during authentication/ do
+  @current_page.should have_authentication_error_message
 end
