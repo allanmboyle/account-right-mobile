@@ -3,6 +3,11 @@ Feature: Authenticated Customer File Access
   As a user
   I want access to my Customer Files to be authenticated
 
+  Scenario: Username defaults to 'administrator'
+    Given the user has logged-in to AccountRight Live
+    When the user has chosen to access a Customer File
+    Then the login username should default to 'Administrator'
+
   Scenario: Access is granted when valid credentials are provided
     Given the user has logged-in to AccountRight Live
     And the user has chosen to access a Customer File

@@ -133,6 +133,10 @@ describe("CustomerFilesView", () ->
             waitsFor(expandedFileToBeUpdatedInModel, "File model to be marked as expanded", 5000)
           )
 
+          it("should default the login forms username to 'Administrator'", () ->
+            expect($("#customer_file_username")).toHaveValue("Administrator")
+          )
+
           describe("and another customer file is expanded", () ->
 
             otherCustomerFileElement = null

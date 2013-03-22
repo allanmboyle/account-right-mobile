@@ -16,6 +16,10 @@ module AccountRightMobile
           "/#customer_files"
         end
 
+        def username
+          @session.find("#customer_file_username").value()
+        end
+
         def access_a_file
           @session.all("#customer-files-list a").first.click
         end

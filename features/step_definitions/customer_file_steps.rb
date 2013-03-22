@@ -21,8 +21,12 @@ When /^the user has chosen to access a Customer File$/ do
   @authentication_service = @api_service
 end
 
-Then /^a message should be displayed indicating no customer files are available to access$/ do
-  @current_page.should have_no_customer_files_available_message
+Then /^the Customer File login is shown$/ do
+  @current_page.shows_login_within?(@customer_file).should be_true
+end
+
+Then /^the login username should default to '([^']*)'$/ do |expected_username|
+  @current_page.username.should eql(expected_username)
 end
 
 Then /^all the Customer Files are shown$/ do
@@ -33,6 +37,7 @@ Then /^the Customer File is shown$/ do
   @current_page.customer_files.should eql([@customer_file])
 end
 
-Then /^the Customer File login is shown$/ do
-  @current_page.shows_login_within?(@customer_file).should be_true
+Then /^a message should be displayed indicating no customer files are available to access$/ do
+  @current_page.should have_no_customer_files_available_message
 end
+
