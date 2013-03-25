@@ -20,6 +20,30 @@ describe AccountRight::API do
       AccountRight::API.invoke(uri, access_token)
     end
 
+    it "should log the request access token header at info level" do
+      logger.should_receive(:info).with(/Authorization.*#{access_token}/)
+
+      AccountRight::API.invoke(uri, access_token)
+    end
+
+    it "should log the request api-key header at info level" do
+      logger.should_receive(:info).with(/x-myobapi-key.*#{AccountRightMobile::Application.config.api["key"]}/)
+
+      AccountRight::API.invoke(uri, access_token)
+    end
+
+    describe "when a cftoken is provided" do
+
+      let(:cf_token) { "some_cf_token" }
+
+      it "should log the request x-myobapi-cftoken header at info level" do
+        logger.should_receive(:info).with(/x-myobapi-cftoken.*#{cf_token}/)
+
+        AccountRight::API.invoke(uri, access_token, cf_token)
+      end
+
+    end
+
     it "should log the response status at info level" do
       logger.should_receive(:info).with(/#{response_code}/)
 

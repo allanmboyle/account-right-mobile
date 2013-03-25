@@ -6,8 +6,9 @@ module AccountRight
 
       def invoke(resource_path, authorization_token, cftoken=nil)
         uri = "#{config["uri"]}/#{resource_path}"
-        response = HTTParty.get(uri, headers: headers_for(authorization_token, cftoken))
-        Rails.logger.info("API:: #{uri} response: #{response.code} #{response.body}")
+        headers = headers_for(authorization_token, cftoken)
+        response = HTTParty.get(uri, headers: headers)
+        Rails.logger.info("API:: URI: #{uri}\n    headers: #{headers}\n    response: #{response.code} #{response.body}")
         raise AccountRight::ApiError.new(response) unless response.code == 200
         response.body
       end
