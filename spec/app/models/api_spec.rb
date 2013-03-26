@@ -8,6 +8,7 @@ describe AccountRight::API do
 
     let(:uri) { "some uri" }
     let(:access_token) { "some token" }
+    let(:security_tokens) { { access_token: access_token } }
     let(:response_code) { 200 }
     let(:response_body) { "some response body" }
     let(:response) { double("HTTPResponse", :body => response_body, :code => response_code) }
@@ -17,29 +18,31 @@ describe AccountRight::API do
     it "should log the requested URI at info level" do
       logger.should_receive(:info).with(/#{uri}/)
 
-      AccountRight::API.invoke(uri, access_token)
+      perform_invoke
     end
 
     it "should log the request access token header at info level" do
       logger.should_receive(:info).with(/Authorization.*#{access_token}/)
 
-      AccountRight::API.invoke(uri, access_token)
+      perform_invoke
     end
 
     it "should log the request api-key header at info level" do
       logger.should_receive(:info).with(/x-myobapi-key.*#{AccountRightMobile::Application.config.api["key"]}/)
 
-      AccountRight::API.invoke(uri, access_token)
+      perform_invoke
     end
 
-    describe "when a cftoken is provided" do
+    describe "when a customer file security token is provided" do
 
       let(:cf_token) { "some_cf_token" }
+
+      let(:security_tokens) { { access_token: access_token, cf_token: cf_token } }
 
       it "should log the request x-myobapi-cftoken header at info level" do
         logger.should_receive(:info).with(/x-myobapi-cftoken.*#{cf_token}/)
 
-        AccountRight::API.invoke(uri, access_token, cf_token)
+        perform_invoke
       end
 
     end
@@ -47,13 +50,13 @@ describe AccountRight::API do
     it "should log the response status at info level" do
       logger.should_receive(:info).with(/#{response_code}/)
 
-      AccountRight::API.invoke(uri, access_token)
+      perform_invoke
     end
 
     it "should log the response body at info level" do
       logger.should_receive(:info).with(/#{response_body}/)
 
-      AccountRight::API.invoke(uri, access_token)
+      perform_invoke
     end
 
     describe "and a 200 response is received" do
@@ -61,7 +64,7 @@ describe AccountRight::API do
       let(:response_code) { 200 }
 
       it "should execute successfully" do
-        AccountRight::API.invoke(uri, access_token)
+        perform_invoke
       end
 
     end
@@ -71,7 +74,7 @@ describe AccountRight::API do
       let(:response_code) { 300 }
 
       it "should raise an error with the response body" do
-        lambda { AccountRight::API.invoke(uri, access_token) }.should raise_error(AccountRight::ApiError, response_body)
+        lambda { perform_invoke }.should raise_error(AccountRight::ApiError, response_body)
       end
 
     end
@@ -81,7 +84,7 @@ describe AccountRight::API do
       let(:response_code) { 400 }
 
       it "should raise an error with the response body" do
-        lambda { AccountRight::API.invoke(uri, access_token) }.should raise_error(AccountRight::ApiError, response_body)
+        lambda { perform_invoke }.should raise_error(AccountRight::ApiError, response_body)
       end
 
     end
@@ -91,9 +94,13 @@ describe AccountRight::API do
       let(:response_code) { 500 }
 
       it "should raise an error with the response body" do
-        lambda { AccountRight::API.invoke(uri, access_token) }.should raise_error(AccountRight::ApiError, response_body)
+        lambda { perform_invoke }.should raise_error(AccountRight::ApiError, response_body)
       end
 
+    end
+    
+    def perform_invoke
+      AccountRight::API.invoke(uri, security_tokens)
     end
 
   end

@@ -12,10 +12,10 @@ describe AccountRight::CustomerFileUser do
     customer_file_user.password.should eql(password)
   end
 
-  describe "#cftoken" do
+  describe "#cf_token" do
 
     it "should return the username and password encoded in RFC 4648 compliant base64" do
-      customer_file_user.cftoken.should eql(Base64.strict_encode64("#{username}:#{password}"))
+      customer_file_user.cf_token.should eql(Base64.strict_encode64("#{username}:#{password}"))
     end
 
   end
@@ -23,14 +23,14 @@ describe AccountRight::CustomerFileUser do
   describe "#login" do
 
     let(:access_token) { "some-access-token" }
+    let(:cf_token) { "some token" }
+    let(:security_tokens) { { access_token: access_token, cf_token: cf_token } }
     let(:customer_file_id) { "0123456789" }
-    let(:cftoken) { "some token" }
 
-    before(:each) { customer_file_user.stub!(:cftoken).and_return(cftoken) }
+    before(:each) { customer_file_user.stub!(:cf_token).and_return(cf_token) }
 
     it "should request to accounting properties of the provided customer file from the api" do
-      AccountRight::API.should_receive(:invoke)
-                       .with("accountright/0123456789/AccountingProperties", access_token, cftoken)
+      AccountRight::API.should_receive(:invoke).with("accountright/0123456789/AccountingProperties", security_tokens)
 
       perform_login
     end

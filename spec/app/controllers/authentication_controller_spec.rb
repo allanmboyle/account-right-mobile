@@ -124,9 +124,9 @@ describe AuthenticationController, type: :controller do
         let(:file_id) { "9876543210" }
 
         let(:access_token) { "some_access_token" }
-        let(:cftoken) { "some_cftoken" }
+        let(:cf_token) { "some_customer_file_token" }
 
-        let(:user) { double(AccountRight::CustomerFileUser, cftoken: cftoken).as_null_object }
+        let(:user) { double(AccountRight::CustomerFileUser, cf_token: cf_token).as_null_object }
 
         before(:each) do
           session[:access_token] = access_token
@@ -162,7 +162,7 @@ describe AuthenticationController, type: :controller do
           it "should establish the users company file token in the users session" do
             post_login
 
-            session[:cftoken].should eql(cftoken)
+            session[:cf_token].should eql(cf_token)
           end
 
           it "should retain the cross site request forgery token in the users session" do
