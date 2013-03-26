@@ -48,7 +48,7 @@ AccountRightMobile::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
   config.assets.precompile = config.assets.precompile.select { |entry| entry.to_s !~ /css\|js/ }
-  config.assets.precompile += %w( *.css )
+  config.assets.precompile += %w( *.css lib/*.js )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
