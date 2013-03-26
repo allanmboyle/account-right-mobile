@@ -2,7 +2,7 @@ module AccountRightMobile
   module Acceptance
     module Pages
 
-      class AccountRightLiveLogin < Pages::Base
+      class LiveLogin < Pages::Base
 
         def self.title
           "AccountRight Live Login"

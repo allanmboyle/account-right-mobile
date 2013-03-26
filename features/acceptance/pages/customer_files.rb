@@ -35,8 +35,9 @@ module AccountRightMobile
         end
 
         def enter_credentials
-          @session.fill_in("customer_file_username", :with => "cf_user")
-          @session.fill_in("customer_file_password", :with => "cf_password")
+          credentials = @configuration["customer_file_user"]
+          @session.fill_in("customer_file_username", :with => credentials["username"])
+          @session.fill_in("customer_file_password", :with => credentials["password"])
         end
 
         def login

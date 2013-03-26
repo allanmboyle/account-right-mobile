@@ -8,6 +8,7 @@ Feature: Authenticated Customer File Access
     When the user has chosen to access a Customer File
     Then the login username should default to 'Administrator'
 
+  @smoke
   Scenario: Access is granted when valid credentials are provided
     Given the user has logged-in to AccountRight Live
     And the user has chosen to access a Customer File
