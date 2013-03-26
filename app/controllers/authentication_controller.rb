@@ -32,9 +32,10 @@ class AuthenticationController < ApplicationController
   end
 
   def recreate_session_with(hash)
-    resolved_hash = session.to_hash.symbolize_keys.tap { |hash| hash.delete(:session_id) }.merge(hash)
+    new_session_hash = session.to_hash.symbolize_keys.tap { |session_hash| session_hash.delete(:session_id) }
+    new_session_hash.merge!(hash)
     reset_session
-    session.update(resolved_hash)
+    session.update(new_session_hash)
   end
 
 end

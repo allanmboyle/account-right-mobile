@@ -58,9 +58,10 @@ describe AuthenticationController, type: :controller do
 
         describe "when the user login is successful" do
 
-          before(:each) do
-            user.stub!(:login).and_return(access_token: "someAccessToken", refresh_token: "someRefreshToken")
-          end
+          let(:access_token) { "someAccessToken" }
+          let(:refresh_token) { "someRefreshToken" }
+
+          before(:each) { user.stub!(:login).and_return(access_token: access_token, refresh_token: refresh_token) }
 
           it "should respond with status of 200" do
             post_login
@@ -74,10 +75,16 @@ describe AuthenticationController, type: :controller do
             post_login
           end
 
-          it "should establish the access token in the users session" do
+          it "should establish the access token in the users session from the login response" do
             post_login
 
-            session[:access_token].should eql("someAccessToken")
+            session[:access_token].should eql(access_token)
+          end
+
+          it "should establish the refresh token in the users session from the login response" do
+            post_login
+
+            session[:refresh_token].should eql(refresh_token)
           end
 
           it "should retain the cross site request forgery token in the users session" do
@@ -124,12 +131,14 @@ describe AuthenticationController, type: :controller do
         let(:file_id) { "9876543210" }
 
         let(:access_token) { "some_access_token" }
+        let(:refresh_token) { "some_refresh_token" }
         let(:cf_token) { "some_customer_file_token" }
 
         let(:user) { double(AccountRight::CustomerFileUser, cf_token: cf_token).as_null_object }
 
         before(:each) do
           session[:access_token] = access_token
+          session[:refresh_token] = refresh_token
 
           AccountRight::CustomerFileUser.stub!(:new).and_return(user)
         end
@@ -175,6 +184,12 @@ describe AuthenticationController, type: :controller do
             post_login
 
             session[:access_token].should eql(access_token)
+          end
+
+          it "should retain the refresh token in the users session" do
+            post_login
+
+            session[:refresh_token].should eql(refresh_token)
           end
 
           it "should respond with an empty json body" do
