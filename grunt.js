@@ -10,7 +10,8 @@ module.exports = function (grunt) {
         lib: 'vendor/assets/javascripts/lib/require-2.1.4.min.js',
         main: 'tmp/spec/javascripts/spec_main.js'
       },
-      'runner-dir': 'tmp/spec/javascripts'
+      'runner-dir': 'tmp/spec/javascripts',
+      timeout : 500
     }
   });
 
