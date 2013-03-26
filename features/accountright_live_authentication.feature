@@ -18,17 +18,17 @@ Feature: Authenticated AccountRight Live Access
     And an error should be displayed indicating the provided credentials were invalid
 
   Scenario: Error is shown when authentication provider is unavailable
-    Given the AccountRight Live authentication service is unavailable
-    And the user visits the AccountRight Live Login page
+    Given the user visits the AccountRight Live Login page
     And the user enters valid login credentials
+    And the AccountRight Live authentication service is unavailable
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
     And an error should be displayed indicating an error occurred during authentication
 
   Scenario: Error is shown when integration with the provider is mis-configured
-    Given the AccountRight Live authentication service is mis-configured
-    And the user visits the AccountRight Live Login page
+    Given the user visits the AccountRight Live Login page
     And the user enters valid login credentials
+    And the AccountRight Live authentication service is mis-configured
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
     And an error should be displayed indicating an error occurred during authentication

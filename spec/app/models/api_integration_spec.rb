@@ -25,20 +25,20 @@ describe AccountRight::API, "integrating with an API server" do
     describe "when the server responds with json" do
 
       it "should request compressed data from the api" do
-        api_service.with("Accept-Encoding" => "gzip,deflate").stub_response!("/#{resource_path}", stub_options)
+        api_service.for_headers("Accept-Encoding" => "gzip,deflate").stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
       it "should issue requests to the api with an authorization header that includes the oAuth token" do
-        api_service.with("Authorization" => "Bearer #{authorization_token}")
+        api_service.for_headers("Authorization" => "Bearer #{authorization_token}")
         .stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
 
       it "should issue requests to the api with the configured API key" do
-        api_service.with("x-myobapi-key" => api_key).stub_response!("/#{resource_path}", stub_options)
+        api_service.for_headers("x-myobapi-key" => api_key).stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token).should_not be_empty
       end
@@ -56,7 +56,7 @@ describe AccountRight::API, "integrating with an API server" do
       let(:customer_file_token) { "some_customer_file_token" }
 
       it "should issue requests to the api with a customer file token header that includes the token" do
-        api_service.with("x-myobapi-cftoken" => customer_file_token).stub_response!("/#{resource_path}", stub_options)
+        api_service.for_headers("x-myobapi-cftoken" => customer_file_token).stub_response!("/#{resource_path}", stub_options)
 
         AccountRight::API.invoke(resource_path, authorization_token, customer_file_token).should_not be_empty
       end

@@ -1,4 +1,5 @@
 Given /^the user enters valid login credentials$/ do
+  @authentication_service.grant_access
   @current_page.enter_credentials
 end
 

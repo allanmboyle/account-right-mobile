@@ -48,6 +48,10 @@ module AccountRightMobile
         activate!("/unavailable")
       end
 
+      def last_access_token
+        ACCESS_TOKEN
+      end
+
     end
 
   end

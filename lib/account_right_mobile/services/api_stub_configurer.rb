@@ -41,12 +41,12 @@ module AccountRightMobile
       activate!("/return_many_files")
       activate!("/grant_access")
 
-      def initialize(headers={})
-        @headers = headers
+      def self.for_headers(headers)
+        ApiStubConfigurer.new(headers)
       end
 
-      def self.with(headers)
-        ApiStubConfigurer.new(headers)
+      def initialize(headers={})
+        @headers = headers
       end
 
       def return_many_files
@@ -66,6 +66,10 @@ module AccountRightMobile
 
       def return_no_files
         activate!("/return_no_files")
+      end
+
+      def grant_access
+        activate!("/grant_access")
       end
 
       def deny_access
