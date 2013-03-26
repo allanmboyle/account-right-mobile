@@ -5,6 +5,8 @@ module AccountRightMobile
       include ::HttpStub::Configurer
 
       URI = "/oauth2/v1/authorize"
+      ACCESS_TOKEN = "test_access_token"
+      REFRESH_TOKEN = "test_refresh_token"
 
       host "localhost"
       port 3002
@@ -12,8 +14,7 @@ module AccountRightMobile
       stub_activator "/grant_access", URI,
                      method: :post,
                      response: { status: 200,
-                                 body: { access_token: "test_access_token",
-                                         refresh_token: "test_refresh_token" }.to_json }
+                                 body: { access_token: ACCESS_TOKEN, refresh_token: REFRESH_TOKEN }.to_json }
 
       stub_activator "/deny_access", URI, method: :post, response: { status: 400 }
 
@@ -32,7 +33,7 @@ module AccountRightMobile
               method: :post,
               parameters: credentials,
               response: { status: 200,
-                          body: { access_token: "test_access_token", refresh_token: "test_refresh_token" }.to_json })
+                          body: { access_token: ACCESS_TOKEN, refresh_token: REFRESH_TOKEN }.to_json })
       end
 
       def deny_access

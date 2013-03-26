@@ -1,15 +1,15 @@
-define([ "backbone", "underscore" ], (Backbone, _) ->
+define([ "backbone", "underscore", "./ajax" ], (Backbone, _, Ajax) ->
 
   class CustomerFileUser extends Backbone.Model
 
     defaults: {
-      username: "Not specified",
+      username: "Not specified"
       password: "Not specified"
     }
 
     loginTo: (customerFile) ->
       user = this
-      Backbone.ajax(
+      Ajax.submit(
         type: "POST"
         url: "/customer_file_login",
         data: _.extend({ fileId: customerFile.get("Id") }, user.attributes)

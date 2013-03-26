@@ -1,5 +1,9 @@
 describe AuthenticationController, type: :controller do
 
+  let(:_csrf_token) { "some_csrf_token" }
+
+  before(:each) { session[:_csrf_token] = _csrf_token }
+
   shared_examples_for "a login action that has standard responses to failure scenarios" do
 
     describe "when the user login is unsuccessful" do
@@ -64,10 +68,22 @@ describe AuthenticationController, type: :controller do
             response.status.should eql(200)
           end
 
+          it "should reset the users session for security reasons" do
+            controller.should_receive(:reset_session)
+
+            post_login
+          end
+
           it "should establish the access token in the users session" do
             post_login
 
             session[:access_token].should eql("someAccessToken")
+          end
+
+          it "should retain the cross site request forgery token in the users session" do
+            post_login
+
+            session[:_csrf_token].should eql(_csrf_token)
           end
 
           it "should respond with an empty json body" do
@@ -137,10 +153,28 @@ describe AuthenticationController, type: :controller do
             response.status.should eql(200)
           end
 
+          it "should reset the users session for security reasons" do
+            controller.should_receive(:reset_session)
+
+            post_login
+          end
+
           it "should establish the users company file token in the users session" do
             post_login
 
             session[:cftoken].should eql(cftoken)
+          end
+
+          it "should retain the cross site request forgery token in the users session" do
+            post_login
+
+            session[:_csrf_token].should eql(_csrf_token)
+          end
+
+          it "should retain the access token in the users session" do
+            post_login
+
+            session[:access_token].should eql(access_token)
           end
 
           it "should respond with an empty json body" do
