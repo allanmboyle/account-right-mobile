@@ -21,7 +21,7 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.all("#customer-files-list a").first.click
+          @session.all("#customer-files-list a").first.click unless login_shown?
         end
 
         def customer_files
@@ -69,6 +69,10 @@ module AccountRightMobile
         end
 
         private
+
+        def login_shown?
+          @session.find("#customer-file-login-content").visible?
+        end
 
         def wait_for_customer_files_to_have_text
           ::Wait.until_true!("all customer files contain text") do

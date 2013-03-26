@@ -16,11 +16,11 @@ module AccountRight
       private
 
       def headers_for(access_token, cftoken)
-        result = { "Authorization" => "Bearer #{access_token}",
-                   "x-myobapi-key" => config["key"],
-                   "Accept-Encoding" => "gzip,deflate" }
-        result["x-myobapi-cftoken"] = cftoken if cftoken
-        result
+        headers = { "Authorization" => "Bearer #{access_token}",
+                    "x-myobapi-key" => config["key"],
+                    "Accept-Encoding" => "gzip,deflate" }
+        headers["x-myobapi-cftoken"] = cftoken if cftoken
+        headers
       end
 
       def config
