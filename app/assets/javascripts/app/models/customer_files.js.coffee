@@ -4,7 +4,7 @@ define([ "backbone", "./customer_file" ], (Backbone, CustomerFile) ->
 
     model: CustomerFile
 
-    url: "/api/accountright"
+    url: "/customer_file"
 
     expandedFile: () ->
       @at(@expandedPosition)

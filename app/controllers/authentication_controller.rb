@@ -1,22 +1,14 @@
-class AuthenticationController < ApplicationController
-
-  def live_login
-    respond_to_authentication do
-      user = AccountRight::LiveUser.new(username: params[:emailAddress], password: params[:password])
-      result = user.login
-      recreate_session_with(access_token: result[:access_token], refresh_token: result[:refresh_token])
-    end
-  end
-
-  def customer_file_login
-    respond_to_authentication do
-      user = AccountRight::CustomerFileUser.new(username: params[:username], password: params[:password])
-      user.login(params[:fileId], session[:access_token])
-      recreate_session_with(cf_token: user.cf_token)
-    end
-  end
+module AuthenticationController
 
   private
+
+  def recreate_session_with(hash={})
+    new_session_hash = { _csrf_token: session[:_csrf_token] }.merge!(hash)
+    reset_session
+    session.update(new_session_hash)
+  end
+
+  alias_method :recreate_session, :recreate_session_with
 
   def respond_to_authentication(&block)
     respond_to_json do
@@ -29,13 +21,6 @@ class AuthenticationController < ApplicationController
         render :json => "", :status => 500
       end
     end
-  end
-
-  def recreate_session_with(hash)
-    new_session_hash = session.to_hash.symbolize_keys.tap { |session_hash| session_hash.delete(:session_id) }
-    new_session_hash.merge!(hash)
-    reset_session
-    session.update(new_session_hash)
   end
 
 end
