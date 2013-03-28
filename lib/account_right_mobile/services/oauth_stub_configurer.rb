@@ -5,7 +5,7 @@ module AccountRightMobile
       include ::HttpStub::Configurer
 
       URI = "/oauth2/v1/authorize"
-      ACCESS_TOKEN = "test_access_token"
+      ACCESS_TOKEN = "A" * 912
       REFRESH_TOKEN = "test_refresh_token"
 
       host "localhost"
@@ -50,6 +50,10 @@ module AccountRightMobile
 
       def last_access_token
         ACCESS_TOKEN
+      end
+
+      def last_refresh_token
+        REFRESH_TOKEN
       end
 
     end

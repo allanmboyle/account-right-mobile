@@ -33,7 +33,10 @@ describe AccountRight::LiveUser, "integrating with an oAuth server" do
       end
 
       it "should return the access and refresh token returned by the oAuth service" do
-        live_user.login.should eql(access_token: "test_access_token", refresh_token: "test_refresh_token")
+        result = live_user.login
+
+        result.should eql(access_token: oauth_service.last_access_token,
+                          refresh_token: oauth_service.last_refresh_token)
       end
 
     end
