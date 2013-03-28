@@ -1,0 +1,58 @@
+/* MYOB Styles */
+.myob-homepage-header-outer
+  font-size: 20px
+  font-weight: bold
+  text-align: center
+  text-shadow: 0 1px 0 #7D7373
+  padding: 0 10px
+
+  .myob-homepage-header-inner
+    background-image: image_url('logo_myob.png')
+    background-repeat: no-repeat
+    background-position: left
+    padding: 30px 0
+
+.myob-hidden
+  visibility: hidden
+
+.myob-buffer
+  margin: 5% 5%
+
+.myob-message
+  height: 5em
+  width: 14em
+  margin: 5%
+  padding: 5%
+  background-color: lightblue
+  border-width: 1px
+  font-weight: bold
+
+#customer-files-content
+  padding: 0
+
+.customer-file-name
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+/* JQueryMobile Overriddes */
+.ui-header .ui-title, .ui-footer .ui-title
+  font-size: 18px
+  font-weight: 100
+  margin: 0.4em 10% 0.5em
+
+.ui-collapsible-content
+  background-color: #C1C1C1
+
+.ui-collapsible-inset .ui-collapsible-heading .ui-btn
+  border-right-width: 0
+  border-left-width: 0
+
+/* Responsive Styles */
+@media handheld, only screen and (min-width: 480px)
+  .myob-button
+    width: 406px
+    margin: 0 auto
+
+  .myob-buffer
+    margin: 8% 20%
