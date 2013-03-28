@@ -11,7 +11,7 @@ define([ "backbone", "underscore", "./ajax" ], (Backbone, _, Ajax) ->
       user = this
       Ajax.submit(
         type: "POST"
-        url: "/customer_file_login",
+        url: "/customer_file/login",
         data: _.extend({ fileId: customerFile.get("Id") }, user.attributes)
         success: () -> user.trigger("login:success")
         error: (jqXHR) ->

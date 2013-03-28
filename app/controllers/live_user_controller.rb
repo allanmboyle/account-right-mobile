@@ -1,8 +1,11 @@
-class LiveLoginController < ApplicationController
+class LiveUserController < ApplicationController
   include AuthenticationController
 
-  def show
-    recreate_session
+  def reset
+    respond_to_json do
+      recreate_session
+      render :json => {}.to_json
+    end
   end
 
   def login

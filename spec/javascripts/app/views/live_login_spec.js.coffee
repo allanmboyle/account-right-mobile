@@ -37,17 +37,23 @@ describe("LiveLoginView", () ->
     describe("model event configuration", () ->
 
       initialActions = {}
-      successSpy = null
-      failSpy = null
-      errorSpy = null
+      resetSuccessSpy = null
+      resetErrorSpy = null
+      loginSuccessSpy = null
+      loginFailSpy = null
+      loginErrorSpy = null
 
       beforeEach(() ->
-        initialActions["success"] = LiveLoginView.prototype.success
-        initialActions["fail"] = LiveLoginView.prototype.fail
-        initialActions["error"] = LiveLoginView.prototype.error
-        successSpy = LiveLoginView.prototype.success = jasmine.createSpy()
-        failSpy = LiveLoginView.prototype.fail = jasmine.createSpy()
-        errorSpy = LiveLoginView.prototype.error = jasmine.createSpy()
+        initialActions["resetSuccess"] = LiveLoginView.prototype.resetSuccess
+        initialActions["resetError"] = LiveLoginView.prototype.resetError
+        initialActions["loginSuccess"] = LiveLoginView.prototype.loginSuccess
+        initialActions["loginFail"] = LiveLoginView.prototype.loginFail
+        initialActions["loginError"] = LiveLoginView.prototype.loginError
+        resetSuccessSpy = LiveLoginView.prototype.resetSuccess = jasmine.createSpy()
+        resetErrorSpy = LiveLoginView.prototype.resetError = jasmine.createSpy()
+        loginSuccessSpy = LiveLoginView.prototype.loginSuccess = jasmine.createSpy()
+        loginFailSpy = LiveLoginView.prototype.loginFail = jasmine.createSpy()
+        loginErrorSpy = LiveLoginView.prototype.loginError = jasmine.createSpy()
 
         liveLoginView = new LiveLoginView()
         liveUser = liveLoginView.user
@@ -57,22 +63,46 @@ describe("LiveLoginView", () ->
         _.extend(LiveLoginView.prototype, initialActions)
       )
 
-      it("should cause the success action to be invoked when the users login:success event occurs", () ->
+      it("should cause the resetSuccess action to be invoked when the users reset:success event occurs", () ->
+        liveUser.trigger("reset:success")
+
+        expect(resetSuccessSpy).toHaveBeenCalled()
+      )
+
+      it("should cause the resetError action to be invoked when the users reset:error event occurs", () ->
+        liveUser.trigger("reset:error")
+
+        expect(resetErrorSpy).toHaveBeenCalled()
+      )
+
+      it("should cause the loginSuccess action to be invoked when the users login:success event occurs", () ->
         liveUser.trigger("login:success")
 
-        expect(successSpy).toHaveBeenCalled()
+        expect(loginSuccessSpy).toHaveBeenCalled()
       )
 
-      it("should cause the fail action to be invoked when the users login:fail event occurs", () ->
+      it("should cause the loginFail action to be invoked when the users login:fail event occurs", () ->
         liveUser.trigger("login:fail")
 
-        expect(failSpy).toHaveBeenCalled()
+        expect(loginFailSpy).toHaveBeenCalled()
       )
 
-      it("should cause the error action to be invoked when the users login:error event occurs", () ->
+      it("should cause the loginError action to be invoked when the users login:error event occurs", () ->
         liveUser.trigger("login:error")
 
-        expect(errorSpy).toHaveBeenCalled()
+        expect(loginErrorSpy).toHaveBeenCalled()
+      )
+
+    )
+
+    describe("#render", () ->
+
+      it("should reset the current user", () ->
+        spyOn(liveUser, "reset")
+
+        liveLoginView.render()
+
+        expect(liveUser.reset).toHaveBeenCalled()
       )
 
     )
@@ -80,7 +110,7 @@ describe("LiveLoginView", () ->
     describe("and rendered", () ->
 
       beforeEach(() ->
-        liveLoginView.render()
+        liveLoginView.resetSuccess()
       )
 
       describe("and crendentials have been entered", () ->
@@ -133,69 +163,89 @@ describe("LiveLoginView", () ->
           )
 
         )
-        
-        describe("#success", () ->
+
+        describe("#resetError", () ->
+
+          beforeEach(() ->
+            location.hash = "#live_login"
+          )
+
+          it("should leave the user on the live login page", () ->
+            liveLoginView.resetError()
+
+            expect(location.hash).toMatch(/^#live_login/)
+          )
+
+          it("should make the general error message popup visible", () ->
+            liveLoginView.resetError()
+
+            expect($("#live-login-general-error-message-popup")).toHaveClass("ui-popup-active")
+          )
+
+        )
+
+        describe("#loginSuccess", () ->
 
           beforeEach(() ->
             location.hash = ""
           )
 
           it("should navigate the user to the customer files page", () ->
-            liveLoginView.success({})
+            liveLoginView.loginSuccess({})
 
             expect(location.hash).toBe("#customer_files")
           )
           
         )
 
-        describe("#fail", () ->
+        describe("#loginFail", () ->
 
           beforeEach(() ->
             location.hash = "#live_login"
           )
 
           it("should leave the user on the live login page", () ->
-            liveLoginView.fail()
+            liveLoginView.loginFail()
 
             expect(location.hash).toMatch(/^#live_login/)
           )
 
           it("should make the login failure popup visible", () ->
-            liveLoginView.fail()
+            liveLoginView.loginFail()
 
-            expect($("#live_login_fail_message-popup")).toHaveClass("ui-popup-active")
+            expect($("#live-login-fail-message-popup")).toHaveClass("ui-popup-active")
           )
 
           it("should display a popup with a message indicating the login attempt failed", () ->
-             liveLoginView.fail()
+             liveLoginView.loginFail()
 
-             expect($("#live_login_fail_message")).toHaveText("The username or password you entered is incorrect")
+             expect($("#live-login-fail-message")).toHaveText("The username or password you entered is incorrect")
           )
 
         )
 
-        describe("#error", () ->
+        describe("#loginError", () ->
 
           beforeEach(() ->
             location.hash = "#live_login"
           )
 
           it("should leave the user on the live login page", () ->
-            liveLoginView.error()
+            liveLoginView.loginError()
 
             expect(location.hash).toMatch(/^#live_login/)
           )
 
           it("should make the login error popup visible", () ->
-            liveLoginView.error()
+            liveLoginView.loginError()
 
-            expect($("#live_login_error_message-popup")).toHaveClass("ui-popup-active")
+            expect($("#live-login-error-message-popup")).toHaveClass("ui-popup-active")
           )
 
           it("should display a popup with a message indicating an error occurred during the login attempt", () ->
-             liveLoginView.error()
+             liveLoginView.loginError()
 
-             expect($("#live_login_error_message")).toHaveText("We can't confirm your details at the moment, try again shortly")
+             expect($("#live-login-error-message")).toHaveText("We can't confirm your details at the moment, try again shortly")
           )
 
         )

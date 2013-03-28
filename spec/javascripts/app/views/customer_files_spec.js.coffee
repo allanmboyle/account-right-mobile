@@ -134,7 +134,7 @@ describe("CustomerFilesView", () ->
           )
 
           it("should default the login forms username to 'Administrator'", () ->
-            expect($("#customer_file_username")).toHaveValue("Administrator")
+            expect($("#customer-file-username")).toHaveValue("Administrator")
           )
 
           describe("and another customer file is expanded", () ->
@@ -165,7 +165,7 @@ describe("CustomerFilesView", () ->
             )
 
             it("should trigger the login action", () ->
-              $("#customer_file_login_submit").click()
+              $("#customer-file-login-submit").click()
 
               loginActionHasBeenCalled = () -> customerFilesView.login.callCount == 1
               waitsFor(loginActionHasBeenCalled, "login action to be called", 5000)
@@ -236,7 +236,7 @@ describe("CustomerFilesView", () ->
         it("should not show a message indicating an error occurred", () ->
           customerFilesView.update()
 
-          expect($("#general_error_message-popup")).not.toHaveClass("ui-popup-active")
+          expect($("#customer-files-general-error-message-popup")).not.toHaveClass("ui-popup-active")
         )
 
       )
@@ -259,9 +259,10 @@ describe("CustomerFilesView", () ->
         it("should show a message indicating an error occurred", () ->
           customerFilesView.update()
 
-          generalErrorMessageToBeVisible = () -> $("#general_error_message-popup").hasClass("ui-popup-active")
+          generalErrorMessageToBeVisible = () ->
+            $("#customer-files-general-error-message-popup").hasClass("ui-popup-active")
 
-          waitsFor(generalErrorMessageToBeVisible, "general error messages to be visible", 5000)
+          waitsFor(generalErrorMessageToBeVisible, "general error message to be visible", 5000)
         )
 
       )
@@ -271,8 +272,8 @@ describe("CustomerFilesView", () ->
     describe("#syncUser", () ->
 
       beforeEach(() ->
-        $("#customer_file_username").val("some_user_name")
-        $("#customer_file_password").val("some_password")
+        $("#customer-file-username").val("some_user_name")
+        $("#customer-file-password").val("some_password")
       )
 
       it("should update the user with the form field values", () ->
@@ -346,13 +347,13 @@ describe("CustomerFilesView", () ->
       it("should make the login failure popup visible", () ->
         customerFilesView.loginFail()
 
-        expect($("#customer_file_login_fail_message-popup")).toHaveClass("ui-popup-active")
+        expect($("#customer-file-login-fail-message-popup")).toHaveClass("ui-popup-active")
       )
 
       it("should display a popup with a message indicating the login attempt failed", () ->
         customerFilesView.loginFail()
 
-        expect($("#customer_file_login_fail_message")).toHaveText("The username or password you entered is incorrect")
+        expect($("#customer-file-login-fail-message")).toHaveText("The username or password you entered is incorrect")
       )
 
     )
@@ -372,13 +373,13 @@ describe("CustomerFilesView", () ->
       it("should make the login error popup visible", () ->
         customerFilesView.loginError()
 
-        expect($("#customer_file_login_error_message-popup")).toHaveClass("ui-popup-active")
+        expect($("#customer-file-login-error-message-popup")).toHaveClass("ui-popup-active")
       )
 
       it("should display a popup with a message indicating an error occurred during the login attempt", () ->
         customerFilesView.loginError()
 
-        expect($("#customer_file_login_error_message")).toHaveText("We can't confirm your details at the moment, try again shortly")
+        expect($("#customer-file-login-error-message")).toHaveText("We can't confirm your details at the moment, try again shortly")
       )
 
     )

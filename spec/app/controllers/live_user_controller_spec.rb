@@ -1,35 +1,49 @@
-describe LiveLoginController, type: :controller do
+describe LiveUserController, type: :controller do
 
   let(:_csrf_token) { "some_csrf_token" }
 
   before(:each) { session[:_csrf_token] = _csrf_token }
 
-  describe "#show" do
+  describe "#reset" do
 
     describe "GET" do
 
-      describe "and the users session contains data" do
+      describe "when a json request is made" do
 
-        before(:each) { session[:key] = "value" }
+        it "should respond with a status of 200" do
+          get_reset
 
-        it "should retain the cross site request forgery token in the users session" do
-          get :show
-
-          session[:_csrf_token].should eql(_csrf_token)
+          response.status.should eql(200)
         end
 
-        it "should empty other data in the users session" do
-          get :show
+        describe "and the users session contains data" do
 
-          session[:key].should be_nil
+          before(:each) { session[:key] = "value" }
+
+          it "should retain the cross site request forgery token in the users session" do
+            get_reset
+
+            session[:_csrf_token].should eql(_csrf_token)
+          end
+
+          it "should empty other data in the users session" do
+            get_reset
+
+            session[:key].should be_nil
+          end
+
         end
 
-        it "should render the single page application view" do
-          get :show
-
-          response.should render_template("show")
+        def get_reset
+          request_action format: :json
         end
 
+      end
+
+      it_should_behave_like "an action that only accepts json"
+
+      def request_action(options)
+        post :reset, options
       end
 
     end

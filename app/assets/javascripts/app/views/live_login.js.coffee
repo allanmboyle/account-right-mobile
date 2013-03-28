@@ -9,34 +9,41 @@ define([ "backbone",
   class LiveLoginView extends Backbone.View
 
     initialize: () ->
-      @user = new LiveUser().on("login:success", @success, this)
-                            .on("login:fail", @fail, this)
-                            .on("login:error", @error, this)
+      @user = new LiveUser().on("reset:success", @resetSuccess, this)
+                            .on("reset:error", @resetError, this)
+                            .on("login:success", @loginSuccess, this)
+                            .on("login:fail", @loginFail, this)
+                            .on("login:error", @loginError, this)
       @$el.html(_.template(Template))
       @$el.on("pageshow", () -> $("#live_email_address").focus())
 
     el: $("#live_login")
 
     events: () ->
-      "click #live_login_submit": "login"
+      "click #live-login-submit": "login"
 
     render: () ->
-      $.mobile.changePage("#live_login", reverse: false, changeHash: false)
-      this
+      @user.reset()
 
     login: (event) ->
       @syncUser()
       @user.login()
       event.preventDefault()
 
-    success: () ->
+    resetSuccess: () ->
+      $.mobile.changePage("#live_login", reverse: false, changeHash: false)
+
+    resetError: () ->
+      $("#live-login-general-error-message").popup().popup("open")
+
+    loginSuccess: () ->
       location.hash = "customer_files"
 
-    fail: () ->
-      $("#live_login_fail_message").popup().popup("open")
+    loginFail: () ->
+      $("#live-login-fail-message").popup().popup("open")
 
-    error: () ->
-      $("#live_login_error_message").popup().popup("open")
+    loginError: () ->
+      $("#live-login-error-message").popup().popup("open")
 
     syncUser: () ->
       @user.set(emailAddress: $("#live_email_address").val(), password: $("#live_password").val())

@@ -21,7 +21,7 @@ describe("customerFileUser", () ->
 
       ajaxOptions = Ajax.submit.mostRecentCall.args[0]
       expect(ajaxOptions["type"]).toEqual("POST")
-      expect(ajaxOptions["url"]).toEqual("/customer_file_login")
+      expect(ajaxOptions["url"]).toEqual("/customer_file/login")
       requestData = ajaxOptions["data"]
       expect(requestData["fileId"]).toEqual("0123456789")
       expect(requestData["username"]).toEqual("someUsername")

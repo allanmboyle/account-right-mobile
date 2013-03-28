@@ -24,7 +24,7 @@ define([ "backbone",
     el: $("#customer_files")
 
     events: () ->
-      "click #customer_file_login_submit": "login"
+      "click #customer-file-login-submit": "login"
       "pagebeforeshow": "pageBeforeShow"
       "pageshow": "showErrorIfNecessary"
 
@@ -48,7 +48,7 @@ define([ "backbone",
       @_showNoFilesMessageIfNecessary()
 
     showErrorIfNecessary: () ->
-      $("#general_error_message").popup().popup("open") if @customerFiles.error
+      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.error
 
     login: (event) ->
       @syncUser()
@@ -56,16 +56,16 @@ define([ "backbone",
       event.preventDefault()
 
     syncUser: () ->
-      @customerFileUser.set(username: $("#customer_file_username").val(), password: $("#customer_file_password").val())
+      @customerFileUser.set(username: $("#customer-file-username").val(), password: $("#customer-file-password").val())
 
     loginSuccess: () ->
       location.hash = "contacts"
 
     loginFail: () ->
-      $("#customer_file_login_fail_message").popup().popup("open")
+      $("#customer-file-login-fail-message").popup().popup("open")
 
     loginError: () ->
-      $("#customer_file_login_error_message").popup().popup("open")
+      $("#customer-file-login-error-message").popup().popup("open")
 
     _showLoginAndUpdateModelWhenFileIsExpanded: () ->
       view = this

@@ -17,7 +17,7 @@ module AccountRightMobile
         end
 
         def username
-          @session.find("#customer_file_username").value()
+          @session.find("#customer-file-username").value()
         end
 
         def access_a_file
@@ -36,12 +36,12 @@ module AccountRightMobile
 
         def enter_credentials
           credentials = @configuration["customer_file_user"]
-          @session.fill_in("customer_file_username", :with => credentials["username"])
-          @session.fill_in("customer_file_password", :with => credentials["password"])
+          @session.fill_in("customer-file-username", :with => credentials["username"])
+          @session.fill_in("customer-file-password", :with => credentials["password"])
         end
 
         def login
-          @session.click_button("customer_file_login_submit")
+          @session.click_button("customer-file-login-submit")
         end
 
         def has_no_customer_files_available_message?
@@ -51,19 +51,19 @@ module AccountRightMobile
         end
 
         def has_application_unavailable_message?
-          @session.has_css?("#general_error_message-popup.ui-popup-active",
+          @session.has_css?("#customer-files-general-error-message-popup.ui-popup-active",
                             text: GENERAL_ERROR_MESSAGE,
                             visible: true)
         end
 
         def has_invalid_credentials_message?
-          @session.has_css?("#customer_file_login_fail_message-popup.ui-popup-active",
+          @session.has_css?("#customer-file-login-fail-message-popup.ui-popup-active",
                             text: "The username or password you entered is incorrect",
                             visible: true)
         end
 
         def has_authentication_error_message?
-          @session.has_css?("#customer_file_login_error_message-popup.ui-popup-active",
+          @session.has_css?("#customer-file-login-error-message-popup.ui-popup-active",
                             text: "We can't confirm your details at the moment, try again shortly",
                             visible: true)
         end

@@ -8,6 +8,52 @@ describe("LiveUser", () ->
     liveUser = new LiveUser(username: "someUsername", password: "somePassword")
   )
 
+  describe("#reset", () ->
+
+    it("should contact the server in order to reset the current users session", () ->
+      spyOn(Ajax, "submit")
+
+      liveUser.reset()
+
+      ajaxOptions = Ajax.submit.mostRecentCall.args[0]
+      expect(ajaxOptions["type"]).toEqual("GET")
+      expect(ajaxOptions["url"]).toEqual("/live_user/reset")
+    )
+
+    describe("when the reset request is successful", () ->
+
+      beforeEach(() ->
+        spyOn(Ajax, "submit").andCallFake((options) -> options.success())
+      )
+
+      it("should trigger a reset:success event", () ->
+        spyOn(liveUser, "trigger")
+
+        liveUser.reset()
+
+        expect(liveUser.trigger).toHaveBeenCalledWith("reset:success")
+      )
+
+    )
+
+    describe("when the reset request fails", () ->
+
+      beforeEach(() ->
+        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 500))
+      )
+
+      it("should trigger a reset:error event", () ->
+        spyOn(liveUser, "trigger")
+
+        liveUser.reset()
+
+        expect(liveUser.trigger).toHaveBeenCalledWith("reset:error")
+      )
+
+    )
+
+  )
+
   describe("#login", () ->
 
     it("should contact the server in order to login", () ->
@@ -17,7 +63,7 @@ describe("LiveUser", () ->
 
       ajaxOptions = Ajax.submit.mostRecentCall.args[0]
       expect(ajaxOptions["type"]).toEqual("POST")
-      expect(ajaxOptions["url"]).toEqual("/live_login")
+      expect(ajaxOptions["url"]).toEqual("/live_user/login")
       requestData = ajaxOptions["data"]
       expect(requestData["username"]).toEqual("someUsername")
       expect(requestData["password"]).toEqual("somePassword")
