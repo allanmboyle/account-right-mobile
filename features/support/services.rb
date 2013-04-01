@@ -1,7 +1,5 @@
 require File.expand_path('../../../lib/account_right_mobile/services', __FILE__)
 
-SMOKE_TEST_RUNNING = false
-
 AfterConfiguration { |config| SMOKE_TEST_RUNNING = config.filters.include?("@smoke") }
 
 Before do
