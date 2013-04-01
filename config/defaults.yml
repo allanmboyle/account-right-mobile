@@ -1,10 +1,10 @@
 api:
-  key: test_key
+  key: apikeyabcdefghijklmnopqr
   uri: http://localhost:3003
 live_login:
   base_uri: http://localhost:3002
-  client_id: test_client_id
-  client_secret: test_client_secret
+  client_id: clientidabcdefghijkmnopq
+  client_secret: clientsecretabcdefghijkl
   grant_type: password
   path: /oauth2/v1/authorize
   scope: CompanyFile

@@ -5,8 +5,8 @@ module AccountRightMobile
       include ::HttpStub::Configurer
 
       URI = "/oauth2/v1/authorize"
-      ACCESS_TOKEN = "A" * 912
-      REFRESH_TOKEN = "test_refresh_token"
+      ACCESS_TOKEN = "accesstoken#{"A" * 901}"
+      REFRESH_TOKEN = "refreshtoken#{"R" * 304}"
 
       host "localhost"
       port 3002
