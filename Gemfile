@@ -45,6 +45,8 @@ gem 'http_server_manager', '~> 0.1.1'
 gem 'wait_until', '~> 0.0.1'
 gem 'httparty', '~> 0.10.2'
 
+gem 'newrelic_rpm'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
