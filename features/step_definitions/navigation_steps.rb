@@ -4,6 +4,10 @@ Given /^(?:a|the) user visits the (.*) page$/ do |page_name|
   step "the page should be shown without error"
 end
 
+Given /^the (.*) page is shown/ do |page_name|
+  step "the #{page_name} page should be shown"
+end
+
 Then /^the (.*) page should be shown$/ do |page_name|
   @current_page = find_page(page_name)
   step "the page should be shown without error"

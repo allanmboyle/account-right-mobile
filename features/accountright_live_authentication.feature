@@ -32,3 +32,9 @@ Feature: Authenticated AccountRight Live Access
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
     And an error should be displayed indicating an error occurred during authentication
+
+  Scenario: Logout of AccountRight Live
+    Given the user has logged-in to AccountRight Live
+    And the Customer Files page is shown
+    When the user logs-out
+    Then the AccountRight Live Login page should be shown

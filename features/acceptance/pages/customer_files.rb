@@ -44,6 +44,10 @@ module AccountRightMobile
           @session.click_button("customer-file-login-submit")
         end
 
+        def logout
+          @session.click_link("live-logout")
+        end
+
         def has_no_customer_files_available_message?
           @session.has_css?("#customer-files-content",
                             text: "No customer files are available to access at this time",

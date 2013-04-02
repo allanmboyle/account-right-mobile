@@ -41,3 +41,6 @@ Then /^a message should be displayed indicating no customer files are available 
   @current_page.should have_no_customer_files_available_message
 end
 
+When /^the user logs-out$/ do
+  @current_page.logout
+end
