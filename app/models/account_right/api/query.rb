@@ -3,6 +3,8 @@ module AccountRight
 
     class Query
 
+      attr_reader :security_tokens
+
       def initialize(resource_path, security_tokens)
         @resource_path = resource_path
         @security_tokens = security_tokens

@@ -3,7 +3,7 @@ describe AccountRight::API::SimpleQueryExecutor, "integrating with an API server
 
   let(:resource_path) { "a_resource" }
   let(:security_tokens) { { access_token: "some_oauth_token" } }
-  let(:json_response) { { "Key" => "Value" }.to_json }
+  let(:json_response) { { "response_key" => "response_value" }.to_json }
   let(:api_stub_options) { { method: :get, response: { status: 200, body: json_response } } }
   let(:api_service) { AccountRightMobile::Services::ApiStubConfigurer }
 

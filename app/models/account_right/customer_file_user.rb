@@ -16,10 +16,10 @@ module AccountRight
       begin
         AccountRight::API.invoke("accountright/#{customer_file_id}/AccountingProperties",
                                  access_token: access_token, cf_token: cf_token)
-      rescue AccountRight::API::Error => api_error
-        error_type = api_error.response_code == 401 ? AccountRight::AuthenticationFailure :
-                                                      AccountRight::AuthenticationError
-        raise error_type
+      rescue AccountRight::API::AuthorizationFailure
+        raise AccountRight::AuthenticationFailure
+      rescue AccountRight::API::Error
+        raise AccountRight::AuthenticationError
       end
     end
 

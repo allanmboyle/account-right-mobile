@@ -52,21 +52,41 @@ describe AccountRight::API::SimpleQueryExecutor do
       perform_execute
     end
 
-    it "should return the API response body" do
-      perform_execute.should eql(response_body)
+    describe "when a 200 response is received" do
+
+      it "should return the API response body" do
+        perform_execute.should eql(response_body)
+      end
+
     end
 
-    describe "when a non-200 response is received" do
+    describe "when a 401 response is received" do
 
-      let(:response_code) { 400 }
+      let(:response_code) { 401 }
 
-      it "should create an API error containing the response" do
+      it "should create an authorization failure containing the response" do
+        AccountRight::API::AuthorizationFailure.should_receive(:new).with(response)
+
+        lambda { perform_execute }.should raise_error
+      end
+
+      it "should raise the created failure" do
+        lambda { perform_execute }.should raise_error(AccountRight::API::AuthorizationFailure)
+      end
+
+    end
+
+    describe "when the response has another response code" do
+
+      let(:response_code) { 500 }
+
+      it "should create an error containing the response" do
         AccountRight::API::Error.should_receive(:new).with(response)
 
         lambda { perform_execute }.should raise_error
       end
 
-      it "should raise the API error containing the response" do
+      it "should raise the created error" do
         lambda { perform_execute }.should raise_error(AccountRight::API::Error)
       end
 
