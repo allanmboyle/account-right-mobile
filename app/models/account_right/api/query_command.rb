@@ -1,7 +1,7 @@
 module AccountRight
   module API
 
-    class Query
+    class QueryCommand
 
       def initialize(resource_path, security_tokens)
         @request = AccountRight::API::Request.new(resource_path, security_tokens)

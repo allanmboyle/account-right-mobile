@@ -17,6 +17,6 @@ SimpleCov.start do # Based on the rails adapter
   add_group 'Helpers', 'app/helpers'
   add_group 'Libraries', 'lib'
 
-  minimum_coverage 97.5
+  minimum_coverage 97.9
   refuse_coverage_drop
 end if ENV["coverage"]

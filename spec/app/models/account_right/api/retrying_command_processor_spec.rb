@@ -1,17 +1,17 @@
-describe AccountRight::API::RetryingQueryExecutor do
+describe AccountRight::API::RetryingCommandProcessor do
 
   describe ".execute" do
 
     let(:access_token) { "some_access_token" }
     let(:refresh_token) { "some_refresh_token" }
     let(:security_tokens) { { access_token: access_token, refresh_token: refresh_token } }
-    let(:query) { double(AccountRight::API::Query, security_tokens: security_tokens) }
+    let(:command) { double(AccountRight::API::QueryCommand, security_tokens: security_tokens) }
     let(:response_body) { "some response body" }
 
-    describe "when the execution of the first API query is successful" do
+    describe "when the execution of the first API command is successful" do
 
       before(:each) do
-        AccountRight::API::SimpleQueryExecutor.stub!(:execute).with(query).and_return(response_body)
+        AccountRight::API::SimpleCommandProcessor.stub!(:execute).with(command).and_return(response_body)
       end
 
       it "should return the API response" do
@@ -20,11 +20,11 @@ describe AccountRight::API::RetryingQueryExecutor do
 
     end
 
-    describe "when the execution of the first API query is unsuccessful" do
+    describe "when the execution of the first API command is unsuccessful" do
 
       before(:each) do
-        AccountRight::API::SimpleQueryExecutor.stub!(:execute).with do |query|
-          query.security_tokens[:access_token] == access_token
+        AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
+          command.security_tokens[:access_token] == access_token
         end.and_raise(error)
       end
 
@@ -38,8 +38,8 @@ describe AccountRight::API::RetryingQueryExecutor do
           AccountRight::OAuth.stub!(:re_login).and_return(access_token: new_access_token,
                                                           refresh_token: new_refresh_token)
 
-          AccountRight::API::SimpleQueryExecutor.stub!(:execute).with do |query|
-            query.security_tokens[:access_token] == new_access_token
+          AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
+            command.security_tokens[:access_token] == new_access_token
           end.and_return(response_body)
         end
 
@@ -50,48 +50,48 @@ describe AccountRight::API::RetryingQueryExecutor do
           perform_execute
         end
         
-        it "should update the queries access security token with the token returned by the re-login request" do
+        it "should update the commands access security token with the token returned by the re-login request" do
           perform_execute
           
-          query.security_tokens[:access_token].should eql(new_access_token)
+          command.security_tokens[:access_token].should eql(new_access_token)
         end
 
-        it "should update the queries refresh security token with the token returned by the re-login request" do
+        it "should update the commands refresh security token with the token returned by the re-login request" do
           perform_execute
           
-          query.security_tokens[:refresh_token].should eql(new_refresh_token)
+          command.security_tokens[:refresh_token].should eql(new_refresh_token)
         end
 
-        it "should re-execute the query with the updated security tokens" do
-          AccountRight::API::SimpleQueryExecutor.should_receive(:execute).with do |query|
-            query.security_tokens[:access_token] == new_access_token &&
-                query.security_tokens[:refresh_token] == new_refresh_token
+        it "should re-execute the command with the updated security tokens" do
+          AccountRight::API::SimpleCommandProcessor.should_receive(:execute).with do |command|
+            command.security_tokens[:access_token] == new_access_token &&
+                command.security_tokens[:refresh_token] == new_refresh_token
           end.and_return(response_body)
 
           perform_execute
         end
 
-        describe "and execution of the new query succeeds" do
+        describe "and execution of the new command succeeds" do
 
-          it "should return the execution result for the new query" do
+          it "should return the execution result for the new command" do
             perform_execute.should eql(response_body)
           end
 
         end
 
-        describe "and execution of the new query fails" do
+        describe "and execution of the new command fails" do
 
           let(:new_error) do
             AccountRight::API::Error.new(double("HttpResponse", body: "another error body", code: 400))
           end
 
           before(:each) do
-            AccountRight::API::SimpleQueryExecutor.stub!(:execute).with do |query|
-              query.security_tokens[:access_token] == new_access_token
+            AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
+              command.security_tokens[:access_token] == new_access_token
             end.and_raise(new_error)
           end
 
-          it "should propagate the exception raised by executing the new query" do
+          it "should propagate the exception raised by executing the new command" do
             lambda { perform_execute }.should raise_error(new_error)
           end
 
@@ -103,7 +103,7 @@ describe AccountRight::API::RetryingQueryExecutor do
 
         let(:error) { AccountRight::API::Error.new(double("HttpResponse", body: "some error body", code: 400)) }
 
-        it "should propagate the exception raised by executing the query" do
+        it "should propagate the exception raised by executing the command" do
            lambda { perform_execute }.should raise_error(error)
         end
 
@@ -112,7 +112,7 @@ describe AccountRight::API::RetryingQueryExecutor do
     end
 
     def perform_execute
-      AccountRight::API::RetryingQueryExecutor.execute(query)
+      AccountRight::API::RetryingCommandProcessor.execute(command)
     end
 
   end

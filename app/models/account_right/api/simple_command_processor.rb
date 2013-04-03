@@ -1,11 +1,11 @@
 module AccountRight
   module API
 
-    class SimpleQueryExecutor
+    class SimpleCommandProcessor
 
-      def self.execute(query)
-        response = query.submit
-        Rails.logger.info("API:: #{query}\n    response: #{response.code} #{response.body}")
+      def self.execute(command)
+        response = command.submit
+        Rails.logger.info("API:: #{command}\n    response: #{response.code} #{response.body}")
         raise AccountRight::API::AuthorizationFailure.new(response) if response.code == 401
         raise AccountRight::API::Error.new(response) unless response.code == 200
         response.body

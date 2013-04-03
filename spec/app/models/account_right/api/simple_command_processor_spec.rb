@@ -1,35 +1,35 @@
-describe AccountRight::API::SimpleQueryExecutor do
+describe AccountRight::API::SimpleCommandProcessor do
 
   describe ".execute" do
 
     let(:response_body) { "some response body" }
     let(:response_code) { 200 }
     let(:response) { double("HttpResponse", body: response_body, code: response_code) }
-    let(:query_description) { "some query description" }
-    let(:query) { double(AccountRight::API::Query, submit: response, to_s: query_description) }
+    let(:command_description) { "some command description" }
+    let(:command) { double("AccountRight::API::Command", submit: response, to_s: command_description) }
     let(:logger) { double("Logger").as_null_object }
 
     before(:each) { Rails.stub!(:logger).and_return(logger) }
 
-    it "should submit the query" do
-      query.should_receive(:submit)
+    it "should submit the command" do
+      command.should_receive(:submit)
 
       perform_execute
     end
 
-    it "should log the query submitted via the Rails logger" do
-      logger.should_receive(:info).with(/#{query_description}/)
+    it "should log the command submitted via the Rails logger" do
+      logger.should_receive(:info).with(/#{command_description}/)
 
       perform_execute
     end
 
-    it "logs the query response code via the Rails logger" do
+    it "logs the command submission response code via the Rails logger" do
       logger.should_receive(:info).with(/#{response_code}/)
 
       perform_execute
     end
 
-    it "logs the query response body via the Rails logger" do
+    it "logs the command response body via the Rails logger" do
       logger.should_receive(:info).with(/#{response_body}/)
 
       perform_execute
@@ -78,7 +78,7 @@ describe AccountRight::API::SimpleQueryExecutor do
   end
 
   def perform_execute
-    AccountRight::API::SimpleQueryExecutor.execute(query)
+    AccountRight::API::SimpleCommandProcessor.execute(command)
   end
 
 end
