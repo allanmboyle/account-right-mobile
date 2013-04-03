@@ -1,41 +1,51 @@
 describe AccountRight::API::Query do
 
   let(:resource_path) { "some/resource/path" }
-  let(:access_token) { "some token" }
-  let(:security_tokens) { { access_token: access_token } }
-  let(:query) { AccountRight::API::Query.new(resource_path, security_tokens) }
+  let(:security_tokens) { { token_key: "token_value" } }
 
-  describe "#uri" do
+  describe "constructor" do
 
-    it "should return the resource path requested appended to the configured base API URI" do
-      query.uri.should eql("#{AccountRightMobile::Application.config.api["uri"]}/#{resource_path}")
+    it "should compose a request containing the provided resource path and security tokens" do
+      AccountRight::API::Request.should_receive(:new).with(resource_path, security_tokens)
+
+      AccountRight::API::Query.new(resource_path, security_tokens)
     end
 
   end
 
-  describe "#headers" do
+  describe "#submit" do
 
-    it "should contain an authorization header whose value is the access security token prefixed with 'Bearer'" do
-      query.headers.should include("Authorization" => "Bearer #{access_token}")
+    let(:request_uri) { "some/request/uri" }
+    let(:request_headers) { { "header_key" => "header_value" } }
+    let(:request) { double(AccountRight::API::Request, uri: request_uri, headers: request_headers) }
+
+    before(:each) { AccountRight::API::Request.stub!(:new).and_return(request) }
+
+    it "should perform a HTTP GET for the resource with the requests headers" do
+      HTTParty.should_receive(:get).with(request_uri, headers: request_headers)
+
+      AccountRight::API::Query.new(resource_path, security_tokens).submit
     end
 
-    it "should contain an API key header whose value is the configured API key" do
-      query.headers.should include("x-myobapi-key" => AccountRightMobile::Application.config.api["key"])
+    it "should return the GET request response" do
+      response = double("HttpResponse", code: 200, body: "some body")
+      HTTParty.stub!(:get).and_return(response)
+
+      AccountRight::API::Query.new(resource_path, security_tokens).submit.should eql(response)
     end
 
-    it "should contain an encoding header whose value is requests a gzip response" do
-      query.headers.should include("Accept-Encoding" => "gzip,deflate")
-    end
+  end
 
-    describe "when a customer file security token is provided" do
+  describe "#security_tokens" do
 
-      let(:cf_token) { "some_cf_token" }
-      let(:security_tokens) { { access_token: access_token, cf_token: cf_token } }
+    let(:request) { double(AccountRight::API::Request) }
 
-      it "should contain a cftoken header whose value is the customer file security token" do
-        query.headers.should include("x-myobapi-cftoken" => cf_token)
-      end
+    before(:each) { AccountRight::API::Request.stub!(:new).and_return(request) }
 
+    it "should return the tokens from the request" do
+      request.should_receive(:security_tokens).and_return(security_tokens)
+
+      AccountRight::API::Query.new(resource_path, security_tokens).security_tokens.should eql(security_tokens)
     end
 
   end

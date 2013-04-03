@@ -4,8 +4,8 @@ module AccountRight
     class SimpleQueryExecutor
 
       def self.execute(query)
-        response = HTTParty.get(query.uri, headers: query.headers)
-        Rails.logger.info("API:: URI: #{query.uri}\n    headers: #{query.headers}\n    response: #{response.code} #{response.body}")
+        response = query.submit
+        Rails.logger.info("API:: #{query}\n    response: #{response.code} #{response.body}")
         raise AccountRight::API::AuthorizationFailure.new(response) if response.code == 401
         raise AccountRight::API::Error.new(response) unless response.code == 200
         response.body
