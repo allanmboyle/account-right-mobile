@@ -42,14 +42,14 @@ describe AccountRight::CustomerFileUser do
     end
 
     it "should raise an authentication failure when an error is thrown with a 401 response code invoking the api" do
-      forced_error = AccountRight::ApiError.new(double("HttpResponse", code: 401, body: "some message"))
+      forced_error = AccountRight::API::Error.new(double("HttpResponse", code: 401, body: "some message"))
       AccountRight::API.stub!(:invoke).and_raise(forced_error)
 
       lambda { process_request }.should raise_error(AccountRight::AuthenticationFailure)
     end
 
     it "should raise an authentication error when an error is thrown with a non-401 response code invoking the api" do
-      forced_error = AccountRight::ApiError.new(double("HttpResponse", code: 500, body: "some message"))
+      forced_error = AccountRight::API::Error.new(double("HttpResponse", code: 500, body: "some message"))
       AccountRight::API.stub!(:invoke).and_raise(forced_error)
 
       lambda { process_request }.should raise_error(AccountRight::AuthenticationError)

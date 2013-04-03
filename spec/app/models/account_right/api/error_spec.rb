@@ -1,8 +1,8 @@
-describe AccountRight::ApiError do
+describe AccountRight::API::Error do
 
   let(:response) { double("HttpResponse", code: 500, body: "some response body") }
 
-  let(:error) { AccountRight::ApiError.new(response) }
+  let(:error) { AccountRight::API::Error.new(response) }
 
   it "should be an standard Ruby exception" do
     error.should be_an(Exception)
