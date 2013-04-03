@@ -3,11 +3,9 @@ api:
   uri: http://localhost:3003
 live_login:
   base_uri: http://localhost:3002
+  path: /oauth2/v1/authorize
   client_id: clientidabcdefghijkmnopq
   client_secret: clientsecretabcdefghijkl
-  grant_type: password
-  path: /oauth2/v1/authorize
-  scope: CompanyFile
 test:
   timeout_in_seconds: 3
   app_uri: http://localhost:3001

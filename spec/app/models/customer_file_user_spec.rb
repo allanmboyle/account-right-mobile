@@ -32,30 +32,30 @@ describe AccountRight::CustomerFileUser do
     it "should request to accounting properties of the provided customer file from the api" do
       AccountRight::API.should_receive(:invoke).with("accountright/0123456789/AccountingProperties", security_tokens)
 
-      perform_login
+      process_request
     end
 
     it "should return the result of the api call" do
       AccountRight::API.stub!(:invoke).and_return("some response body")
 
-      perform_login.should eql("some response body")
+      process_request.should eql("some response body")
     end
 
     it "should raise an authentication failure when an error is thrown with a 401 response code invoking the api" do
       forced_error = AccountRight::ApiError.new(double("HttpResponse", code: 401, body: "some message"))
       AccountRight::API.stub!(:invoke).and_raise(forced_error)
 
-      lambda { perform_login }.should raise_error(AccountRight::AuthenticationFailure)
+      lambda { process_request }.should raise_error(AccountRight::AuthenticationFailure)
     end
 
     it "should raise an authentication error when an error is thrown with a non-401 response code invoking the api" do
       forced_error = AccountRight::ApiError.new(double("HttpResponse", code: 500, body: "some message"))
       AccountRight::API.stub!(:invoke).and_raise(forced_error)
 
-      lambda { perform_login }.should raise_error(AccountRight::AuthenticationError)
+      lambda { process_request }.should raise_error(AccountRight::AuthenticationError)
     end
 
-    def perform_login
+    def process_request
       customer_file_user.login(customer_file_id, access_token)
     end
 
