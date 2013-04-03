@@ -218,8 +218,6 @@ describe("CustomerFilesView", () ->
 
         beforeEach(() ->
           customerFilesView.render()
-
-          location.hash = "#customer_files"
         )
 
         it("should redirect the user to the live login page", () ->
