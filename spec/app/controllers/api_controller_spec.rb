@@ -8,21 +8,22 @@ describe ApiController, type: :controller do
 
         let(:access_token) { "some_access_token" }
         let(:resource_path) { "some/resource/path" }
-        let(:user_tokens) { double(AccountRight::UserTokens) }
+        let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
 
         before(:each) do
-          AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+          AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
           AccountRight::API.stub!(:invoke)
         end
 
-        it "should create user tokens encapsulating tokens in the users session" do
-          AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
+        it "should create client application state encapsulating data in the users session" do
+          AccountRightMobile::ClientApplicationState.should_receive(:new).with(session)
+                                                                         .and_return(client_application_state)
 
           get_invoke
         end
 
-        it "should invoke the API with the created users tokens" do
-          AccountRight::API.should_receive(:invoke).with(resource_path, user_tokens)
+        it "should invoke the API with the created client application state" do
+          AccountRight::API.should_receive(:invoke).with(resource_path, client_application_state)
 
           get_invoke
         end

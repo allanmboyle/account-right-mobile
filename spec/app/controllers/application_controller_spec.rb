@@ -1,24 +1,24 @@
 describe TestableApplicationController, type: :controller do
 
-  describe "#establish_user_tokens" do
+  describe "#establish_client_application_state" do
 
-    it "should create user tokens encapsulating the tokens in the users session" do
-      AccountRight::UserTokens.should_receive(:new).with(session)
+    it "should create client application state encapsulating data in the users session" do
+      AccountRightMobile::ClientApplicationState.should_receive(:new).with(session)
 
-      controller.establish_user_tokens
+      controller.establish_client_application_state
     end
 
-    it "should establish the user tokens as an instance variable accessible within actions" do
-      user_tokens = double(AccountRight::UserTokens)
-      AccountRight::UserTokens.stub!(:new).with(session).and_return(user_tokens)
+    it "should establish the client application state as an instance variable accessible within actions" do
+      client_application_state = double(AccountRightMobile::ClientApplicationState)
+      AccountRightMobile::ClientApplicationState.stub!(:new).with(session).and_return(client_application_state)
 
-      controller.establish_user_tokens
+      controller.establish_client_application_state
 
-      assigns(:user_tokens).should eql(user_tokens)
+      assigns(:client_application_state).should eql(client_application_state)
     end
 
     it "should be executed before each action" do
-      controller.should_receive(:establish_user_tokens)
+      controller.should_receive(:establish_client_application_state)
 
       post :some_action, format: :json
     end

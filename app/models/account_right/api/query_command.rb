@@ -3,16 +3,16 @@ module AccountRight
 
     class QueryCommand
 
-      def initialize(resource_path, user_tokens)
-        @request = AccountRight::API::Request.new(resource_path, user_tokens)
+      def initialize(resource_path, client_application_state)
+        @request = AccountRight::API::Request.new(resource_path, client_application_state)
       end
 
       def submit
         HTTParty.get(@request.uri, headers: @request.headers)
       end
 
-      def user_tokens
-        @request.user_tokens
+      def client_application_state
+        @request.client_application_state
       end
 
       def to_s

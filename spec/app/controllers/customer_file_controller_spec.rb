@@ -3,7 +3,7 @@ describe CustomerFileController, type: :controller do
   let(:csrf_token) { "some_csrf_token" }
   let(:access_token) { "some_access_token" }
   let(:refresh_token) { "some_refresh_token" }
-  let(:user_tokens) { double(AccountRight::UserTokens) }
+  let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
 
   before(:each) do
     session[:_csrf_token] = csrf_token
@@ -11,7 +11,7 @@ describe CustomerFileController, type: :controller do
     session[:refresh_token] = refresh_token
     session[:key] = "value"
 
-    AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+    AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
   end
 
   describe "#index" do
@@ -22,11 +22,11 @@ describe CustomerFileController, type: :controller do
 
         before(:each) { AccountRight::API.stub!(:invoke) }
 
-        it "should invoke the API with user tokens created from the users session" do
-          AccountRight::UserTokens.should_receive(:new)
-                                  .with(hash_including(access_token: access_token, refresh_token: refresh_token))
-                                  .and_return(user_tokens)
-          AccountRight::API.should_receive(:invoke).with("accountright", user_tokens)
+        it "should invoke the API with client application state created from the users session" do
+          mandatory_state = hash_including(access_token: access_token, refresh_token: refresh_token)
+          AccountRightMobile::ClientApplicationState.should_receive(:new).with(mandatory_state)
+                                                                         .and_return(client_application_state)
+          AccountRight::API.should_receive(:invoke).with("accountright", client_application_state)
 
           get_index
         end
@@ -98,7 +98,7 @@ describe CustomerFileController, type: :controller do
           before(:each) do
             AccountRight::CustomerFile.stub!(:new).and_return(customer_file)
             AccountRight::CustomerFileUser.stub!(:new).and_return(user)
-            user_tokens.stub!(:save)
+            client_application_state.stub!(:save)
           end
 
           it "should create a customer file with the provided customer file id" do
@@ -117,7 +117,7 @@ describe CustomerFileController, type: :controller do
           describe "when the user login is successful" do
 
             before(:each) do
-              user.stub!(:login).with(customer_file, user_tokens)
+              user.stub!(:login).with(customer_file, client_application_state)
             end
 
             it "should respond with status of 200" do
@@ -132,14 +132,15 @@ describe CustomerFileController, type: :controller do
               session[:_csrf_token].should eql(csrf_token)
             end
 
-            it "should create user tokens encapsulating tokens in the users session" do
-              AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
+            it "should create client application state encapsulating data in the users session" do
+              AccountRightMobile::ClientApplicationState.should_receive(:new).with(session)
+                                                                             .and_return(client_application_state)
 
               post_login
             end
 
-            it "should save any changes to the users tokens" do
-              user_tokens.should_receive(:save).with(no_args)
+            it "should save any changes to the client application state" do
+              client_application_state.should_receive(:save).with(no_args)
 
               post_login
             end

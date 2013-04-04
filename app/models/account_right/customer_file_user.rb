@@ -1,6 +1,6 @@
 module AccountRight
 
-  class CustomerFileUser < AccountRight::Base
+  class CustomerFileUser < Model::Base
 
     attr_accessor :username, :password
 
@@ -12,10 +12,10 @@ module AccountRight
       Base64.strict_encode64("#{username}:#{password}")
     end
 
-    def login(customer_file, user_tokens)
-      user_tokens[:cf_token] = cf_token
+    def login(customer_file, client_application_state)
+      client_application_state[:cf_token] = cf_token
       begin
-        customer_file.accounting_properties(user_tokens)
+        customer_file.accounting_properties(client_application_state)
       rescue AccountRight::API::AuthorizationFailure
         raise AccountRight::AuthenticationFailure
       rescue AccountRight::API::Error

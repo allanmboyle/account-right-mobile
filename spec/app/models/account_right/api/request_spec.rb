@@ -2,8 +2,8 @@ describe AccountRight::API::Request do
 
   let(:resource_path) { "some/resource/path" }
   let(:access_token) { "some token" }
-  let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token) }
-  let(:request) { AccountRight::API::Request.new(resource_path, user_tokens) }
+  let(:client_application_state) { AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token) }
+  let(:request) { AccountRight::API::Request.new(resource_path, client_application_state) }
 
   describe "#uri" do
 
@@ -27,10 +27,12 @@ describe AccountRight::API::Request do
       request.headers.should include("Accept-Encoding" => "gzip,deflate")
     end
 
-    describe "when a customer file user token is provided" do
+    describe "when a customer file token is provided" do
 
       let(:cf_token) { "some_cf_token" }
-      let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token, cf_token: cf_token) }
+      let(:client_application_state) do
+        AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token, cf_token: cf_token)
+      end
 
       it "should contain a cftoken header whose value is the customer file token" do
         request.headers.should include("x-myobapi-cftoken" => cf_token)
@@ -40,10 +42,10 @@ describe AccountRight::API::Request do
 
   end
 
-  describe "#user_tokens" do
+  describe "#client_application_state" do
 
-    it "should return the provided tokens" do
-      request.user_tokens.should eql(user_tokens)
+    it "should return the provided client application state" do
+      request.client_application_state.should eql(client_application_state)
     end
 
   end

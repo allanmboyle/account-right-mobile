@@ -62,11 +62,11 @@ describe LiveUserController, type: :controller do
           let(:password) { "some_password" }
           let(:credentials) { { emailAddress: email_address, password: password } }
           let(:user) { double(AccountRight::LiveUser).as_null_object }
-          let(:user_tokens) { double(AccountRight::UserTokens).as_null_object }
+          let(:client_application_state) { double(AccountRightMobile::ClientApplicationState).as_null_object }
 
           before(:each) do
             AccountRight::LiveUser.stub!(:new).and_return(user)
-            AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+            AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
           end
 
           it "should create a live user with the credentials" do
@@ -89,20 +89,21 @@ describe LiveUserController, type: :controller do
               response.status.should eql(200)
             end
 
-            it "should create user tokens encapsulating tokens in the users session" do
-              AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
+            it "should create client application state encapsulating data in the users session" do
+              AccountRightMobile::ClientApplicationState.should_receive(:new).with(session)
+                                                                             .and_return(client_application_state)
 
               post_login
             end
 
-            it "should save the login response's access token in the users tokens" do
-              user_tokens.should_receive(:save).with(hash_including(access_token: access_token))
+            it "should save the login response's access token in the client application state" do
+              client_application_state.should_receive(:save).with(hash_including(access_token: access_token))
 
               post_login
             end
 
-            it "should save the login response's refresh token in the users tokens" do
-              user_tokens.should_receive(:save).with(hash_including(refresh_token: refresh_token))
+            it "should save the login response's refresh token in the client application state" do
+              client_application_state.should_receive(:save).with(hash_including(refresh_token: refresh_token))
 
               post_login
             end

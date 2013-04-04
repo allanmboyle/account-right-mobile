@@ -1,4 +1,4 @@
-module AccountRight
+module Model
 
   class Base
     include ActiveModel::Conversion

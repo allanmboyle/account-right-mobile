@@ -16,8 +16,8 @@ module AccountRight
         private
 
         def retry_execute(command)
-          re_login_response = AccountRight::OAuth.re_login(command.user_tokens[:refresh_token])
-          command.user_tokens.save(access_token: re_login_response[:access_token],
+          re_login_response = AccountRight::OAuth.re_login(command.client_application_state[:refresh_token])
+          command.client_application_state.save(access_token: re_login_response[:access_token],
                                    refresh_token: re_login_response[:refresh_token])
           AccountRight::API::SimpleCommandProcessor.execute(command)
         end

@@ -24,19 +24,19 @@ describe AccountRight::CustomerFileUser do
 
     let(:access_token) { "some-access-token" }
     let(:cf_token) { "some token" }
-    let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token) }
+    let(:client_application_state) { AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token) }
     let(:customer_file) { double(AccountRight::CustomerFile, accounting_properties: "some accounting properties") }
 
     before(:each) { customer_file_user.stub!(:cf_token).and_return(cf_token) }
 
-    it "should include the users customer file token in the users tokens" do
+    it "should include the users customer file token in the client application state" do
       perform_login
 
-      user_tokens[:cf_token].should eql(cf_token)
+      client_application_state[:cf_token].should eql(cf_token)
     end
 
     it "should request the accounting properties of the provided customer file" do
-      customer_file.should_receive(:accounting_properties).with(user_tokens)
+      customer_file.should_receive(:accounting_properties).with(client_application_state)
 
       perform_login
     end
@@ -60,7 +60,7 @@ describe AccountRight::CustomerFileUser do
     end
 
     def perform_login
-      customer_file_user.login(customer_file, user_tokens)
+      customer_file_user.login(customer_file, client_application_state)
     end
 
   end

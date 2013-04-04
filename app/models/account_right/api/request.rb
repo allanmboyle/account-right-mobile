@@ -3,11 +3,11 @@ module AccountRight
 
     class Request
 
-      attr_reader :user_tokens
+      attr_reader :client_application_state
 
-      def initialize(resource_path, user_tokens)
+      def initialize(resource_path, client_application_state)
         @resource_path = resource_path
-        @user_tokens = user_tokens
+        @client_application_state = client_application_state
       end
 
       def uri
@@ -15,10 +15,10 @@ module AccountRight
       end
 
       def headers
-        headers = { "Authorization" => "Bearer #{@user_tokens[:access_token]}",
+        headers = { "Authorization" => "Bearer #{@client_application_state[:access_token]}",
                     "x-myobapi-key" => config["key"],
                     "Accept-Encoding" => "gzip,deflate" }
-        headers["x-myobapi-cftoken"] = @user_tokens[:cf_token] if @user_tokens[:cf_token]
+        headers["x-myobapi-cftoken"] = @client_application_state[:cf_token] if @client_application_state[:cf_token]
         headers
       end
 

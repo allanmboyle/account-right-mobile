@@ -1,14 +1,14 @@
 describe ContactController, type: :controller do
 
   let(:customer_file_id) { 8 }
-  let(:user_tokens) { double(AccountRight::UserTokens).as_null_object }
+  let(:client_application_state) { double(AccountRightMobile::ClientApplicationState).as_null_object }
   let(:contacts) { double(AccountRight::Contacts).as_null_object }
   let(:customer_file) { double(AccountRight::CustomerFile, contacts: contacts).as_null_object }
 
   before(:each) do
     session[:cf_id] = customer_file_id
 
-    AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+    AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
     AccountRight::CustomerFile.stub!(:new).and_return(customer_file)
   end
 
@@ -24,14 +24,15 @@ describe ContactController, type: :controller do
           get_index
         end
 
-        it "should create user tokens encapsulating access to the tokens in the users session" do
-          AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
+        it "should create client application state encapsulating data in the users session" do
+          AccountRightMobile::ClientApplicationState.should_receive(:new).with(session)
+                                                                         .and_return(client_application_state)
 
           get_index
         end
 
         it "should retrieve the contacts from the customer file" do
-          customer_file.should_receive(:contacts).with(user_tokens).and_return(contacts)
+          customer_file.should_receive(:contacts).with(client_application_state).and_return(contacts)
 
           get_index
         end

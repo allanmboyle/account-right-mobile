@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :establish_user_tokens
+  before_filter :establish_client_application_state
 
-  def establish_user_tokens
-    @user_tokens = AccountRight::UserTokens.new(session)
+  def establish_client_application_state
+    @client_application_state = AccountRightMobile::ClientApplicationState.new(session)
   end
 
   def respond_to_json

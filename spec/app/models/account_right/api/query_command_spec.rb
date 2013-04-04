@@ -1,14 +1,16 @@
 describe AccountRight::API::QueryCommand do
 
   let(:resource_path) { "some/resource/path" }
-  let(:user_tokens) { double(AccountRight::UserTokens) }
+  let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
+
+  let(:query_command) { AccountRight::API::QueryCommand.new(resource_path, client_application_state) }
 
   describe "constructor" do
 
-    it "should compose a request containing the provided resource path and user tokens" do
-      AccountRight::API::Request.should_receive(:new).with(resource_path, user_tokens)
+    it "should compose a request containing the provided resource path and client application state" do
+      AccountRight::API::Request.should_receive(:new).with(resource_path, client_application_state)
 
-      AccountRight::API::QueryCommand.new(resource_path, user_tokens)
+      query_command
     end
 
   end
@@ -24,28 +26,28 @@ describe AccountRight::API::QueryCommand do
     it "should perform a HTTP GET for the resource with the requests headers" do
       HTTParty.should_receive(:get).with(request_uri, headers: request_headers)
 
-      AccountRight::API::QueryCommand.new(resource_path, user_tokens).submit
+      query_command.submit
     end
 
     it "should return the GET request response" do
       response = double("HttpResponse", code: 200, body: "some body")
       HTTParty.stub!(:get).and_return(response)
 
-      AccountRight::API::QueryCommand.new(resource_path, user_tokens).submit.should eql(response)
+      query_command.submit.should eql(response)
     end
 
   end
 
-  describe "#user_tokens" do
+  describe "#client_application_state" do
 
     let(:request) { double(AccountRight::API::Request) }
 
     before(:each) { AccountRight::API::Request.stub!(:new).and_return(request) }
 
-    it "should return the tokens from the request" do
-      request.should_receive(:user_tokens).and_return(user_tokens)
+    it "should delegate to the request to retrieve the client application state" do
+      request.should_receive(:client_application_state).and_return(client_application_state)
 
-      AccountRight::API::QueryCommand.new(resource_path, user_tokens).user_tokens.should eql(user_tokens)
+      query_command.client_application_state.should eql(client_application_state)
     end
 
   end
@@ -57,7 +59,7 @@ describe AccountRight::API::QueryCommand do
     before(:each) { AccountRight::API::Request.stub!(:new).and_return(request) }
 
     it "should return string representation of the request" do
-      AccountRight::API::QueryCommand.new(resource_path, user_tokens).to_s.should eql("some request description")
+      query_command.to_s.should eql("some request description")
     end
 
   end

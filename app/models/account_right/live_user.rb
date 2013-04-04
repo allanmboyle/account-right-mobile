@@ -1,6 +1,6 @@
 module AccountRight
 
-  class LiveUser < AccountRight::Base
+  class LiveUser < Model::Base
 
     attr_accessor :username, :password
 
