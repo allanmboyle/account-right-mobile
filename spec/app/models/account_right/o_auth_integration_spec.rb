@@ -5,11 +5,7 @@ describe AccountRight::OAuth, "integrating with an oAuth server" do
   let(:client_secret) { "some_client_secret" }
   let(:oauth_service) { AccountRightMobile::Services::OAuthStubConfigurer.new }
 
-  before(:each) do
-    force_server_start!
-
-    oauth_service.deny_access
-  end
+  before(:each) { force_server_start! }
 
   before(:each) do
     @original_live_login_config = AccountRightMobile::Application.config.live_login.clone
@@ -66,8 +62,8 @@ describe AccountRight::OAuth, "integrating with an oAuth server" do
     describe "when the server allows the log-in attempt for a given client and user" do
 
       before(:each) do
-        oauth_service.grant_access_for(client_id: client_id, client_secret: client_secret, grant_type: grant_type,
-                                       scope: scope, username: username, password: password)
+        oauth_service.grant_access_for_only(client_id: client_id, client_secret: client_secret, grant_type: grant_type,
+                                            scope: scope, username: username, password: password)
       end
 
       it "should return the access and refresh token returned by the oAuth service" do
@@ -95,8 +91,8 @@ describe AccountRight::OAuth, "integrating with an oAuth server" do
     describe "when the server allows the refresh log-in attempt for a given client and refresh token" do
 
       before(:each) do
-        oauth_service.grant_access_for(client_id: client_id, client_secret: client_secret,
-                                       grant_type: grant_type, refresh_token: refresh_token)
+        oauth_service.grant_access_for_only(client_id: client_id, client_secret: client_secret,
+                                            grant_type: grant_type, refresh_token: refresh_token)
       end
 
       it "should return the access and refresh token returned by the oAuth service" do

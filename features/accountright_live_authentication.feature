@@ -38,3 +38,10 @@ Feature: Authenticated AccountRight Live Access
     And the Customer Files page is shown
     When the user logs-out
     Then the AccountRight Live Login page should be shown
+
+  Scenario: User is automatically re-logged-in when AccountRight Live login expires
+    Given the user has logged-in to AccountRight Live
+    And the Customer Files page is shown
+    And the users AccountRight Live login has expired
+    When the user logs-in to a Customer File
+    Then the Contacts page should be shown

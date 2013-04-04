@@ -6,11 +6,21 @@ describe ApiController, type: :controller do
 
       let(:access_token) { "some_access_token" }
       let(:resource_path) { "some/resource/path" }
+      let(:user_tokens) { double(AccountRight::UserTokens) }
 
-      before(:each) { session[:access_token] = access_token }
+      before(:each) do
+        AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+        AccountRight::API.stub!(:invoke)
+      end
 
-      it "should invoke the API with the users session which contains security tokens" do
-        AccountRight::API.should_receive(:invoke).with(resource_path, session)
+      it "should create user tokens encapsulating tokens in the users session" do
+        AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
+
+        get_invoke
+      end
+
+      it "should invoke the API with the created users tokens" do
+        AccountRight::API.should_receive(:invoke).with(resource_path, user_tokens)
 
         get_invoke
       end

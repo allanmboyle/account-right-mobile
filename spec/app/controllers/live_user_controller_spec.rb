@@ -62,8 +62,12 @@ describe LiveUserController, type: :controller do
           let(:password) { "some_password" }
           let(:credentials) { { emailAddress: email_address, password: password } }
           let(:user) { double(AccountRight::LiveUser).as_null_object }
+          let(:user_tokens) { double(AccountRight::UserTokens).as_null_object }
 
-          before(:each) { AccountRight::LiveUser.stub!(:new).and_return(user) }
+          before(:each) do
+            AccountRight::LiveUser.stub!(:new).and_return(user)
+            AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
+          end
 
           it "should create a live user with the credentials" do
             AccountRight::LiveUser.should_receive(:new).with(username: email_address, password: password)
@@ -85,16 +89,22 @@ describe LiveUserController, type: :controller do
               response.status.should eql(200)
             end
 
-            it "should establish the access token in the users session from the login response" do
-              post_login
+            it "should create user tokens encapsulating tokens in the users session" do
+              AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
 
-              session[:access_token].should eql(access_token)
+              post_login
             end
 
-            it "should establish the refresh token in the users session from the login response" do
-              post_login
+            it "should save the login response's access token in the users tokens" do
+              user_tokens.should_receive(:save).with(hash_including(access_token: access_token))
 
-              session[:refresh_token].should eql(refresh_token)
+              post_login
+            end
+
+            it "should save the login response's refresh token in the users tokens" do
+              user_tokens.should_receive(:save).with(hash_including(refresh_token: refresh_token))
+
+              post_login
             end
 
             it "should respond with an empty json body" do

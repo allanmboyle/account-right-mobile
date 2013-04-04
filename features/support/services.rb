@@ -11,5 +11,5 @@ Before do
   api_service_class = SMOKE_TEST_RUNNING ?
       AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::ApiStubConfigurer
   api_service_class.initialize!
-  @api_service = api_service_class.for_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}")
+  @api_service = api_service_class.new
 end

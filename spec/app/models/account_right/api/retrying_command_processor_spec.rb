@@ -4,8 +4,9 @@ describe AccountRight::API::RetryingCommandProcessor do
 
     let(:access_token) { "some_access_token" }
     let(:refresh_token) { "some_refresh_token" }
-    let(:security_tokens) { { access_token: access_token, refresh_token: refresh_token } }
-    let(:command) { double(AccountRight::API::QueryCommand, security_tokens: security_tokens) }
+    let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token,
+                                                               refresh_token: refresh_token) }
+    let(:command) { double(AccountRight::API::QueryCommand, user_tokens: user_tokens) }
     let(:response_body) { "some response body" }
 
     describe "when the execution of the first API command is successful" do
@@ -24,7 +25,7 @@ describe AccountRight::API::RetryingCommandProcessor do
 
       before(:each) do
         AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
-          command.security_tokens[:access_token] == access_token
+          command.user_tokens[:access_token] == access_token
         end.and_raise(error)
       end
 
@@ -39,7 +40,7 @@ describe AccountRight::API::RetryingCommandProcessor do
                                                           refresh_token: new_refresh_token)
 
           AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
-            command.security_tokens[:access_token] == new_access_token
+            command.user_tokens[:access_token] == new_access_token
           end.and_return(response_body)
         end
 
@@ -50,22 +51,22 @@ describe AccountRight::API::RetryingCommandProcessor do
           perform_execute
         end
         
-        it "should update the commands access security token with the token returned by the re-login request" do
+        it "should save the commands user tokens with the access token returned by the re-login request" do
           perform_execute
           
-          command.security_tokens[:access_token].should eql(new_access_token)
+          user_tokens.last_saved_tokens.should include(access_token: new_access_token)
         end
 
-        it "should update the commands refresh security token with the token returned by the re-login request" do
+        it "should save the commands user tokens with the refresh token returned by the re-login request" do
           perform_execute
-          
-          command.security_tokens[:refresh_token].should eql(new_refresh_token)
+
+          user_tokens.last_saved_tokens.should include(refresh_token: new_refresh_token)
         end
 
-        it "should re-execute the command with the updated security tokens" do
+        it "should re-execute the command with the updated user tokens" do
           AccountRight::API::SimpleCommandProcessor.should_receive(:execute).with do |command|
-            command.security_tokens[:access_token] == new_access_token &&
-                command.security_tokens[:refresh_token] == new_refresh_token
+            command.user_tokens[:access_token] == new_access_token &&
+                command.user_tokens[:refresh_token] == new_refresh_token
           end.and_return(response_body)
 
           perform_execute
@@ -87,7 +88,7 @@ describe AccountRight::API::RetryingCommandProcessor do
 
           before(:each) do
             AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
-              command.security_tokens[:access_token] == new_access_token
+              command.user_tokens[:access_token] == new_access_token
             end.and_raise(new_error)
           end
 

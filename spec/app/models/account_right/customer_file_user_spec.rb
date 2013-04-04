@@ -24,20 +24,28 @@ describe AccountRight::CustomerFileUser do
 
     let(:access_token) { "some-access-token" }
     let(:cf_token) { "some token" }
-    let(:security_tokens) { { access_token: access_token, cf_token: cf_token } }
+    let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token) }
     let(:customer_file_id) { "0123456789" }
 
-    before(:each) { customer_file_user.stub!(:cf_token).and_return(cf_token) }
+    before(:each) do
+      customer_file_user.stub!(:cf_token).and_return(cf_token)
 
-    it "should request to accounting properties of the provided customer file from the api" do
-      AccountRight::API.should_receive(:invoke).with("accountright/0123456789/AccountingProperties", security_tokens)
+      AccountRight::API.stub!(:invoke).and_return("some response body")
+    end
+
+    it "should include the users customer file token in the users tokens" do
+      process_request
+
+      user_tokens[:cf_token].should eql(cf_token)
+    end
+
+    it "should request the accounting properties of the provided customer file from the api" do
+      AccountRight::API.should_receive(:invoke).with("accountright/0123456789/AccountingProperties", user_tokens)
 
       process_request
     end
 
     it "should return the result of the api call" do
-      AccountRight::API.stub!(:invoke).and_return("some response body")
-
       process_request.should eql("some response body")
     end
 
@@ -56,7 +64,7 @@ describe AccountRight::CustomerFileUser do
     end
 
     def process_request
-      customer_file_user.login(customer_file_id, access_token)
+      customer_file_user.login(customer_file_id, user_tokens)
     end
 
   end

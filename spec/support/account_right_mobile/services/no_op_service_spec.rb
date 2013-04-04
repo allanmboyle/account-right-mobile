@@ -1,5 +1,17 @@
 describe AccountRightMobile::Services::NoOpService do
 
+  describe "constructor" do
+
+    it "should accept no arguments" do
+      lambda { AccountRightMobile::Services::NoOpService.new }.should_not raise_error
+    end
+
+    it "should accept some arguments" do
+      lambda { AccountRightMobile::Services::NoOpService.new("arg", 2, Object.new) }.should_not raise_error
+    end
+
+  end
+
   describe "when a class method is called" do
 
     let(:service_class) { AccountRightMobile::Services::NoOpService }

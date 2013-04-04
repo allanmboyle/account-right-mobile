@@ -2,8 +2,8 @@ module AccountRight
 
   module API
 
-    def self.invoke(resource_path, security_tokens)
-      command = AccountRight::API::QueryCommand.new(resource_path, security_tokens)
+    def self.invoke(resource_path, user_tokens)
+      command = AccountRight::API::QueryCommand.new(resource_path, user_tokens)
       AccountRight::API::RetryingCommandProcessor.execute(command)
     end
 

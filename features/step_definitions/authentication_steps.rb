@@ -1,5 +1,8 @@
 Given /^the user enters valid login credentials$/ do
   @authentication_service.grant_access
+  if @authentication_service.is_a?(AccountRightMobile::Services::OAuthStubConfigurer)
+    @api_service.with_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}")
+  end
   @current_page.enter_credentials
 end
 
@@ -8,7 +11,7 @@ Given /^the user enters invalid login credentials$/ do
   @current_page.enter_credentials
 end
 
-Given /^the user logs-in with valid credentials/ do
+Given /^the user logs-in with valid credentials$/ do
   step "the user enters valid login credentials"
   step "the user attempts to login"
 end
@@ -25,6 +28,11 @@ end
 
 Given /^the AccountRight Live authentication service is mis-configured/ do
   @oauth_service.misconfigure
+end
+
+Given /^the users AccountRight Live login has expired$/ do
+  @api_service.deny_access_for_current_headers
+  @oauth_service.grant_access
 end
 
 When /^the user attempts to login$/ do

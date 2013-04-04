@@ -41,12 +41,13 @@ module AccountRightMobile
       activate!("/return_many_files")
       activate!("/grant_access")
 
-      def self.for_headers(headers)
-        ApiStubConfigurer.new(headers)
+      def initialize
+        @headers = {}
       end
 
-      def initialize(headers={})
+      def with_headers(headers)
         @headers = headers
+        self
       end
 
       def return_many_files
@@ -76,6 +77,12 @@ module AccountRightMobile
         activate!("/deny_access")
       end
 
+      def deny_access_for_current_headers
+        stub!(/#{COMPANY_FILE_URI}.*/,
+              method: :get,
+              response: { status: 401, body: [].to_json })
+      end
+
       def return_errors
         activate!("/return_errors")
       end
@@ -83,7 +90,7 @@ module AccountRightMobile
       alias_method :stub_without_headers!, :stub!
 
       def stub!(uri, options)
-        stub_without_headers!(uri, options.merge(headers: @headers))
+        stub_without_headers!(uri, { headers: @headers }.merge(options))
       end
 
       alias_method :stub_response!, :stub!

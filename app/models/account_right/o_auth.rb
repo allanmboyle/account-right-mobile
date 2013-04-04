@@ -1,7 +1,7 @@
 module AccountRight
 
   class OAuth
-    include ::HTTParty
+    include HTTParty
 
     base_uri AccountRightMobile::Application.config.live_login["base_uri"]
 
@@ -22,8 +22,10 @@ module AccountRight
       private
 
       def process_request(credentials)
-        response = post(login_config["path"], body: { client_id: login_config["client_id"],
-                                                      client_secret: login_config["client_secret"] }.merge(credentials))
+        resolved_credentials = {client_id: login_config["client_id"],
+                                client_secret: login_config["client_secret"] }.merge(credentials)
+        response = post(login_config["path"], body: resolved_credentials)
+        Rails.logger.info("OAuth:: Path: #{login_config["path"]}\n\tCredentials: #{resolved_credentials}\n\tResponse: #{response.code} #{response.body}")
         raise AccountRight::AuthenticationFailure if response.code == 400
         raise AccountRight::AuthenticationError if response.code > 400
         JSON.parse(response.body).symbolize_keys

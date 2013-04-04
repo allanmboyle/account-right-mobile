@@ -2,8 +2,8 @@ describe AccountRight::API::Request do
 
   let(:resource_path) { "some/resource/path" }
   let(:access_token) { "some token" }
-  let(:security_tokens) { { access_token: access_token } }
-  let(:request) { AccountRight::API::Request.new(resource_path, security_tokens) }
+  let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token) }
+  let(:request) { AccountRight::API::Request.new(resource_path, user_tokens) }
 
   describe "#uri" do
 
@@ -15,7 +15,7 @@ describe AccountRight::API::Request do
 
   describe "#headers" do
 
-    it "should contain an authorization header whose value is the access security token prefixed with 'Bearer'" do
+    it "should contain an authorization header whose value is the user's access token prefixed with 'Bearer'" do
       request.headers.should include("Authorization" => "Bearer #{access_token}")
     end
 
@@ -27,12 +27,12 @@ describe AccountRight::API::Request do
       request.headers.should include("Accept-Encoding" => "gzip,deflate")
     end
 
-    describe "when a customer file security token is provided" do
+    describe "when a customer file user token is provided" do
 
       let(:cf_token) { "some_cf_token" }
-      let(:security_tokens) { { access_token: access_token, cf_token: cf_token } }
+      let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token, cf_token: cf_token) }
 
-      it "should contain a cftoken header whose value is the customer file security token" do
+      it "should contain a cftoken header whose value is the customer file token" do
         request.headers.should include("x-myobapi-cftoken" => cf_token)
       end
 
@@ -40,10 +40,10 @@ describe AccountRight::API::Request do
 
   end
 
-  describe "#security_tokens" do
+  describe "#user_tokens" do
 
     it "should return the provided tokens" do
-      request.security_tokens.should eql(security_tokens)
+      request.user_tokens.should eql(user_tokens)
     end
 
   end

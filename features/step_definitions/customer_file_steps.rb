@@ -21,6 +21,15 @@ When /^the user has chosen to access a Customer File$/ do
   @authentication_service = @api_service
 end
 
+When /^the user logs-out$/ do
+  @current_page.logout
+end
+
+When /^the user logs-in to a Customer File$/ do
+  step "the user has chosen to access a Customer File"
+  step "the user logs-in with valid credentials"
+end
+
 Then /^the Customer File login is shown$/ do
   @current_page.shows_login_within?(@customer_file).should be_true
 end
@@ -39,8 +48,4 @@ end
 
 Then /^a message should be displayed indicating no customer files are available to access$/ do
   @current_page.should have_no_customer_files_available_message
-end
-
-When /^the user logs-out$/ do
-  @current_page.logout
 end

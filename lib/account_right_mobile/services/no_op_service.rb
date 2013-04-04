@@ -7,6 +7,10 @@ module AccountRightMobile
         self.new
       end
 
+      def initialize(*args)
+        # Intentionally blank
+      end
+
       def method_missing(*args)
         self
       end

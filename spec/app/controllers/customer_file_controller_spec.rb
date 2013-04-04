@@ -3,12 +3,15 @@ describe CustomerFileController, type: :controller do
   let(:csrf_token) { "some_csrf_token" }
   let(:access_token) { "some_access_token" }
   let(:refresh_token) { "some_refresh_token" }
+  let(:user_tokens) { double(AccountRight::UserTokens) }
 
   before(:each) do
     session[:_csrf_token] = csrf_token
     session[:access_token] = access_token
     session[:refresh_token] = refresh_token
     session[:key] = "value"
+
+    AccountRight::UserTokens.stub!(:new).and_return(user_tokens)
   end
 
   describe "#index" do
@@ -17,10 +20,13 @@ describe CustomerFileController, type: :controller do
       
       describe "when a json request is made" do
 
-        before(:each){ AccountRight::API.stub!(:invoke) }
+        before(:each) { AccountRight::API.stub!(:invoke) }
 
-        it "should invoke the API with the access token in the users session" do
-          AccountRight::API.should_receive(:invoke).with("accountright", access_token: access_token)
+        it "should invoke the API with user tokens created from the users session" do
+          AccountRight::UserTokens.should_receive(:new)
+                                  .with(hash_including(access_token: access_token, refresh_token: refresh_token))
+                                  .and_return(user_tokens)
+          AccountRight::API.should_receive(:invoke).with("accountright", user_tokens)
 
           get_index
         end
@@ -49,18 +55,6 @@ describe CustomerFileController, type: :controller do
           get_index
 
           session[:_csrf_token].should eql(csrf_token)
-        end
-
-        it "should retain the access token in the users session" do
-          get_index
-
-          session[:access_token].should eql(access_token)
-        end
-
-        it "should retain the refresh token in the users session" do
-          get_index
-
-          session[:refresh_token].should eql(refresh_token)
         end
 
         it "should empty other data in the users session" do
@@ -100,7 +94,10 @@ describe CustomerFileController, type: :controller do
           let(:cf_token) { "some_customer_file_token" }
           let(:user) { double(AccountRight::CustomerFileUser, cf_token: cf_token).as_null_object }
 
-          before(:each) { AccountRight::CustomerFileUser.stub!(:new).and_return(user) }
+          before(:each) do
+            AccountRight::CustomerFileUser.stub!(:new).and_return(user)
+            user_tokens.stub!(:save)
+          end
 
           it "should create a customer file user with the credentials" do
             AccountRight::CustomerFileUser.should_receive(:new).with(username: username, password: password)
@@ -112,7 +109,7 @@ describe CustomerFileController, type: :controller do
           describe "when the user login is successful" do
 
             before(:each) do
-              user.stub!(:login).with(file_id, access_token)
+              user.stub!(:login).with(file_id, user_tokens)
             end
 
             it "should respond with status of 200" do
@@ -121,28 +118,22 @@ describe CustomerFileController, type: :controller do
               response.status.should eql(200)
             end
 
-            it "should establish the users company file token in the users session" do
-              post_login
-
-              session[:cf_token].should eql(cf_token)
-            end
-
             it "should retain the cross site request forgery token in the users session" do
               post_login
 
               session[:_csrf_token].should eql(csrf_token)
             end
 
-            it "should retain the access token in the users session" do
-              post_login
+            it "should create user tokens encapsulating tokens in the users session" do
+              AccountRight::UserTokens.should_receive(:new).with(session).and_return(user_tokens)
 
-              session[:access_token].should eql(access_token)
+              post_login
             end
 
-            it "should retain the refresh token in the users session" do
-              post_login
+            it "should save any changes to the users tokens" do
+              user_tokens.should_receive(:save).with(no_args)
 
-              session[:refresh_token].should eql(refresh_token)
+              post_login
             end
 
             it "should respond with an empty json body" do
