@@ -4,6 +4,6 @@ define([ "backbone", "./contact" ], (Backbone, Contact) ->
 
     model: Contact
 
-    url: "/contacts"
+    url: "/contact"
 
 )

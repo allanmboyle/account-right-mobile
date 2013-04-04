@@ -82,9 +82,7 @@ describe AccountRight::API::RetryingCommandProcessor do
 
         describe "and execution of the new command fails" do
 
-          let(:new_error) do
-            AccountRight::API::Error.new(double("HttpResponse", body: "another error body", code: 400))
-          end
+          let(:new_error) { AccountRight::API::ErrorFactory.create(400) }
 
           before(:each) do
             AccountRight::API::SimpleCommandProcessor.stub!(:execute).with do |command|
@@ -102,7 +100,7 @@ describe AccountRight::API::RetryingCommandProcessor do
 
       describe "due to another type of error" do
 
-        let(:error) { AccountRight::API::Error.new(double("HttpResponse", body: "some error body", code: 400)) }
+        let(:error) { AccountRight::API::ErrorFactory.create(400) }
 
         it "should propagate the exception raised by executing the command" do
            lambda { perform_execute }.should raise_error(error)

@@ -12,9 +12,9 @@ class CustomerFileController < ApplicationController
   def login
     respond_to_authentication do
       user = AccountRight::CustomerFileUser.new(username: params[:username], password: params[:password])
-      user_tokens = AccountRight::UserTokens.new(session)
-      user.login(params[:fileId], user_tokens)
-      user_tokens.save
+      user.login(AccountRight::CustomerFile.new(params[:fileId]), @user_tokens)
+      @user_tokens.save
+      session[:cf_id] = params[:fileId]
     end
   end
 

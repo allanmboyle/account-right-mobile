@@ -37,24 +37,24 @@ describe("ContactsView", () ->
     describe("#update", () ->
 
       it("should place the retrieved contacts in the dom", () ->
-        response = [{ name: "A Name", type: "Customer", balance: 100.00 },
-                    { name: "B Name", type: "Supplier", balance: -100.00 },
-                    { name: "C Name", type: "Customer", balance: 200.00 }]
+        response = [{ CoLastName: "A Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00 },
+                    { CoLastName: "Noah", IsIndividual: true, FirstName: "Joachim", Type: "Supplier", CurrentBalance: -100.00 },
+                    { CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 200.00 }]
 
         spyOn(Backbone, "sync").andCallFake((method, model, options) -> options.success(response))
 
         contactsView.update()
 
         contacts = $(".contact")
-        assertContact(contacts[0], { name: "A Name", type: "Customer", balance: "100.00" })
-        assertContact(contacts[1], { name: "B Name", type: "Supplier", balance: "100.00" })
-        assertContact(contacts[2], { name: "C Name", type: "Customer", balance: "200.00" })
+        assertContact(contacts[0], { name: "A Company", type: "Customer", balance: "100.00" })
+        assertContact(contacts[1], { name: "Noah, Joachim", type: "Supplier", balance: "100.00" })
+        assertContact(contacts[2], { name: "Another Company", type: "Customer", balance: "200.00" })
       )
 
       assertContact = (container, expectedValues) ->
         jqueryContainer = $(container)
         expect(jqueryContainer.find(".name")).toHaveText(expectedValues.name)
-        expect(jqueryContainer.find(".contact-type")).toHaveText(expectedValues.type)
+        expect(jqueryContainer.find(".type")).toHaveText(expectedValues.type)
         expect(jqueryContainer.find(".balance")).toHaveText(new RegExp(regexEscape(expectedValues.balance)))
     )
 
@@ -63,7 +63,7 @@ describe("ContactsView", () ->
       describe("when a contacts balance is negative", () ->
 
         beforeEach(() ->
-          contact.set(balance: -1)
+          contact.set(CurrentBalance: -1)
         )
 
         it("should return a string containing 'I owe'", () ->
@@ -80,7 +80,7 @@ describe("ContactsView", () ->
       describe("when a contacts balance is positive", () ->
 
         beforeEach(() ->
-          contact.set(balance: 1)
+          contact.set(CurrentBalance: 1)
         )
 
         it("should return a string containing 'They owe'", () ->
@@ -92,7 +92,7 @@ describe("ContactsView", () ->
       describe("when a contacts balance is zero", () ->
 
         beforeEach(() ->
-          contact.set(balance: 0)
+          contact.set(CurrentBalance: 0)
         )
 
         it("should return a string containing 'They owe'", () ->

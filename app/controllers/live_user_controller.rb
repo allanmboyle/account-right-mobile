@@ -12,8 +12,7 @@ class LiveUserController < ApplicationController
     respond_to_authentication do
       user = AccountRight::LiveUser.new(username: params[:emailAddress], password: params[:password])
       result = user.login
-      AccountRight::UserTokens.new(session)
-                              .save(access_token: result[:access_token], refresh_token: result[:refresh_token])
+      @user_tokens.save(access_token: result[:access_token], refresh_token: result[:refresh_token])
     end
   end
 

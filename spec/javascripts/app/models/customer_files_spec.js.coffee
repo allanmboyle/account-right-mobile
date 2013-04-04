@@ -31,7 +31,7 @@ describe("CustomerFiles", () ->
 
     it("should be populated by the servers response", () ->
       spyOn(Backbone, "ajax").andCallFake((options) ->
-        options.success([ { "Id": "1", "Name": "File 1"},
+        options.success([ { "Id": "1", "Name": "File 1" },
                           { "Id": "2", "Name": "File 2" },
                           { "Id": "3", "Name": "File 3" } ])
       )

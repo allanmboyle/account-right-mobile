@@ -90,13 +90,21 @@ describe CustomerFileController, type: :controller do
           let(:username) { "some_username" }
           let(:password) { "some_password" }
           let(:credentials) { { username: username, password: password } }
-          let(:file_id) { "9876543210" }
+          let(:customer_file_id) { "9876543210" }
+          let(:customer_file) { double(AccountRight::CustomerFile) }
           let(:cf_token) { "some_customer_file_token" }
           let(:user) { double(AccountRight::CustomerFileUser, cf_token: cf_token).as_null_object }
 
           before(:each) do
+            AccountRight::CustomerFile.stub!(:new).and_return(customer_file)
             AccountRight::CustomerFileUser.stub!(:new).and_return(user)
             user_tokens.stub!(:save)
+          end
+
+          it "should create a customer file with the provided customer file id" do
+            AccountRight::CustomerFile.should_receive(:new).with(customer_file_id).and_return(customer_file)
+
+            post_login
           end
 
           it "should create a customer file user with the credentials" do
@@ -109,7 +117,7 @@ describe CustomerFileController, type: :controller do
           describe "when the user login is successful" do
 
             before(:each) do
-              user.stub!(:login).with(file_id, user_tokens)
+              user.stub!(:login).with(customer_file, user_tokens)
             end
 
             it "should respond with status of 200" do
@@ -136,6 +144,12 @@ describe CustomerFileController, type: :controller do
               post_login
             end
 
+            it "should retain the customer file id in the users session" do
+              post_login
+
+              session[:cf_id].should eql(customer_file_id)
+            end
+
             it "should respond with an empty json body" do
               post_login
 
@@ -147,7 +161,7 @@ describe CustomerFileController, type: :controller do
           it_should_behave_like "a login action that has standard responses to failure scenarios"
 
           def post_login
-            request_action credentials.merge(fileId: file_id, format: :json)
+            request_action credentials.merge(fileId: customer_file_id, format: :json)
           end
 
         end

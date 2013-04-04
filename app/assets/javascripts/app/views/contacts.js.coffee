@@ -31,7 +31,7 @@ define([ "backbone",
       this
 
     balanceDescription: (contact) ->
-      balance = contact.get('balance')
+      balance = contact.get("CurrentBalance")
       oweingEntity = if balance < 0 then "I" else "They"
       "#{oweingEntity} owe #{Math.abs(balance).toFixed(2)}"
 

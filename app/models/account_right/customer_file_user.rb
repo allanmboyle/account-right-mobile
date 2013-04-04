@@ -12,10 +12,10 @@ module AccountRight
       Base64.strict_encode64("#{username}:#{password}")
     end
 
-    def login(customer_file_id, user_tokens)
+    def login(customer_file, user_tokens)
       user_tokens[:cf_token] = cf_token
       begin
-        AccountRight::API.invoke("accountright/#{customer_file_id}/AccountingProperties", user_tokens)
+        customer_file.accounting_properties(user_tokens)
       rescue AccountRight::API::AuthorizationFailure
         raise AccountRight::AuthenticationFailure
       rescue AccountRight::API::Error

@@ -25,46 +25,42 @@ describe AccountRight::CustomerFileUser do
     let(:access_token) { "some-access-token" }
     let(:cf_token) { "some token" }
     let(:user_tokens) { AccountRight::UserTokensFactory.create(access_token: access_token) }
-    let(:customer_file_id) { "0123456789" }
+    let(:customer_file) { double(AccountRight::CustomerFile, accounting_properties: "some accounting properties") }
 
-    before(:each) do
-      customer_file_user.stub!(:cf_token).and_return(cf_token)
-
-      AccountRight::API.stub!(:invoke).and_return("some response body")
-    end
+    before(:each) { customer_file_user.stub!(:cf_token).and_return(cf_token) }
 
     it "should include the users customer file token in the users tokens" do
-      process_request
+      perform_login
 
       user_tokens[:cf_token].should eql(cf_token)
     end
 
-    it "should request the accounting properties of the provided customer file from the api" do
-      AccountRight::API.should_receive(:invoke).with("accountright/0123456789/AccountingProperties", user_tokens)
+    it "should request the accounting properties of the provided customer file" do
+      customer_file.should_receive(:accounting_properties).with(user_tokens)
 
-      process_request
+      perform_login
     end
 
-    it "should return the result of the api call" do
-      process_request.should eql("some response body")
+    it "should return the customer files accounting properties" do
+      perform_login.should eql("some accounting properties")
     end
 
-    it "should raise an authentication failure when an authorization failure is thrown invoking the api" do
+    it "should raise an authentication failure when an authorization failure is thrown retrieving the properties" do
       forced_error = AccountRight::API::AuthorizationFailure.new(double("HttpResponse", body: "some message"))
-      AccountRight::API.stub!(:invoke).and_raise(forced_error)
+      customer_file.stub!(:accounting_properties).and_raise(forced_error)
 
-      lambda { process_request }.should raise_error(AccountRight::AuthenticationFailure)
+      lambda { perform_login }.should raise_error(AccountRight::AuthenticationFailure)
     end
 
     it "should raise an authentication error when an error is thrown invoking the api" do
-      forced_error = AccountRight::API::Error.new(double("HttpResponse", code: 500, body: "some message"))
-      AccountRight::API.stub!(:invoke).and_raise(forced_error)
+      forced_error = AccountRight::API::ErrorFactory.create
+      customer_file.stub!(:accounting_properties).and_raise(forced_error)
 
-      lambda { process_request }.should raise_error(AccountRight::AuthenticationError)
+      lambda { perform_login }.should raise_error(AccountRight::AuthenticationError)
     end
 
-    def process_request
-      customer_file_user.login(customer_file_id, user_tokens)
+    def perform_login
+      customer_file_user.login(customer_file, user_tokens)
     end
 
   end

@@ -40,6 +40,23 @@ module AccountRightMobile
 
       activate!("/return_many_files")
       activate!("/grant_access")
+      stub_response!(/#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                     method: :get,
+                     response: { status: 200, body:
+                         { "Items" => [
+                             { CoLastName: "A Customer", FirstName: "", IsIndividual: false, CurrentBalance: 100.00 },
+                             { CoLastName: "Clay", FirstName: "Bill", IsIndividual: true, CurrentBalance: 150.00 }
+                           ]
+                         }.to_json
+                     })
+      stub_response!(/#{COMPANY_FILE_URI}\/[^\/]+\/Supplier/,
+                     method: :get,
+                     response: { status: 200, body:
+                         { "Items" => [
+                             { CoLastName: "A Supplier", FirstName: "", IsIndividual: false, CurrentBalance: -100.00 }
+                           ]
+                         }.to_json
+                     })
 
       def initialize
         @headers = {}

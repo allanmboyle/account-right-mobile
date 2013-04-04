@@ -3,9 +3,14 @@ define([ "backbone" ], (Backbone) ->
   class Contact extends Backbone.Model
 
     defaults: {
-      name: "Not specified"
-      type: "Not specified"
-      balance: "Not specified"
+      CoLastName: "Not specified"
+      IsIndividual: "Not specified"
+      FirstName: "Not specified"
+      Type: "Not specified"
+      CurrentBalance: "Not specified"
     }
+
+    name: () ->
+      if @get("IsIndividual") then "#{@get("CoLastName")}, #{@get("FirstName")}" else @get("CoLastName")
 
 )
