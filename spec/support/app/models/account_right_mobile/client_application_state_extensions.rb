@@ -1,5 +1,5 @@
 module AccountRightMobile
-  module ClientApplicationStateEnhancements
+  module ClientApplicationStateExtensions
 
     attr_reader :last_saved_state
 
@@ -15,4 +15,4 @@ module AccountRightMobile
   end
 end
 
-AccountRightMobile::ClientApplicationState.send(:include, AccountRightMobile::ClientApplicationStateEnhancements)
+AccountRightMobile::ClientApplicationState.send(:include, AccountRightMobile::ClientApplicationStateExtensions)

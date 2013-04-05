@@ -1,5 +1,5 @@
 module AccountRightMobile
-  module Build
+  module Core
 
     module ObjectExtensions
 
@@ -21,4 +21,4 @@ module AccountRightMobile
   end
 end
 
-::Object.send(:include, AccountRightMobile::Build::ObjectExtensions)
+::Object.send(:include, AccountRightMobile::Core::ObjectExtensions)

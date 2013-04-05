@@ -54,6 +54,19 @@ describe AccountRightMobile::Configuration do
                                                                             "nestedkey3" => "nestedvalue3" })
         end
 
+        describe "that override a setting with a nil value" do
+
+          let(:environment_settings) do
+            { "key2" => { "nestedkey2" => nil } }
+          end
+
+          it "should establish the nil value" do
+            AccountRightMobile::Configuration.load.should include("key2" => { "nestedkey1" => "nestedvalue1",
+                                                                              "nestedkey2" => nil })
+          end
+
+        end
+
       end
 
       describe "when the configuration gem returns empty settings" do

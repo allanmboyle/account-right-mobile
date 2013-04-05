@@ -1,5 +1,5 @@
 module AccountRightMobile
-  module Build
+  module Core
 
     module StringExtensions
 
@@ -20,4 +20,4 @@ module AccountRightMobile
   end
 end
 
-::String.send(:include, AccountRightMobile::Build::StringExtensions)
+::String.send(:include, AccountRightMobile::Core::StringExtensions)

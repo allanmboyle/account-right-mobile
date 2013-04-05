@@ -9,7 +9,6 @@ gem 'rails', '3.2.13'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'account-right-mobile-configuration', '0.2.10' if ENV['GEMFURY_URL']
-gem 'deep_merge', '~> 1.0.0', require: 'deep_merge/rails_compat'
 gem 'json'
 
 # Gems used only for assets and not required

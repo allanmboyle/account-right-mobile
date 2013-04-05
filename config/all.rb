@@ -6,3 +6,5 @@ require "rails"
   rescue LoadError
   end
 end
+
+require File.expand_path('../../lib/account_right_mobile/core', __FILE__)

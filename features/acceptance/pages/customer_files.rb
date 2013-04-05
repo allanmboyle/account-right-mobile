@@ -35,6 +35,7 @@ module AccountRightMobile
         end
 
         def enter_credentials
+          wait_for_login_form_to_be_visible
           credentials = @configuration["customer_file_user"]
           @session.fill_in("customer-file-username", :with => credentials["username"])
           @session.fill_in("customer-file-password", :with => credentials["password"])
@@ -76,6 +77,12 @@ module AccountRightMobile
 
         def login_shown?
           @session.find("#customer-file-login-content").visible?
+        end
+
+        def wait_for_login_form_to_be_visible
+          ::Wait.until_true!("login form is visible") do
+            @session.has_css?("#customer-file-login-content", visible: true)
+          end
         end
 
         def wait_for_customer_files_to_have_text
