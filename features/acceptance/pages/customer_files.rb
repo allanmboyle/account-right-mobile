@@ -21,7 +21,8 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.all("#customer-files-list a").first.click unless login_shown?
+          @session.all("#customer-files-list a").first.click unless customer_files.size == 1
+          wait_for_login_to_be_shown
         end
 
         def customer_files
@@ -35,7 +36,6 @@ module AccountRightMobile
         end
 
         def enter_credentials
-          wait_for_login_form_to_be_visible
           credentials = @configuration["customer_file_user"]
           @session.fill_in("customer-file-username", :with => credentials["username"])
           @session.fill_in("customer-file-password", :with => credentials["password"])
@@ -75,14 +75,8 @@ module AccountRightMobile
 
         private
 
-        def login_shown?
-          @session.find("#customer-file-login-content").visible?
-        end
-
-        def wait_for_login_form_to_be_visible
-          ::Wait.until_true!("login form is visible") do
-            @session.has_css?("#customer-file-login-content", visible: true)
-          end
+        def wait_for_login_to_be_shown
+          ::Wait.until_true!("login is shown") { @session.find("#customer-file-login-content").visible? }
         end
 
         def wait_for_customer_files_to_have_text
