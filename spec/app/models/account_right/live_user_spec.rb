@@ -7,13 +7,13 @@ describe AccountRight::LiveUser do
 
   describe "#login" do
 
-    it "should login the user using oAuth" do
+    it "should login the user using OAuth" do
       AccountRight::OAuth.should_receive(:login).with(username, password)
 
       user.login
     end
 
-    it "should return the oAuth response" do
+    it "should return the OAuth response" do
       oauth_response = {access_token: "some_access_token", refresh_token: "some_refresh_token"}
 
       AccountRight::OAuth.stub!(:login).and_return(oauth_response)

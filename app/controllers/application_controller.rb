@@ -9,9 +9,7 @@ class ApplicationController < ActionController::Base
 
   def respond_to_json
     respond_to do |format|
-      format.json do
-        yield
-      end
+      format.json { yield }
     end
   end
 

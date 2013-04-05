@@ -4,8 +4,9 @@ describe AccountRight::API::RetryingCommandProcessor do
 
     let(:access_token) { "some_access_token" }
     let(:refresh_token) { "some_refresh_token" }
-    let(:client_application_state) { AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token,
-                                                               refresh_token: refresh_token) }
+    let(:client_application_state) do
+      AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token,refresh_token: refresh_token)
+    end
     let(:command) { double(AccountRight::API::QueryCommand, client_application_state: client_application_state) }
     let(:response_body) { "some response body" }
 
@@ -44,7 +45,7 @@ describe AccountRight::API::RetryingCommandProcessor do
           end.and_return(response_body)
         end
 
-        it "should re-login the user via oAuth" do
+        it "should re-login the user via OAuth" do
           AccountRight::OAuth.should_receive(:re_login).with(refresh_token).and_return(access_token: new_access_token, 
                                                                                        refresh_token: new_refresh_token)
           

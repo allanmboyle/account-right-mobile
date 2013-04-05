@@ -2,7 +2,9 @@ describe AccountRight::API::Request do
 
   let(:resource_path) { "some/resource/path" }
   let(:access_token) { "some token" }
-  let(:client_application_state) { AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token) }
+  let(:client_application_state) do
+    AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token)
+  end
   let(:request) { AccountRight::API::Request.new(resource_path, client_application_state) }
 
   describe "#uri" do

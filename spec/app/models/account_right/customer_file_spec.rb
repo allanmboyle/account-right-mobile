@@ -1,8 +1,8 @@
 describe AccountRight::CustomerFile do
 
-  let(:customer_file_id) { 8 }
+  let(:id) { 8 }
   let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
-  let(:customer_file) { AccountRight::CustomerFile.new(customer_file_id) }
+  let(:customer_file) { AccountRight::CustomerFile.new(id: id) }
 
   describe "#accounting_properties" do
 
@@ -12,7 +12,7 @@ describe AccountRight::CustomerFile do
 
     it "should invoke the API to retrieve the accounting properties for the customer file id" do
       AccountRight::API.should_receive(:invoke)
-                       .with("accountright/#{customer_file_id}/AccountingProperties", client_application_state)
+                       .with("accountright/#{id}/AccountingProperties", client_application_state)
 
       customer_file.accounting_properties(client_application_state)
     end
@@ -44,14 +44,14 @@ describe AccountRight::CustomerFile do
     end
 
     it "should invoke the API to retrieve the customers for the customer file id" do
-      AccountRight::API.should_receive(:invoke).with("accountright/#{customer_file_id}/Customer", client_application_state)
+      AccountRight::API.should_receive(:invoke).with("accountright/#{id}/Customer", client_application_state)
                                                .and_return(customer_response)
 
       customer_file.contacts(client_application_state)
     end
 
     it "should invoke the API to retrieve the suppliers for the customer file id" do
-      AccountRight::API.should_receive(:invoke).with("accountright/#{customer_file_id}/Supplier", client_application_state)
+      AccountRight::API.should_receive(:invoke).with("accountright/#{id}/Supplier", client_application_state)
                                                .and_return(supplier_response)
 
       customer_file.contacts(client_application_state)

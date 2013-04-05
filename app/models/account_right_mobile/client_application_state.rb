@@ -2,11 +2,18 @@ module AccountRightMobile
 
   class ClientApplicationState
 
+    private
+
+    STATE_KEYS = [:access_token, :refresh_token, :cf_id, :cf_token].freeze
+
+    public
+
     def initialize(session)
       @session = session
-      @state = { access_token: session[:access_token],
-                 refresh_token: session[:refresh_token],
-                 cf_token: session[:cf_token] }
+      @state = STATE_KEYS.inject({}) do |result, key|
+        result[key] = session[key]
+        result
+      end
     end
 
     def [](key)

@@ -102,14 +102,15 @@ describe CustomerFileController, type: :controller do
           end
 
           it "should create a customer file with the provided customer file id" do
-            AccountRight::CustomerFile.should_receive(:new).with(customer_file_id).and_return(customer_file)
+            AccountRight::CustomerFile.should_receive(:new).with(id: customer_file_id).and_return(customer_file)
 
             post_login
           end
 
-          it "should create a customer file user with the credentials" do
-            AccountRight::CustomerFileUser.should_receive(:new).with(username: username, password: password)
-                                                               .and_return(user)
+          it "should create a customer file user with the customer file and credentials" do
+            AccountRight::CustomerFileUser.should_receive(:new)
+                                          .with(customer_file: customer_file, username: username, password: password)
+                                          .and_return(user)
 
             post_login
           end
@@ -117,7 +118,7 @@ describe CustomerFileController, type: :controller do
           describe "when the user login is successful" do
 
             before(:each) do
-              user.stub!(:login).with(customer_file, client_application_state)
+              user.stub!(:login).with(client_application_state)
             end
 
             it "should respond with status of 200" do
@@ -143,12 +144,6 @@ describe CustomerFileController, type: :controller do
               client_application_state.should_receive(:save).with(no_args)
 
               post_login
-            end
-
-            it "should retain the customer file id in the users session" do
-              post_login
-
-              session[:cf_id].should eql(customer_file_id)
             end
 
             it "should respond with an empty json body" do

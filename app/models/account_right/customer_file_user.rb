@@ -2,7 +2,7 @@ module AccountRight
 
   class CustomerFileUser < Model::Base
 
-    attr_accessor :username, :password
+    attr_accessor :customer_file, :username, :password
 
     def initialize(attributes = {})
       super(attributes)
@@ -12,7 +12,8 @@ module AccountRight
       Base64.strict_encode64("#{username}:#{password}")
     end
 
-    def login(customer_file, client_application_state)
+    def login(client_application_state)
+      client_application_state[:cf_id] = customer_file.id
       client_application_state[:cf_token] = cf_token
       begin
         customer_file.accounting_properties(client_application_state)

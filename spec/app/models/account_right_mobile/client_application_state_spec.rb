@@ -13,6 +13,7 @@ describe AccountRightMobile::ClientApplicationState do
         session.stub!(:[]).with(:access_token).and_return("some access token")
         session.stub!(:[]).with(:refresh_token).and_return("some refresh token")
         session.stub!(:[]).with(:cf_token).and_return("some customer file token")
+        session.stub!(:[]).with(:cf_id).and_return("some customer file id")
       end
 
       it "should expose the access token in the users session" do
@@ -25,6 +26,10 @@ describe AccountRightMobile::ClientApplicationState do
 
       it "should expose the customer file token in the users session" do
         client_application_state[:cf_token].should eql("some customer file token")
+      end
+
+      it "should expose the customer file id in the users session" do
+        client_application_state[:cf_id].should eql("some customer file id")
       end
 
       describe "and the value has been overwritten in the client application state" do

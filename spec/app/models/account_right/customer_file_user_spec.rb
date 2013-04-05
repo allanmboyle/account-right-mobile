@@ -1,8 +1,13 @@
 describe AccountRight::CustomerFileUser do
 
+  let(:cf_id) { 888 }
+  let(:customer_file) { double(AccountRight::CustomerFile, id: cf_id).as_null_object }
   let(:username) { "some_username" }
   let(:password) { "some_password" }
-  let(:customer_file_user) { AccountRight::CustomerFileUser.new(username: username, password: password) }
+
+  let(:customer_file_user) do
+    AccountRight::CustomerFileUser.new(customer_file: customer_file, username: username, password: password)
+  end
 
   it "should consist of a username" do
     customer_file_user.username.should eql(username)
@@ -24,10 +29,17 @@ describe AccountRight::CustomerFileUser do
 
     let(:access_token) { "some-access-token" }
     let(:cf_token) { "some token" }
-    let(:client_application_state) { AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token) }
-    let(:customer_file) { double(AccountRight::CustomerFile, accounting_properties: "some accounting properties") }
+    let(:client_application_state) do
+      AccountRightMobile::ClientApplicationStateFactory.create(access_token: access_token)
+    end
 
     before(:each) { customer_file_user.stub!(:cf_token).and_return(cf_token) }
+
+    it "should include customer files id in the client application state" do
+      perform_login
+
+      client_application_state[:cf_id].should eql(cf_id)
+    end
 
     it "should include the users customer file token in the client application state" do
       perform_login
@@ -42,6 +54,8 @@ describe AccountRight::CustomerFileUser do
     end
 
     it "should return the customer files accounting properties" do
+      customer_file.stub!(:accounting_properties).and_return("some accounting properties")
+
       perform_login.should eql("some accounting properties")
     end
 
@@ -60,7 +74,7 @@ describe AccountRight::CustomerFileUser do
     end
 
     def perform_login
-      customer_file_user.login(customer_file, client_application_state)
+      customer_file_user.login(client_application_state)
     end
 
   end

@@ -1,5 +1,5 @@
-describe AccountRight::OAuth, "integrating with an oAuth server" do
-  include_context "integration with an oAuth stub server"
+describe AccountRight::OAuth, "integrating with an OAuth server" do
+  include_context "integration with an OAuth stub server"
 
   let(:client_id) { "some_client_id" }
   let(:client_secret) { "some_client_secret" }
@@ -66,7 +66,7 @@ describe AccountRight::OAuth, "integrating with an oAuth server" do
                                             scope: scope, username: username, password: password)
       end
 
-      it "should return the access and refresh token returned by the oAuth service" do
+      it "should return the access and refresh token returned by the OAuth service" do
         result = process_request
 
         result.should eql(access_token: oauth_service.last_access_token,
@@ -95,7 +95,7 @@ describe AccountRight::OAuth, "integrating with an oAuth server" do
                                             grant_type: grant_type, refresh_token: refresh_token)
       end
 
-      it "should return the access and refresh token returned by the oAuth service" do
+      it "should return the access and refresh token returned by the OAuth service" do
         result = process_request
 
         result.should eql(access_token: oauth_service.last_access_token,

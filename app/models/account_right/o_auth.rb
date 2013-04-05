@@ -5,9 +5,9 @@ module AccountRight
 
     base_uri AccountRightMobile::Application.config.live_login["base_uri"]
 
-    LOGIN_GRANT_TYPE = "password"
-    LOGIN_SCOPE = "CompanyFile"
-    RE_LOGIN_GRANT_TYPE = "refresh_token"
+    LOGIN_GRANT_TYPE = "password".freeze
+    LOGIN_SCOPE = "CompanyFile".freeze
+    RE_LOGIN_GRANT_TYPE = "refresh_token".freeze
 
     class << self
 

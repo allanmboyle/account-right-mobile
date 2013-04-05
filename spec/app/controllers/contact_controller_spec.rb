@@ -6,9 +6,9 @@ describe ContactController, type: :controller do
   let(:customer_file) { double(AccountRight::CustomerFile, contacts: contacts).as_null_object }
 
   before(:each) do
-    session[:cf_id] = customer_file_id
-
     AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
+    client_application_state.stub!(:[]).with(:cf_id).and_return(customer_file_id)
+
     AccountRight::CustomerFile.stub!(:new).and_return(customer_file)
   end
 
@@ -19,7 +19,7 @@ describe ContactController, type: :controller do
       describe "when a json request is made" do
 
         it "should create a customer file customer file for the id in the users session" do
-          AccountRight::CustomerFile.should_receive(:new).with(customer_file_id).and_return(customer_file)
+          AccountRight::CustomerFile.should_receive(:new).with(id: customer_file_id).and_return(customer_file)
 
           get_index
         end

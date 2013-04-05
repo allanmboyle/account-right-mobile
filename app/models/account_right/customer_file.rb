@@ -1,13 +1,15 @@
 module AccountRight
 
-  class CustomerFile
+  class CustomerFile < Model::Base
 
-    def initialize(customer_file_id)
-      @customer_file_id = customer_file_id
+    attr_accessor :id
+
+    def initialize(attributes = {})
+      super(attributes)
     end
 
     def accounting_properties(client_application_state)
-      AccountRight::API.invoke("accountright/#{@customer_file_id}/AccountingProperties", client_application_state)
+      AccountRight::API.invoke("accountright/#{id}/AccountingProperties", client_application_state)
     end
 
     def contacts(client_application_state)
@@ -18,11 +20,11 @@ module AccountRight
     private
 
     def customers(client_application_state)
-      AccountRight::API.invoke("accountright/#{@customer_file_id}/Customer", client_application_state)
+      AccountRight::API.invoke("accountright/#{id}/Customer", client_application_state)
     end
 
     def suppliers(client_application_state)
-      AccountRight::API.invoke("accountright/#{@customer_file_id}/Supplier", client_application_state)
+      AccountRight::API.invoke("accountright/#{id}/Supplier", client_application_state)
     end
 
   end
