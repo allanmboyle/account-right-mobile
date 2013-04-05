@@ -4,6 +4,31 @@ describe AccountRight::CustomerFile do
   let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
   let(:customer_file) { AccountRight::CustomerFile.new(id: id) }
 
+  describe ".all" do
+
+    let(:customer_files_response) { "some customer files response" }
+
+    before(:each) { AccountRight::API.stub!(:invoke).and_return(customer_files_response) }
+
+    it "should invoke the API to retrieve the customer files based on the client application state" do
+      AccountRight::API.should_receive(:invoke).with("accountright", client_application_state)
+
+      AccountRight::CustomerFile.all(client_application_state)
+    end
+
+    it "should return the API response" do
+      AccountRight::CustomerFile.all(client_application_state).should eql(customer_files_response)
+    end
+
+    it "should propagate any API error raised" do
+      forced_error = AccountRight::API::ErrorFactory.create
+      AccountRight::API.stub!(:invoke).and_raise(forced_error)
+
+      lambda { AccountRight::CustomerFile.all(client_application_state) }.should raise_error(forced_error)
+    end
+
+  end
+
   describe "#accounting_properties" do
 
     let(:accounting_properties_response) { "some accounting properties response" }

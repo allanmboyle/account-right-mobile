@@ -4,6 +4,10 @@ module AccountRight
 
     attr_accessor :id
 
+    def self.all(client_application_state)
+      AccountRight::API.invoke("accountright", client_application_state)
+    end
+
     def initialize(attributes = {})
       super(attributes)
     end

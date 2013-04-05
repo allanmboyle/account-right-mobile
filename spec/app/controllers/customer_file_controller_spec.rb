@@ -20,22 +20,22 @@ describe CustomerFileController, type: :controller do
       
       describe "when a json request is made" do
 
-        before(:each) { AccountRight::API.stub!(:invoke) }
+        before(:each) { AccountRight::CustomerFile.stub!(:all) }
 
-        it "should invoke the API with client application state created from the users session" do
+        it "should find all customer files accessible to the user via the model" do
           mandatory_state = hash_including(access_token: access_token, refresh_token: refresh_token)
           AccountRightMobile::ClientApplicationState.should_receive(:new).with(mandatory_state)
                                                                          .and_return(client_application_state)
-          AccountRight::API.should_receive(:invoke).with("accountright", client_application_state)
+          AccountRight::CustomerFile.should_receive(:all).with(client_application_state)
 
           get_index
         end
 
-        describe "when the API successfully responds" do
+        describe "when the model successfully responds" do
 
-          let(:api_response) { { key: "value" }.to_json }
+          let(:model_response) { { key: "value" }.to_json }
 
-          before(:each) { AccountRight::API.stub!(:invoke).and_return(api_response) }
+          before(:each) { AccountRight::CustomerFile.stub!(:all).and_return(model_response) }
 
           it "should respond with a status of 200" do
             get_index
@@ -43,10 +43,10 @@ describe CustomerFileController, type: :controller do
             response.status.should eql(200)
           end
 
-          it "should return the response from the API" do
+          it "should return the response from the model" do
             get_index
 
-            response.body.should eql(api_response)
+            response.body.should eql(model_response)
           end
 
         end
