@@ -42,6 +42,15 @@ module AccountRightMobile
                            method: :get,
                            response: { status: 200, body: { "Items" => [] }.to_json })
 
+            stub_activator("/return_customers_with_long_name", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                           method: :get,
+                           response: { status: 200, body:
+                               { "Items" => [
+                                   { CoLastName: "A Customer with an extremely long name that should extend past the width of a phone", FirstName: "", IsIndividual: false, CurrentBalance: -700.00 }
+                               ]
+                               }.to_json
+                           })
+
             stub_activator("/return_customers_error", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
                            response: { status: 500, body: "A general error occurred" })
