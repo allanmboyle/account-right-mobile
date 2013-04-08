@@ -1,3 +1,7 @@
+Given /^the API is unable to return contacts data due to an arbitrary problem$/ do
+  @api_service.return_contacts_error
+end
+
 When /^the Customer File contains multiple contacts$/ do
   @customers = [ { CoLastName: "Visy", FirstName: "", IsIndividual: false, CurrentBalance: -25000.00 },
                  { CoLastName: "Nexus", FirstName: "Ingrid", IsIndividual: true, CurrentBalance: 15000.00 },

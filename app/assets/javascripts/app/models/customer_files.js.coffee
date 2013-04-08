@@ -1,6 +1,6 @@
-define([ "backbone", "./customer_file" ], (Backbone, CustomerFile) ->
+define([ "./base_collection", "./customer_file" ], (BaseCollection, CustomerFile) ->
 
-  class CustomerFiles extends Backbone.Collection
+  class CustomerFiles extends BaseCollection
 
     model: CustomerFile
 

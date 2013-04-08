@@ -15,9 +15,9 @@ Scenario: Customer File contains no contacts
   Then the Contacts page should be shown
   And a message should be displayed indicating the file contains no contacts
 
-@wip
 Scenario: Error is shown when an unexpected API error occurs
   Given the API is unable to return contacts data due to an arbitrary problem
   And the user has logged-in to AccountRight Live
   When the user logs-in to a Customer File
-  Then an error should be displayed indicating the application is unavailable
+  Then the Contacts page should be shown
+  And an error should be displayed indicating the application is unavailable

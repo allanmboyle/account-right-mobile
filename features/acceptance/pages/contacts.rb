@@ -28,6 +28,12 @@ module AccountRightMobile
                             visible: true)
         end
 
+        def has_application_unavailable_message?
+          @session.has_css?("#contacts-general-error-message-popup.ui-popup-active",
+                            text: GENERAL_ERROR_MESSAGE,
+                            visible: true)
+        end
+
       end
 
     end

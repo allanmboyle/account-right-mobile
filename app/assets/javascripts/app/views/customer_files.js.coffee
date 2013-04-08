@@ -29,8 +29,7 @@ define([ "backbone",
       "pageshow": "showErrorIfNecessary"
 
     update: () ->
-      @customerFiles.error = false
-      @customerFiles.on("reset", @render, this).on("error", @error, this)
+      @customerFiles.on("reset", @render, this).on("error", @render, this)
       @customerFiles.fetch()
 
     render: () ->
@@ -38,17 +37,13 @@ define([ "backbone",
       $.mobile.changePage("#customer_files", reverse: false, changeHash: false)
       this
 
-    error: () ->
-      @customerFiles.error = true
-      @render()
-
     pageBeforeShow: () ->
       @_showLoginAndUpdateModelWhenFileIsExpanded()
       @_showInitialLoginIfNecessary()
       @_showNoFilesMessageIfNecessary()
 
     showErrorIfNecessary: () ->
-      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.error
+      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.fetchError
 
     login: (event) ->
       @syncUser()

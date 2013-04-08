@@ -11,15 +11,17 @@ define([ "backbone",
 
     initialize: () ->
       @compiledContentTemplate = _.template(ContentTemplate)
-      @contacts = new Contacts().on("reset", @render, this)
+      @contacts = new Contacts()
       @$el.html(_.template(LayoutTemplate))
 
     el: $("#contacts")
 
     events: () ->
       "pagebeforeshow": "pageBeforeShow"
+      "pageshow": "showErrorIfNecessary"
 
     update: () ->
+      @contacts.on("reset", @render, this).on("error", @render, this)
       @contacts.fetch()
 
     render: () ->
@@ -30,6 +32,9 @@ define([ "backbone",
     pageBeforeShow: () ->
       @_refreshAutoDividers()
       @_showNoContactsMessageIfNecessary()
+
+    showErrorIfNecessary: () ->
+      $("#contacts-general-error-message").popup().popup("open") if @contacts.fetchError
 
     _refreshAutoDividers: () ->
       $("#contacts-list").listview(autodividers: true,

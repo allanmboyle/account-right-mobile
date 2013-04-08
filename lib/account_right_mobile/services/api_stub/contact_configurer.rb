@@ -42,6 +42,10 @@ module AccountRightMobile
                            method: :get,
                            response: { status: 200, body: { "Items" => [] }.to_json })
 
+            stub_activator("/return_customers_error", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                           method: :get,
+                           response: { status: 500, body: "A general error occurred" })
+
             activate!("/return_multiple_customers")
             activate!("/return_multiple_suppliers")
           end
@@ -63,6 +67,10 @@ module AccountRightMobile
         def return_no_contacts
           activate!("/return_no_customers")
           activate!("/return_no_suppliers")
+        end
+
+        def return_contacts_error
+          activate!("/return_customers_error")
         end
 
       end

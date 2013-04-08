@@ -1,6 +1,6 @@
-define([ "backbone", "./contact" ], (Backbone, Contact) ->
+define([ "./base_collection", "./contact" ], (BaseCollection, Contact) ->
 
-  class Contacts extends Backbone.Collection
+  class Contacts extends BaseCollection
 
     model: Contact
 
