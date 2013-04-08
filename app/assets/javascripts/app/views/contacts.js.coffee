@@ -14,7 +14,8 @@ define([ "backbone",
       @contacts = new Contacts().on("reset", @render, this)
       @$el.html(_.template(LayoutTemplate))
       @$el.bind("pagebeforeshow", () ->
-        $("#contacts-list").listview(autodividers: true, autodividersSelector: (li) -> $(li).find(".name").text()[0])
+        $("#contacts-list").listview(autodividers: true,
+                                     autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase())
         $("#contacts-list").listview("refresh")
       )
 

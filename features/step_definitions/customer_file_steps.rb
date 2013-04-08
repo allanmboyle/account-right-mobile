@@ -1,10 +1,12 @@
 Given /^the user has access to multiple Customer Files$/ do
-  @customer_files = ["Clearwater Pty Ltd", "Muddywater Pty Ltd", "BusyIzzy Cafe"]
+  @customer_files = [ { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee1", Name: "Clearwater Pty Ltd" },
+                      { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee2", Name: "Muddywater Pty Ltd" },
+                      { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee3", Name: "BusyIzzy Cafe" } ]
   @api_service.return_files(@customer_files)
 end
 
 Given /^the user has access to one Customer File$/ do
-  @customer_file = configuration["customer_file"]
+  @customer_file = configuration["customer_file"].symbolize_keys
   @api_service.return_files([@customer_file])
 end
 
@@ -30,8 +32,14 @@ When /^the user logs-in to a Customer File$/ do
   step "the user logs-in with valid credentials"
 end
 
+When /^the user logs-in to a Customer File with (.*)$/ do |contacts_expression|
+  step "the user has chosen to access a Customer File"
+  step "the Customer File contains #{contacts_expression}"
+  step "the user logs-in with valid credentials"
+end
+
 Then /^the Customer File login is shown$/ do
-  @current_page.shows_login_within?(@customer_file).should be_true
+  @current_page.shows_login_within?(@customer_file[:Name]).should be_true
 end
 
 Then /^the login username should default to '([^']*)'$/ do |expected_username|
@@ -39,11 +47,11 @@ Then /^the login username should default to '([^']*)'$/ do |expected_username|
 end
 
 Then /^all the Customer Files are shown$/ do
-  @current_page.customer_files.should eql(@customer_files)
+  @current_page.customer_file_names.should eql(@customer_files.map { |file| file[:Name] })
 end
 
 Then /^the Customer File is shown$/ do
-  @current_page.customer_files.should eql([@customer_file])
+  @current_page.customer_file_names.should eql([@customer_file[:Name]])
 end
 
 Then /^a message should be displayed indicating no customer files are available to access$/ do

@@ -5,6 +5,6 @@ require 'http_server_manager/rake/task_generators'
 
 namespace :oauth_stub_server do
 
-  ::HttpServerManager::Rake::ServerTasks.new(AccountRightMobile::Services::OAuthStubServer.new(port: 3002))
+  ::HttpServerManager::Rake::ServerTasks.new(AccountRightMobile::Services::OAuthStub::Server.new(port: 3002))
 
 end

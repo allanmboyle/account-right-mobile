@@ -12,7 +12,9 @@ test:
   live_user:
     username: arl_user
     password: arl_password
-  customer_file: Clearwater Pty Ltd
+  customer_file:
+    Id: 123aaaaa-bb98-21cc-dd89-eeeeeeeeeee1
+    Name: Clearwater Pty Ltd
   customer_file_user:
     username: cf_user
     password: cf_password

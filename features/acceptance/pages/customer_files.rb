@@ -21,11 +21,11 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.all("#customer-files-list a").first.click unless customer_files.size == 1
+          @session.all("#customer-files-list a").first.click unless customer_file_names.size == 1
           wait_for_login_to_be_shown
         end
 
-        def customer_files
+        def customer_file_names
           wait_for_customer_files_to_have_text
           @session.all(".customer-file-name").map { |node| node.text() }
         end

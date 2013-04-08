@@ -16,6 +16,12 @@ module AccountRightMobile
           "/#contacts"
         end
 
+        def contacts
+          @session.all(".contact").map do |node|
+            { name: node.find(".name").text(), type: node.find(".type").text(), balance: node.find(".balance").text() }
+          end
+        end
+
       end
 
     end

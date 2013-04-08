@@ -1,6 +1,6 @@
 Given /^the user enters valid login credentials$/ do
   @authentication_service.grant_access
-  if @authentication_service.is_a?(AccountRightMobile::Services::OAuthStubConfigurer)
+  if @authentication_service.is_a?(AccountRightMobile::Services::OAuthStub::Configurer)
     @api_service.with_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}")
   end
   @current_page.enter_credentials

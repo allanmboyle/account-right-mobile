@@ -6,4 +6,7 @@ define([ "backbone", "./contact" ], (Backbone, Contact) ->
 
     url: "/contact"
 
+    comparator: (contact) ->
+      contact.get("CoLastName").toUpperCase()
+
 )

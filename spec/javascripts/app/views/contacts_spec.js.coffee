@@ -47,8 +47,23 @@ describe("ContactsView", () ->
 
         contacts = $(".contact")
         assertContact(contacts[0], { name: "A Company", type: "Customer", balance: "100.00" })
-        assertContact(contacts[1], { name: "Noah, Joachim", type: "Supplier", balance: "100.00" })
-        assertContact(contacts[2], { name: "Another Company", type: "Customer", balance: "200.00" })
+        assertContact(contacts[1], { name: "Another Company", type: "Customer", balance: "200.00" })
+        assertContact(contacts[2], { name: "Noah, Joachim", type: "Supplier", balance: "100.00" })
+      )
+
+      it("should group contacts by their case-insensitive CoLastName", () ->
+        response = [{ CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00 },
+                    { CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Supplier", CurrentBalance: 200.00 }]
+
+        spyOn(Backbone, "sync").andCallFake((method, model, options) -> options.success(response))
+
+        contactsView.update()
+
+        group_letters = $(".ui-li-divider").text()
+        expect(group_letters).toBe("A")
+        contacts = $(".contact")
+        assertContact(contacts[0], { name: "a Company", type: "Customer", balance: "100.00" })
+        assertContact(contacts[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
       )
 
       assertContact = (container, expectedValues) ->
