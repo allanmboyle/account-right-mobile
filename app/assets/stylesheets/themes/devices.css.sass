@@ -15,6 +15,11 @@
 .myob-hidden
   visibility: hidden
 
+.myob-wrap
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
 .myob-buffer
   margin: 5% 5%
 
@@ -30,14 +35,24 @@
 #customer-files-content
   padding: 0
 
-.customer-file-name, .contact .name
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
+.customer-file-name
+  @extend .wrap
 
-#contacts-list .ui-li-aside
-  margin-top: 2.5em
-  width: inherit
+.contact
+  margin-bottom: 0.5em
+
+  .name
+    @extend .wrap
+    display: block
+    clear: left
+
+  .type
+    display: block
+    float: left
+
+  .balance
+    display: block
+    float: right
 
 #no-contacts-message
   margin-top: 1em
