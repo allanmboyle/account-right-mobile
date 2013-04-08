@@ -9,7 +9,6 @@ Scenario: Customer File contains multiple contacts
   Then the Contacts page should be shown
   And all the Contacts are shown
 
-@wip
 Scenario: Customer File contains no contacts
   Given the user has logged-in to AccountRight Live
   When the user logs-in to a Customer File with no contacts

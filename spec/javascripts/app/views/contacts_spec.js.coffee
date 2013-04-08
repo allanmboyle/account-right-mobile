@@ -27,11 +27,9 @@ describe("ContactsView", () ->
   describe("when instantiated", () ->
 
     contactsView = null
-    contact = null
 
     beforeEach(() ->
       contactsView = new ContactsView()
-      contact = new Contact()
     )
 
     describe("#update", () ->
@@ -51,72 +49,56 @@ describe("ContactsView", () ->
         assertContact(contacts[2], { name: "Noah, Joachim", type: "Supplier", balance: "100.00" })
       )
 
-      it("should group contacts by their case-insensitive CoLastName", () ->
-        response = [{ CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00 },
-                    { CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Supplier", CurrentBalance: 200.00 }]
-
-        spyOn(Backbone, "sync").andCallFake((method, model, options) -> options.success(response))
-
-        contactsView.update()
-
-        group_letters = $(".ui-li-divider").text()
-        expect(group_letters).toBe("A")
-        contacts = $(".contact")
-        assertContact(contacts[0], { name: "a Company", type: "Customer", balance: "100.00" })
-        assertContact(contacts[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
-      )
-
-      assertContact = (container, expectedValues) ->
-        jqueryContainer = $(container)
-        expect(jqueryContainer.find(".name")).toHaveText(expectedValues.name)
-        expect(jqueryContainer.find(".type")).toHaveText(expectedValues.type)
-        expect(jqueryContainer.find(".balance")).toHaveText(new RegExp(regexEscape(expectedValues.balance)))
     )
 
-    describe("#balanceDescription", () ->
+    describe("#render", () ->
 
-      describe("when a contacts balance is negative", () ->
+      describe("when contacts have been retrieved", () ->
 
         beforeEach(() ->
-          contact.set(CurrentBalance: -1)
+          contactsView.contacts.add([new Contact(CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00),
+                                     new Contact(CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Supplier", CurrentBalance: 200.00)])
         )
 
-        it("should return a string containing 'I owe'", () ->
-          expect(contactsView.balanceDescription(contact)).toContain("I owe")
+        it("should group contacts by their case-insensitive CoLastName", () ->
+          contactsView.render()
+
+          group_letters = $(".ui-li-divider").text()
+          expect(group_letters).toBe("A")
+          contacts = $(".contact")
+          assertContact(contacts[0], { name: "a Company", type: "Customer", balance: "100.00" })
+          assertContact(contacts[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
         )
 
-        it("should display the negative balance as a positive number", () ->
-          expect(contactsView.balanceDescription(contact)).not.toContain("-1")
-          expect(contactsView.balanceDescription(contact)).toContain("1")
+        it("should not show a message indicating no contacts are available", () ->
+           contactsView.render()
+
+           noContactsAvailableMessageToBeHidden = () -> $("#no-contacts-message").is(":hidden")
+
+           waitsFor(noContactsAvailableMessageToBeHidden, "No contacts available message to be hidden", 5000)
         )
 
       )
 
-      describe("when a contacts balance is positive", () ->
+      describe("when no contacts are retrived", () ->
 
-        beforeEach(() ->
-          contact.set(CurrentBalance: 1)
-        )
+        it("should show a message indicating no contacts are available", () ->
+          contactsView.render()
 
-        it("should return a string containing 'They owe'", () ->
-          expect(contactsView.balanceDescription(contact)).toContain("They owe")
-        )
+          noContactsAvailableMessageToBeVisible = () -> $("#no-contacts-message").is(":visible")
 
-      )
-
-      describe("when a contacts balance is zero", () ->
-
-        beforeEach(() ->
-          contact.set(CurrentBalance: 0)
-        )
-
-        it("should return a string containing 'They owe'", () ->
-          expect(contactsView.balanceDescription(contact)).toContain("They owe")
+          waitsFor(noContactsAvailableMessageToBeVisible, "No contacts available message to be visible", 5000)
         )
 
       )
 
     )
+
+    assertContact = (container, expectedValues) ->
+      jqueryContainer = $(container)
+      expect(jqueryContainer.find(".name")).toHaveText(expectedValues.name)
+      expect(jqueryContainer.find(".type")).toHaveText(expectedValues.type)
+      expect(jqueryContainer.find(".balance")).toHaveText(new RegExp(regexEscape(expectedValues.balance)))
 
   )
 

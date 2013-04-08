@@ -105,9 +105,9 @@ describe("CustomerFilesView", () ->
         )
 
         it("should not show a message indicating no files are available", () ->
-           customerFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
+           noFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
 
-           waitsFor(customerFilesAvailableMessageToBeHidden, "Customer Files available message to be hidden", 5000)
+           waitsFor(noFilesAvailableMessageToBeHidden, "No Customer Files available message to be hidden", 5000)
         )
 
         describe("and a customer file is expanded", () ->
@@ -193,9 +193,9 @@ describe("CustomerFilesView", () ->
         )
 
         it("should not show a message indicating no files are available", () ->
-          customerFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
+          noFilesAvailableMessageToBeHidden = () -> $("#no-customer-files-message").is(":hidden")
 
-          waitsFor(customerFilesAvailableMessageToBeHidden, "Customer Files available message to be hidden", 5000)
+          waitsFor(noFilesAvailableMessageToBeHidden, "No Customer Files available message to be hidden", 5000)
         )
 
       )
@@ -207,9 +207,9 @@ describe("CustomerFilesView", () ->
         )
 
         it("should show a message indicating no files are available", () ->
-          noCustomerFilesAvailableMessageToBeVisible = () -> $("#no-customer-files-message").is(":visible")
+          noFilesAvailableMessageToBeVisible = () -> $("#no-customer-files-message").is(":visible")
 
-          waitsFor(noCustomerFilesAvailableMessageToBeVisible, "Customer Files available message to be visible", 5000)
+          waitsFor(noFilesAvailableMessageToBeVisible, "No Customer Files available message to be visible", 5000)
         )
 
       )

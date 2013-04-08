@@ -13,4 +13,9 @@ define([ "backbone" ], (Backbone) ->
     name: () ->
       if @get("IsIndividual") then "#{@get("CoLastName")}, #{@get("FirstName")}" else @get("CoLastName")
 
+    balanceDescription: () ->
+      balance = @get("CurrentBalance")
+      oweingEntity = if balance < 0 then "I" else "They"
+      "#{oweingEntity} owe #{Math.abs(balance).toFixed(2)}"
+
 )

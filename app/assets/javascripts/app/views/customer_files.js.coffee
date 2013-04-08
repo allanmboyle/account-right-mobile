@@ -79,10 +79,7 @@ define([ "backbone",
       $(".customer-file:first-child").trigger("expand") if @customerFiles.length == 1
 
     _showNoFilesMessageIfNecessary: () ->
-      if (@customerFiles.length == 0)
-        @_noFilesMessage().show()
-      else
-        @_noFilesMessage().hide()
+      if (@customerFiles.isEmpty()) then @_noFilesMessage().show() else @_noFilesMessage().hide()
 
     _loginContent: () ->
       $("#customer-file-login-content")

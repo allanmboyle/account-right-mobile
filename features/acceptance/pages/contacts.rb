@@ -22,6 +22,12 @@ module AccountRightMobile
           end
         end
 
+        def has_no_contacts_available_message?
+          @session.has_css?("#contacts-content",
+                            text: "No contacts are available to access at this time",
+                            visible: true)
+        end
+
       end
 
     end
