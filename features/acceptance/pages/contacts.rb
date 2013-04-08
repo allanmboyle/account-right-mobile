@@ -17,6 +17,7 @@ module AccountRightMobile
         end
 
         def contacts
+          wait_until_all_contacts_are_shown
           @session.all(".contact").map do |node|
             { name: node.find(".name").text(), type: node.find(".type").text(), balance: node.find(".balance").text() }
           end
@@ -32,6 +33,12 @@ module AccountRightMobile
           @session.has_css?("#contacts-general-error-message-popup.ui-popup-active",
                             text: GENERAL_ERROR_MESSAGE,
                             visible: true)
+        end
+
+        private
+
+        def wait_until_all_contacts_are_shown
+          wait_until_all_contain_text(".contact .name")
         end
 
       end

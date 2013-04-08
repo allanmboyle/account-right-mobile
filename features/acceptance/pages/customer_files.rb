@@ -22,11 +22,11 @@ module AccountRightMobile
 
         def access_a_file
           @session.all("#customer-files-list a").first.click unless customer_file_names.size == 1
-          wait_for_login_to_be_shown
+          wait_until_login_is_shown
         end
 
         def customer_file_names
-          wait_for_customer_files_to_have_text
+          wait_until_all_customer_files_are_shown
           @session.all(".customer-file-name").map { |node| node.text() }
         end
 
@@ -75,14 +75,12 @@ module AccountRightMobile
 
         private
 
-        def wait_for_login_to_be_shown
+        def wait_until_login_is_shown
           ::Wait.until_true!("login is shown") { @session.find("#customer-file-login-content").visible? }
         end
 
-        def wait_for_customer_files_to_have_text
-          ::Wait.until_true!("all customer files contain text") do
-            @session.all(".customer-file-name").reduce(true) { |result, node| result && !node.text().empty? }
-          end
+        def wait_until_all_customer_files_are_shown
+          wait_until_all_contain_text(".customer-file-name")
         end
 
       end

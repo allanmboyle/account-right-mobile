@@ -38,6 +38,14 @@ module AccountRightMobile
           shown? && @session.has_no_selector?(".ui-popup-active", text: /error/i)
         end
 
+        protected
+
+        def wait_until_all_contain_text(locator)
+          ::Wait.until_true!("all nodes matching #{locator} contain text") do
+            @session.all(locator).reduce(true) { |result, node| result && !node.text().empty? }
+          end
+        end
+
       end
 
     end
