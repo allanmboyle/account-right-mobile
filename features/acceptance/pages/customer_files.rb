@@ -51,7 +51,7 @@ module AccountRightMobile
 
         def has_no_customer_files_available_message?
           @session.has_css?("#customer-files-content",
-                            text: "No customer files are available to access at this time",
+                            text: "It looks like you're not online yet",
                             visible: true)
         end
 
