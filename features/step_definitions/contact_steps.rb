@@ -3,18 +3,19 @@ Given /^the API is unable to return contacts data due to an arbitrary problem$/ 
 end
 
 Given /^the user intends to access a Contact with a comprehensive set of data$/ do
-  @api_service.return_contact_with_all_data
+  @contact = @api_data_factory.create_company()
+  @contact_type = "Customer"
+  @api_service.return_contacts(customers: [@contact], suppliers: [])
 end
 
 When /^the Customer File contains multiple contacts$/ do
   @customers = [ @api_data_factory.create_company(),
                  @api_data_factory.create_individual(),
                  @api_data_factory.create_company() ]
-  @api_service.return_customers(@customers)
   @suppliers = [ @api_data_factory.create_company(),
                  @api_data_factory.create_individual(),
                  @api_data_factory.create_company() ]
-  @api_service.return_suppliers(@suppliers)
+  @api_service.return_contacts(customers: @customers, suppliers: @suppliers)
 end
 
 When /^the Customer File contains no contacts$/ do
@@ -26,32 +27,34 @@ When /^the user accesses the Contacts Details$/ do
 end
 
 Then /^all the Contacts are shown$/ do
-  contacts_expected = (to_page_contacts(@customers, "Customer") +
-                       to_page_contacts(@suppliers, "Supplier")).sort_by { |contact| contact[:name] }
-  @current_page.contacts.should eql(contacts_expected)
+  expected_contacts = (to_overview_fragments(@customers, "Customer") +
+                       to_overview_fragments(@suppliers, "Supplier")).sort_by { |contact| contact.name }
+  @current_page.contacts.should eql(expected_contacts)
 end
 
 Then /^a message should be displayed indicating the file contains no contacts$/ do
   @current_page.should have_no_contacts_available_message
 end
 
-When /^the ([^\s]*) of the contact should be shown$/ do |field|
-  @current_page.contact[field.to_sym].should eql(@contact[field.to_sym])
+Then /^the ([^\s]*) of the contact should be shown$/ do |field|
+  @expected_contact ||= to_detail_fragment(@contact, @contact_type)
+  @current_page.contact.send(field.to_sym).should eql(@expected_contact.send(field.to_sym))
 end
 
-When /^the phone numbers of the contact should be shown$/ do
+Then /^the phone numbers of the contact should be shown$/ do
   step "the phone_numbers of the contact should be shown"
 end
 
-When /^the email address of the contact should be shown$/ do
+Then /^the email address of the contact should be shown$/ do
   step "the email_address of the contact should be shown"
 end
 
-def to_page_contacts(api_contacts, type)
-  api_contacts.map do |api_contact|
-    name = "#{api_contact[:CoLastName]}#{api_contact[:IsIndividual] ? ", #{api_contact[:FirstName]}" : ""}"
-    balance_first_word = api_contact[:CurrentBalance] < 0 ? "I" : "They"
-    balance = "#{balance_first_word} owe #{sprintf("%.2f", api_contact[:CurrentBalance].abs)}"
-    { name: name, type: type, balance: balance }
+def to_overview_fragments(api_models, type)
+  api_models.map do |model|
+    AccountRightMobile::Acceptance::Pages::Fragments::ContactOverview.from_api_model(model, type)
   end
+end
+
+def to_detail_fragment(api_model, type)
+  AccountRightMobile::Acceptance::Pages::Fragments::ContactDetail.from_api_model(api_model, type)
 end

@@ -3,7 +3,6 @@ Feature: Display Contact Details
   As a user
   I want to be able to view details about a customer or supplier
 
-@wip
 Scenario: Contact contains comprehensive set of data
   Given the user intends to access a Contact with a comprehensive set of data
   And the user has accessed a Customer File

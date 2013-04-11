@@ -18,13 +18,13 @@ module AccountRightMobile
 
         def contacts
           wait_until_all_contacts_are_shown
-          @session.all(".contact").map do |node|
-            { name: node.find(".name").text(), type: node.find(".type").text(), balance: node.find(".balance").text() }
-          end
+          @session.all("#contacts .contact").map { |node| Fragments::ContactOverview.from_page_node(node) }
         end
 
+        memoize :contacts
+
         def access_a_contact
-          @session.all(".contact .name").first.click
+          @session.all("#contacts .contact .name").first.click
         end
 
         def has_no_contacts_available_message?
@@ -42,7 +42,7 @@ module AccountRightMobile
         private
 
         def wait_until_all_contacts_are_shown
-          wait_until_all_contain_text(".contact .name")
+          wait_until_all_contain_text("#contacts .contact .name")
         end
 
       end

@@ -3,6 +3,7 @@ require File.expand_path("../../config/environment", __FILE__)
 
 Bundler.setup(:test)
 require 'immutable_struct'
+require 'memoize'
 require 'capybara'
 
 require File.expand_path('../acceptance', __FILE__)

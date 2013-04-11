@@ -18,13 +18,11 @@ module AccountRightMobile
 
         def contact
           wait_until_data_is_shown
-          node = @session.find(".contact")
-          node ? to_contact(node) : {}
+          node = @session.find("#contact-details .contact")
+          node ? Fragments::ContactDetail.from_page_node(node) : Fragments::ContactDetail.new()
         end
 
-        def access_a_contact
-          @session.all(".contact .name").first.click
-        end
+        memoize :contact
 
         def has_no_contacts_available_message?
           @session.has_css?("#contacts-content",
@@ -41,16 +39,7 @@ module AccountRightMobile
         private
 
         def wait_until_data_is_shown
-          wait_until_all_contain_text(".contact .name")
-        end
-
-        def to_contact(node)
-          { name: node.find(".name").text(),
-            type: node.find(".type").text(),
-            balance: node.find(".balance").text(),
-            phone_numbers: node.all(".phoneNumber").text(),
-            email_address: node.find(".emailAddress").text(),
-            address: node.all(".address .line").text() }
+          wait_until_all_contain_text("#contact-details .contact .name")
         end
 
       end

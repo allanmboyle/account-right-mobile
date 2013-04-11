@@ -5,6 +5,7 @@ module AccountRightMobile
       GENERAL_ERROR_MESSAGE = "An unexpected error has occurred"
 
       class Base
+        extend Memoize
 
         class << self
 
