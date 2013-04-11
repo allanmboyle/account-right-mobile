@@ -2,19 +2,27 @@ Given /^the API is unable to return contacts data due to an arbitrary problem$/ 
   @api_service.return_contacts_error
 end
 
+Given /^the user intends to access a Contact with a comprehensive set of data$/ do
+  @api_service.return_contact_with_all_data
+end
+
 When /^the Customer File contains multiple contacts$/ do
-  @customers = [ { CoLastName: "Visy", FirstName: "", IsIndividual: false, CurrentBalance: -25000.00 },
-                 { CoLastName: "Nexus", FirstName: "Ingrid", IsIndividual: true, CurrentBalance: 15000.00 },
-                 { CoLastName: "Visible Gap", FirstName: "", IsIndividual: false, CurrentBalance: 975.00 } ]
+  @customers = [ @api_data_factory.create_company(),
+                 @api_data_factory.create_individual(),
+                 @api_data_factory.create_company() ]
   @api_service.return_customers(@customers)
-  @suppliers = [ { CoLastName: "Dell Inc.", FirstName: "", IsIndividual: false, CurrentBalance: 75000.00 },
-                 { CoLastName: "Nique", FirstName: "Pitch", IsIndividual: true, CurrentBalance: -5000.00 },
-                 { CoLastName: "HighTense Corp.", FirstName: "", IsIndividual: false, CurrentBalance: 201.00 } ]
+  @suppliers = [ @api_data_factory.create_company(),
+                 @api_data_factory.create_individual(),
+                 @api_data_factory.create_company() ]
   @api_service.return_suppliers(@suppliers)
 end
 
 When /^the Customer File contains no contacts$/ do
   @api_service.return_no_contacts
+end
+
+When /^the user accesses the Contacts Details$/ do
+  @current_page.access_a_contact
 end
 
 Then /^all the Contacts are shown$/ do
@@ -25,6 +33,18 @@ end
 
 Then /^a message should be displayed indicating the file contains no contacts$/ do
   @current_page.should have_no_contacts_available_message
+end
+
+When /^the ([^\s]*) of the contact should be shown$/ do |field|
+  @current_page.contact[field.to_sym].should eql(@contact[field.to_sym])
+end
+
+When /^the phone numbers of the contact should be shown$/ do
+  step "the phone_numbers of the contact should be shown"
+end
+
+When /^the email address of the contact should be shown$/ do
+  step "the email_address of the contact should be shown"
 end
 
 def to_page_contacts(api_contacts, type)

@@ -15,24 +15,22 @@ module AccountRightMobile
             stub_activator("/return_multiple_customers", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
                            response: { status: 200, body:
-                               { "Items" => [
-                                   { CoLastName: "hek scheen", FirstName: "", IsIndividual: false, CurrentBalance: 50000.00 },
-                                   { CoLastName: "Clay", FirstName: "Bill", IsIndividual: true, CurrentBalance: 150.00 },
-                                   { CoLastName: "Fenced-In", FirstName: "", IsIndividual: false, CurrentBalance: 2500.00 }
-                               ]
-                               }.to_json
+                               { "Items" => [ DataFactory.create_company(),
+                                              DataFactory.create_individual(),
+                                              DataFactory.create_company() ] }.to_json
                            })
 
             stub_activator("/return_multiple_suppliers", /#{COMPANY_FILE_URI}\/[^\/]+\/Supplier/,
                            method: :get,
                            response: { status: 200, body:
-                               { "Items" => [
-                                   { CoLastName: "Chan", FirstName: "Jackie", IsIndividual: true, CurrentBalance: -7000.00 },
-                                   { CoLastName: "Power Source", FirstName: "", IsIndividual: false, CurrentBalance: -10000.00 },
-                                   { CoLastName: "Heed", FirstName: "Trent", IsIndividual: false, CurrentBalance: -800.00 }
-                               ]
-                               }.to_json
+                               { "Items" => [ DataFactory.create_individual(),
+                                              DataFactory.create_company(),
+                                              DataFactory.create_individual() ] }.to_json
                            })
+
+            stub_activator("/return_one_customer", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                           method: :get,
+                           response: { status: 200, body: { "Items" => [ DataFactory.create_company() ] }.to_json })
 
             stub_activator("/return_no_customers", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
@@ -42,13 +40,21 @@ module AccountRightMobile
                            method: :get,
                            response: { status: 200, body: { "Items" => [] }.to_json })
 
-            stub_activator("/return_customers_with_long_name", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+            stub_activator("/return_customer_with_long_name", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
                            response: { status: 200, body:
                                { "Items" => [
-                                   { CoLastName: "A Customer with an extremely long name that should extend past the width of a phone", FirstName: "", IsIndividual: false, CurrentBalance: -700.00 }
-                               ]
-                               }.to_json
+                                   DataFactory.create_company(CoLastName: ::Faker::Lorem.characters(255))
+                               ] }.to_json
+                           })
+
+            stub_activator("/return_customer_with_minimal_data", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                           method: :get,
+                           response: { status: 200, body:
+                               { "Items" => [
+                                   { CoLastName: ::Faker::Company.name, FirstName: "", IsIndividual: false,
+                                     CurrentBalance: ::AccountRightMobile::Faker::Money.random, Addresses: [ {} ] }
+                               ]}.to_json
                            })
 
             stub_activator("/return_customers_error", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
@@ -71,6 +77,11 @@ module AccountRightMobile
           stub_response!(/#{COMPANY_FILE_URI}\/[^\/]+\/Supplier/,
                          method: :get,
                          response: { status: 200, body: { "Items" => suppliers }.to_json })
+        end
+
+        def return_contact_with_all_data
+          activate!("/return_one_customer")
+          activate!("/return_no_suppliers")
         end
 
         def return_no_contacts

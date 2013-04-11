@@ -1,0 +1,34 @@
+<div data-role="header">
+    <a href="#contacts" data-role="button" data-inline="true" data-theme="b">Back</a>
+    <h1><%= contact.name() %></h1>
+</div>
+<div class="contact" data-role="content" data-theme="d">
+    <div class="overview">
+        <h3 class="name"><%= contact.name() %></h3>
+        <div class="small-print">
+            <div class="type"><%= contact.get("Type") %></div>
+            <div class="balance"><%= contact.balanceDescription() %></div>
+        </div>
+    </div>
+    <div class="detail">
+        <ul data-role="listview" data-inset="true">
+            <% _.each(contact.phoneNumbers(), function(phoneNumber) { %>
+            <li class="phoneNumber"><%= phoneNumber %></li>
+            <% }); %>
+        </ul>
+        <% if (contact.hasEmailAddress()) { %>
+        <ul data-role="listview" data-inset="true">
+            <li class="emailAddress"><%= contact.emailAddress() %></li>
+        </ul>
+        <% } %>
+        <% if (contact.hasAddress()) { %>
+        <ul data-role="listview" data-inset="true">
+            <li class="address">
+                <% _.each(contact.addressLines(), function(line) { %>
+                <div class="line"><%= line %></div>
+                <% }); %>
+            </li>
+        </ul>
+        <% } %>
+    </div>
+</div>

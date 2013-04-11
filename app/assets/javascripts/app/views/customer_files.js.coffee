@@ -8,42 +8,34 @@ define([ "backbone",
          "text!./customer_files_login.tmpl" ], (Backbone, $, _, CustomerFiles, CustomerFileUser,
                                                 LayoutTemplate, ContentTemplate, LoginTemplate) ->
 
-  $("body").append("<div id='customer_files' data-role='page' data-title='Customer Files'></div>")
+  $("body").append("<div id='customer-files' data-role='page' data-title='Customer Files'></div>")
 
   class CustomerFilesView extends Backbone.View
 
     initialize: () ->
       @compiledContentTemplate = _.template(ContentTemplate)
-      @customerFiles = new CustomerFiles()
+      @customerFiles = new CustomerFiles().on("reset", @render, this)
+                                          .on("error", @render, this)
       @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
                                                 .on("login:fail", @loginFail, this)
                                                 .on("login:error", @loginError, this)
       @$el.html(_.template(LayoutTemplate))
       @_loginContent().hide().append(_.template(LoginTemplate))
 
-    el: $("#customer_files")
+    el: $("#customer-files")
 
     events: () ->
+      "pagebeforeshow": "_pageBeforeShow"
+      "pageshow": "_showErrorIfNecessary"
       "click #customer-file-login-submit": "login"
-      "pagebeforeshow": "pageBeforeShow"
-      "pageshow": "showErrorIfNecessary"
 
     update: () ->
-      @customerFiles.on("reset", @render, this).on("error", @render, this)
       @customerFiles.fetch()
 
     render: () ->
       $("#customer-files-content").html(@compiledContentTemplate(customerFiles: @customerFiles))
-      $.mobile.changePage("#customer_files", reverse: false, changeHash: false)
+      $.mobile.changePage("#customer-files", reverse: false, changeHash: false)
       this
-
-    pageBeforeShow: () ->
-      @_showLoginAndUpdateModelWhenFileIsExpanded()
-      @_showInitialLoginIfNecessary()
-      @_showNoFilesMessageIfNecessary()
-
-    showErrorIfNecessary: () ->
-      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.fetchError
 
     login: (event) ->
       @syncUser()
@@ -62,12 +54,16 @@ define([ "backbone",
     loginError: () ->
       $("#customer-file-login-error-message").popup().popup("open")
 
+    _pageBeforeShow: () ->
+      @_showLoginAndUpdateModelWhenFileIsExpanded()
+      @_showInitialLoginIfNecessary()
+      @_showNoFilesMessageIfNecessary()
+
     _showLoginAndUpdateModelWhenFileIsExpanded: () ->
-      view = this
-      $(".customer-file").on("expand", (event) ->
+      $(".customer-file").on("expand", (event) =>
         collapsible_content_element = $(event.target).find(".ui-collapsible-content")
-        collapsible_content_element.append(view._loginContent().show())
-        view.customerFiles.expandedPosition = $(".ui-collapsible-content").index(collapsible_content_element)
+        collapsible_content_element.append(@_loginContent().show())
+        @customerFiles.expandedPosition = $(".ui-collapsible-content").index(collapsible_content_element)
       )
 
     _showInitialLoginIfNecessary: () ->
@@ -75,6 +71,9 @@ define([ "backbone",
 
     _showNoFilesMessageIfNecessary: () ->
       if (@customerFiles.isEmpty()) then @_noFilesMessage().show() else @_noFilesMessage().hide()
+
+    _showErrorIfNecessary: () ->
+      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.fetchError
 
     _loginContent: () ->
       $("#customer-file-login-content")

@@ -2,39 +2,39 @@ define([ "backbone",
          "jquery",
          "underscore",
          "../models/contacts",
-         "text!./contacts_layout.tmpl",
-         "text!./contacts_content.tmpl"], (Backbone, $, _, Contacts, LayoutTemplate, ContentTemplate) ->
+         "text!./contacts.tmpl" ], (Backbone, $, _, Contacts, Template) ->
 
   $("body").append("<div id='contacts' data-role='page' data-title='Contacts'></div>")
 
   class ContactsView extends Backbone.View
 
-    initialize: () ->
-      @compiledContentTemplate = _.template(ContentTemplate)
-      @contacts = new Contacts()
-      @$el.html(_.template(LayoutTemplate))
+    initialize: (@applicationState) ->
+      @compiledTemplate = _.template(Template)
+      @contacts = new Contacts().on("reset", @render, this)
+                                .on("error", @render, this)
 
     el: $("#contacts")
 
     events: () ->
-      "pagebeforeshow": "pageBeforeShow"
-      "pageshow": "showErrorIfNecessary"
+      "pagebeforeshow": "_pageBeforeShow"
+      "pageshow": "_showErrorIfNecessary"
+      "click .contact": "open"
 
     update: () ->
-      @contacts.on("reset", @render, this).on("error", @render, this)
       @contacts.fetch()
 
     render: () ->
-      $("#contacts-content").html(@compiledContentTemplate(contacts: @contacts))
+      @$el.html(@compiledTemplate(contacts: @contacts))
       $.mobile.changePage("#contacts", reverse: false, changeHash: false)
       this
 
-    pageBeforeShow: () ->
+    open: (event) ->
+      @applicationState.openedContact = @_contactFrom(event)
+      location.hash = "contact_details"
+
+    _pageBeforeShow: () ->
       @_refreshAutoDividers()
       @_showNoContactsMessageIfNecessary()
-
-    showErrorIfNecessary: () ->
-      $("#contacts-general-error-message").popup().popup("open") if @contacts.fetchError
 
     _refreshAutoDividers: () ->
       $("#contacts-list").listview(autodividers: true,
@@ -44,7 +44,15 @@ define([ "backbone",
     _showNoContactsMessageIfNecessary: () ->
       if (@contacts.isEmpty()) then @_noContactsMessage().show() else @_noContactsMessage().hide()
 
+    _showErrorIfNecessary: () ->
+      $("#contacts-general-error-message").popup().popup("open") if @contacts.fetchError
+
     _noContactsMessage: () ->
       $("#no-contacts-message")
+
+    _contactFrom: (event) ->
+      target = $(event.target)
+      target = target.parent() unless target.hasClass("contact")
+      @contacts.at(target.data("position"))
 
 )

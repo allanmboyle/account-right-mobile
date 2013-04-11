@@ -26,17 +26,22 @@ describe("LiveLoginView", () ->
 
   describe("when instantiated", () ->
 
+    initialPrototype = null
     liveLoginView = null
     liveUser = null
 
     beforeEach(() ->
+      initialPrototype = _.extend({}, LiveLoginView.prototype)
       liveLoginView = new LiveLoginView()
       liveUser = liveLoginView.user
     )
 
+    afterEach(() ->
+      LiveLoginView.prototype = initialPrototype
+    )
+
     describe("model event configuration", () ->
 
-      initialActions = {}
       resetSuccessSpy = null
       resetErrorSpy = null
       loginSuccessSpy = null
@@ -44,11 +49,6 @@ describe("LiveLoginView", () ->
       loginErrorSpy = null
 
       beforeEach(() ->
-        initialActions["resetSuccess"] = LiveLoginView.prototype.resetSuccess
-        initialActions["resetError"] = LiveLoginView.prototype.resetError
-        initialActions["loginSuccess"] = LiveLoginView.prototype.loginSuccess
-        initialActions["loginFail"] = LiveLoginView.prototype.loginFail
-        initialActions["loginError"] = LiveLoginView.prototype.loginError
         resetSuccessSpy = LiveLoginView.prototype.resetSuccess = jasmine.createSpy()
         resetErrorSpy = LiveLoginView.prototype.resetError = jasmine.createSpy()
         loginSuccessSpy = LiveLoginView.prototype.loginSuccess = jasmine.createSpy()
@@ -57,10 +57,6 @@ describe("LiveLoginView", () ->
 
         liveLoginView = new LiveLoginView()
         liveUser = liveLoginView.user
-      )
-
-      afterEach(() ->
-        _.extend(LiveLoginView.prototype, initialActions)
       )
 
       it("should cause the resetSuccess action to be invoked when the users reset:success event occurs", () ->

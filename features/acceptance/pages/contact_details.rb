@@ -2,10 +2,10 @@ module AccountRightMobile
   module Acceptance
     module Pages
 
-      class Contacts < Pages::Base
+      class ContactDetails < Pages::Base
 
         def self.title
-          "Contacts"
+          "Contact Details"
         end
 
         def initialize(session, configuration)
@@ -13,14 +13,13 @@ module AccountRightMobile
         end
 
         def url
-          "/#contacts"
+          "/#contact_details"
         end
 
-        def contacts
-          wait_until_all_contacts_are_shown
-          @session.all(".contact").map do |node|
-            { name: node.find(".name").text(), type: node.find(".type").text(), balance: node.find(".balance").text() }
-          end
+        def contact
+          wait_until_data_is_shown
+          node = @session.find(".contact")
+          node ? to_contact(node) : {}
         end
 
         def access_a_contact
@@ -41,8 +40,17 @@ module AccountRightMobile
 
         private
 
-        def wait_until_all_contacts_are_shown
+        def wait_until_data_is_shown
           wait_until_all_contain_text(".contact .name")
+        end
+
+        def to_contact(node)
+          { name: node.find(".name").text(),
+            type: node.find(".type").text(),
+            balance: node.find(".balance").text(),
+            phone_numbers: node.all(".phoneNumber").text(),
+            email_address: node.find(".emailAddress").text(),
+            address: node.all(".address .line").text() }
         end
 
       end

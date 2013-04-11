@@ -22,6 +22,12 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
       address = @_firstAddress()
       _.filter([address["Phone1"], address["Phone2"], address["Phone3"]], (phoneNumber) -> !!phoneNumber)
 
+    emailAddress: () ->
+      @_firstAddress()["Email"] || ""
+
+    hasEmailAddress: () ->
+      !_.isEmpty(@emailAddress())
+
     addressLines: () ->
       address = @_firstAddress()
       thirdLine = _.filter([address["State"], address["PostCode"], address["Country"]], (field) -> !!field).join(" ")

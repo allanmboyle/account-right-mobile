@@ -8,24 +8,22 @@ define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
     }
 
     reset: () ->
-      user = this
       Ajax.submit(
         type: "GET"
         url: "/live_user/reset"
-        success: () -> user.trigger("reset:success")
-        error: () -> user.trigger("reset:error")
+        success: () => @trigger("reset:success")
+        error: () => @trigger("reset:error")
       )
 
     login: () ->
-      user = this
       Ajax.submit(
         type: "POST"
         url: "/live_user/login"
-        data: user.attributes
-        success: () -> user.trigger("login:success")
-        error: (jqXHR) ->
+        data: @attributes
+        success: () => @trigger("login:success")
+        error: (jqXHR) =>
           eventToTrigger = if jqXHR.status == 401 then "fail" else "error"
-          user.trigger("login:#{eventToTrigger}")
+          @trigger("login:#{eventToTrigger}")
       )
 
 )

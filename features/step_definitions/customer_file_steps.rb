@@ -1,7 +1,7 @@
 Given /^the user has access to multiple Customer Files$/ do
-  @customer_files = [ { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee1", Name: "Clearwater Pty Ltd" },
-                      { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee2", Name: "Muddywater Pty Ltd" },
-                      { Id: "123aaaaa-bb98-21cc-dd89-eeeeeeeeeee3", Name: "BusyIzzy Cafe" } ]
+  @customer_files = [ @api_data_factory.create_customer_file(),
+                      @api_data_factory.create_customer_file(),
+                      @api_data_factory.create_customer_file() ]
   @api_service.return_files(@customer_files)
 end
 
@@ -16,6 +16,16 @@ end
 
 Given /^the API is unable to return data due to an arbitrary problem$/ do
   @api_service.return_errors
+end
+
+Given /^the user has logged-in to a Customer File$/ do
+  step "the user logs-in to a Customer File"
+end
+
+Given /^the user has accessed a Customer File$/ do
+  step "the user has logged-in to AccountRight Live"
+  step "the user has logged-in to a Customer File"
+  step "the Contacts page should be shown"
 end
 
 When /^the user has chosen to access a Customer File$/ do

@@ -2,13 +2,16 @@ describe("ContactsView", () ->
 
   Backbone = null
   ContactsView = null
+  applicationState = null
   Contact = null
 
   jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
-                         "app/models/contact" ], (LoadedBackbone, LoadedContactsView, LoadedContact) ->
+                         "app/models/application_state"
+                         "app/models/contact" ], (LoadedBackbone, LoadedContactsView, ApplicationState, LoadedContact) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
+    applicationState = new ApplicationState()
     Contact = LoadedContact
   )
 
@@ -31,10 +34,16 @@ describe("ContactsView", () ->
 
   describe("when instantiated", () ->
 
+    initialPrototype = null
     contactsView = null
 
     beforeEach(() ->
-      contactsView = new ContactsView()
+      initialPrototype = _.extend({}, ContactsView.prototype)
+      contactsView = new ContactsView(applicationState)
+    )
+
+    afterEach(() ->
+      ContactsView.prototype = initialPrototype
     )
 
     describe("#update", () ->
@@ -45,16 +54,16 @@ describe("ContactsView", () ->
           response = [{ CoLastName: "A Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00 },
                       { CoLastName: "Noah", IsIndividual: true, FirstName: "Joachim", Type: "Supplier", CurrentBalance: -100.00 },
                       { CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 200.00 }]
-
           spyOn(Backbone, "ajax").andCallFake((options) -> options.success(response))
         )
 
         it("should render the view", () ->
-          spyOn(contactsView, "render")
+          renderSpy = ContactsView.prototype.render = jasmine.createSpy()
+          contactsView = new ContactsView(applicationState)
 
           contactsView.update()
 
-          renderToBeCalled = () -> contactsView.render.callCount == 1
+          renderToBeCalled = () -> renderSpy.callCount == 1
           waitsFor(renderToBeCalled, "update action to eventually trigger render", 5000)
         )
 
@@ -82,11 +91,12 @@ describe("ContactsView", () ->
         )
 
         it("should render the view", () ->
-          spyOn(contactsView, "render")
+          renderSpy = ContactsView.prototype.render = jasmine.createSpy()
+          contactsView = new ContactsView(applicationState)
 
           contactsView.update()
 
-          renderToBeCalled = () -> contactsView.render.callCount == 1
+          renderToBeCalled = () -> renderSpy.callCount == 1
           waitsFor(renderToBeCalled, "update action to eventually trigger render", 5000)
         )
 
@@ -124,8 +134,25 @@ describe("ContactsView", () ->
            contactsView.render()
 
            noContactsAvailableMessageToBeHidden = () -> $("#no-contacts-message").is(":hidden")
-
            waitsFor(noContactsAvailableMessageToBeHidden, "No contacts available message to be hidden", 5000)
+        )
+
+        describe("and the user clicks a contact", () ->
+
+          beforeEach(() ->
+            contactsView.render()
+          )
+
+          it("should invoke the open action", () ->
+            spyOn(contactsView, "open")
+            contactsView.delegateEvents() # Attach spy to DOM events
+
+            $($(".contact")[1]).click()
+
+            openActionToBeInvoked = () -> contactsView.open.callCount == 1
+            waitsFor(openActionToBeInvoked, "contact click to invoke open action", 5000)
+          )
+
         )
 
       )
@@ -136,8 +163,67 @@ describe("ContactsView", () ->
           contactsView.render()
 
           noContactsAvailableMessageToBeVisible = () -> $("#no-contacts-message").is(":visible")
-
           waitsFor(noContactsAvailableMessageToBeVisible, "No contacts available message to be visible", 5000)
+        )
+
+      )
+
+    )
+
+    describe("#open", () ->
+
+      describe("when the view has been rendered with multiple contacts", () ->
+
+        contacts = null
+        event = null
+
+        beforeEach(() ->
+          contacts = [new Contact(CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00),
+                      new Contact(CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Supplier", CurrentBalance: 200.00)]
+          contactsView.contacts.add(contacts)
+          contactsView.render()
+        )
+
+        describe("and the event target is a contact element", () ->
+
+          beforeEach(() ->
+            event = new StubEvent()
+            event.target = $(".contact")[1]
+          )
+
+          it("should establish the associated contact object in the application state", () ->
+            contactsView.open(event)
+
+            openedContactToBeInApplicationState = () -> applicationState.openedContact == contacts[1]
+            waitsFor(openedContactToBeInApplicationState,
+                     "clicked contact to be established in the application state", 5000)
+          )
+
+          it("should navigate the user to the contact details page", () ->
+            contactsView.open(event)
+
+            navigationToTheContactDetailsPage = () -> location.hash == "#contact_details"
+            waitsFor(navigationToTheContactDetailsPage,
+                     "contact click navigating the user to the contact details page", 5000)
+          )
+
+        )
+
+        describe("and the event target is an element within a contact", () ->
+
+          beforeEach(() ->
+            event = new StubEvent()
+            event.target = $(".contact .name")[0]
+          )
+
+          it("should establish the associated contact object in the application state", () ->
+            contactsView.open(event)
+
+            openedContactToBeInApplicationState = () -> applicationState.openedContact == contacts[0]
+            waitsFor(openedContactToBeInApplicationState,
+                     "clicked contact to be established in the application state", 5000)
+          )
+
         )
 
       )

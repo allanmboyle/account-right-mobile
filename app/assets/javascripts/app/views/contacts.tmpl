@@ -1,0 +1,21 @@
+<div data-role="header">
+    <a href="#customer_files" data-role="button" data-inline="true" data-theme="b">Back</a>
+    <h1>Busy Izzy Catering</h1>
+</div>
+<div id="contacts-content" data-role="content" data-theme="d">
+    <ul id="contacts-list" data-role="listview" data-autodividers="true">
+        <% contacts.each(function(contact, index) { %>
+        <li class="contact" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-position="<%= index %>">
+            <h3 class="name"><%= contact.name() %></h3>
+            <div class="small-print">
+                <p class="type"><%= contact.get("Type") %></p>
+                <p class="balance"><%= contact.balanceDescription() %></p>
+            </div>
+        </li>
+        <% }); %>
+    </ul>
+    <div id="no-contacts-message">No contacts are available to access at this time</div>
+    <div id="contacts-general-error-message" data-role="popup" data-overlay-theme="b">
+        <p>An unexpected error has occurred</p>
+    </div>
+</div>

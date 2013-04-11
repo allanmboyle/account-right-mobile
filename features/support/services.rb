@@ -12,4 +12,6 @@ Before do
       AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::ApiStub::Configurer
   api_service_class.initialize!
   @api_service = api_service_class.new
+
+  @api_data_factory = AccountRightMobile::Services::ApiStub::DataFactory
 end

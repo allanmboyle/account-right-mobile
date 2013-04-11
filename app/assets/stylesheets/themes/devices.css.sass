@@ -1,16 +1,14 @@
 /* MYOB Styles */
-.myob-homepage-header-outer
+.myob-homepage-header
   font-size: 20px
   font-weight: bold
   text-align: center
   text-shadow: 0 1px 0 #7D7373
-  padding: 0 10px
-
-  .myob-homepage-header-inner
-    background-image: image_url('logo_myob.png')
-    background-repeat: no-repeat
-    background-position: left
-    padding: 15px 0
+  padding: 0 0.6em
+  background:
+    image: image_url('logo_myob.png')
+    repeat: no-repeat
+    position: 15px 50%
 
 .myob-hidden
   visibility: hidden
@@ -36,32 +34,105 @@
   padding: 0
 
 .customer-file-name
-  @extend .wrap
+  @extend .myob-wrap
 
 .contact
-  margin-bottom: 0.5em
+  height: auto
+  padding-bottom: 0.5em
+
+  *
+    font-weight: 400
+    overflow: hidden
 
   .name
-    @extend .wrap
-    display: block
-    clear: left
+    @extend .myob-wrap
+    clear: both
+    margin: 0 0 0.3em 0
+    padding: 0
 
-  .type
-    display: block
-    float: left
+  .small-print
+    clear: both
+    font-size: 12px
 
-  .balance
-    display: block
-    float: right
+    *
+      margin: 0
+      padding: 0
+
+    .type
+      float: left
+
+    .balance
+      float: right
+
+#contacts .contact
+  cursor: pointer
 
 #no-contacts-message
   margin-top: 1em
 
+#contact-details
+
+  .ui-content
+    padding: 0
+
+  .ui-corner-all
+    -webkit-border-radius: 0.5em
+    border-radius: 0.5em
+
+  .overview
+    clear: both
+    padding: 0.7em
+    background-color: #3c4246
+    box-shadow: 0 2px 1px #000000 inset
+    color: #ffffff
+
+    *
+      font-weight: 200
+
+  .detail
+    clear: both
+    padding: 0 0.5em 1.2em 0.5em
+    background-color: #d7d9db
+    box-shadow: 0 2px 1px #3c4246 inset
+
+    ul
+      margin: 0
+      padding: 1.2em 0 0 0
+      box-shadow: none
+
+      li
+        padding-left: 4em
+        font-weight: 100
+        background:
+          repeat: no-repeat
+          position: 1.2em 50%
+
+      .phoneNumber
+        background-image: image_url('icon_phone.png')
+
+      .emailAddress
+        background-image: image_url('icon_email.png')
+        @extend .myob-wrap
+
+      .address
+        background-image: image_url('icon_address.png')
+
 /* JQueryMobile Overriddes */
+.ui-mobile .ui-header, .ui-mobile .ui-footer
+  border-width: 0
+
+.ui-mobile .ui-header
+  padding: 0.8em 10%
+
 .ui-header .ui-title, .ui-footer .ui-title
   font-size: 18px
   font-weight: 100
-  margin: 0.4em 10% 0.5em
+  padding: 0
+  margin: 0
+
+.ui-header .ui-btn-left, .ui-footer .ui-btn-left
+  left: 0.4em
+  top: 0.45em
 
 .ui-collapsible-content
   background-color: #C1C1C1
@@ -76,6 +147,7 @@
 
 /* Responsive Styles */
 @media handheld, only screen and (min-width: 480px)
+
   .myob-button
     width: 406px
     margin: 0 auto

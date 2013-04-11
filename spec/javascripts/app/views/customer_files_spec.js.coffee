@@ -15,31 +15,37 @@ describe("CustomerFilesView", () ->
 
   beforeEach(() ->
     # Compensation for pageshow not being triggered in behaviours
-    $("#customer_files").on("pagebeforeshow", () -> $("#customer_files").trigger("pageshow"))
+    $("#customer-files").on("pagebeforeshow", () -> $("#customer-files").trigger("pageshow"))
   )
 
   afterEach(() ->
-    $("#customer_files").remove()
+    $("#customer-files").remove()
   )
 
   describe("when loaded", () ->
 
     it("should add a page placeholder to the dom", () ->
-      expect($("#customer_files")).toExist()
+      expect($("#customer-files")).toExist()
     )
 
   )
 
   describe("when instantiated", () ->
 
+    initialPrototype = null
     customerFilesView = null
     customerFiles = null
     customerFileUser = null
 
     beforeEach(() ->
+      initialPrototype = _.extend({}, CustomerFilesView.prototype)
       customerFilesView = new CustomerFilesView()
       customerFiles = customerFilesView.customerFiles
       customerFileUser = customerFilesView.customerFileUser
+    )
+
+    afterEach(() ->
+      CustomerFilesView.prototype = initialPrototype
     )
 
     it("should add customer file login content to the page which is initially hidden", () ->
@@ -49,25 +55,17 @@ describe("CustomerFilesView", () ->
 
     describe("model event configuration", () ->
 
-      initialActions = {}
       loginSuccessSpy = null
       loginFailSpy = null
       loginErrorSpy = null
 
       beforeEach(() ->
-        initialActions["loginSuccess"] = CustomerFilesView.prototype.loginSuccess
-        initialActions["loginFail"] = CustomerFilesView.prototype.loginFail
-        initialActions["loginError"] = CustomerFilesView.prototype.loginError
         loginSuccessSpy = CustomerFilesView.prototype.loginSuccess = jasmine.createSpy()
         loginFailSpy = CustomerFilesView.prototype.loginFail = jasmine.createSpy()
         loginErrorSpy = CustomerFilesView.prototype.loginError = jasmine.createSpy()
 
         customerFilesView = new CustomerFilesView()
         customerFileUser = customerFilesView.customerFileUser
-      )
-
-      afterEach(() ->
-        _.extend(CustomerFilesView.prototype, initialActions)
       )
 
       it("should trigger the loginSuccess action when the customer file user's login:success event occurs", () ->
@@ -95,7 +93,9 @@ describe("CustomerFilesView", () ->
       describe("with multiple customer files", () ->
 
         beforeEach(() ->
-          customerFiles.add([new CustomerFile(Name: "File 1"), new CustomerFile(Name: "File 2"), new CustomerFile(Name: "File 3")])
+          customerFiles.add([new CustomerFile(Name: "File 1"),
+                             new CustomerFile(Name: "File 2"),
+                             new CustomerFile(Name: "File 3")])
 
           customerFilesView.render()
         )
@@ -158,13 +158,10 @@ describe("CustomerFilesView", () ->
 
           describe("and the login button is clicked", () ->
 
-            beforeEach(() ->
-              spyOn(customerFilesView, "login")
-
-              customerFilesView.delegateEvents() # Attach spy to DOM events
-            )
-
             it("should trigger the login action", () ->
+              spyOn(customerFilesView, "login")
+              customerFilesView.delegateEvents() # Attach spy to DOM events
+
               $("#customer-file-login-submit").click()
 
               loginActionHasBeenCalled = () -> customerFilesView.login.callCount == 1
@@ -237,11 +234,12 @@ describe("CustomerFilesView", () ->
         )
 
         it("should render the view", () ->
-          spyOn(customerFilesView, "render")
+          renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
+          customerFilesView = new CustomerFilesView()
 
           customerFilesView.update()
 
-          renderToBeCalled = () -> customerFilesView.render.callCount == 1
+          renderToBeCalled = () -> renderSpy.callCount == 1
           waitsFor(renderToBeCalled, "update action to eventually trigger render", 5000)
         )
 
@@ -260,11 +258,12 @@ describe("CustomerFilesView", () ->
         )
 
         it("should render the view", () ->
-          spyOn(customerFilesView, "render")
+          renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
+          customerFilesView = new CustomerFilesView()
 
           customerFilesView.update()
 
-          renderToBeCalled = () -> customerFilesView.render.callCount == 1
+          renderToBeCalled = () -> renderSpy.callCount == 1
           waitsFor(renderToBeCalled, "update action to eventually trigger render", 5000)
         )
 

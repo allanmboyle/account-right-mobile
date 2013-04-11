@@ -15,20 +15,19 @@ module AccountRightMobile
             stub_activator("/return_many_files", COMPANY_FILE_URI,
                            method: :get,
                            response: { status: 200,
-                                       body: [ { Id: "11aaaaaa-74bb-cc55-1dd2-987654321eee", Name: "Clearwater" },
-                                               { Id: "12aaaaaa-74bb-cc55-1dd2-987654321eee", Name: "Muddywater" },
-                                               { Id: "13aaaaaa-74bb-cc55-1dd2-987654321eee", Name: "Busyizzy" }
-                                             ].to_json })
+                                       body: [ DataFactory.create_customer_file(),
+                                               DataFactory.create_customer_file(),
+                                               DataFactory.create_customer_file() ].to_json })
 
             stub_activator("/return_one_file", COMPANY_FILE_URI,
                            method: :get,
-                           response: { status: 200, body: [ { Id: "11aaaaaa-74bb-cc55-1dd2-987654321eee",
-                                                              Name: "Clearwater" } ].to_json })
+                           response: { status: 200, body: [ DataFactory.create_customer_file() ].to_json })
 
             stub_activator("/return_file_with_long_name", COMPANY_FILE_URI,
                            method: :get,
-                           response: { status: 200, body: [ { Id: "11aaaaaa-74bb-cc55-1dd2-987654321eee",
-                                                              Name: "A Customer File with an extremely long name that should extend past the width of a phone" } ].to_json })
+                           response: { status: 200, body: [
+                               DataFactory.create_customer_file(Name: "A Customer File with an extremely long name that should extend past the width of a phone")
+                           ].to_json })
 
             stub_activator("/return_no_files", COMPANY_FILE_URI,
                            method: :get,

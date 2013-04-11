@@ -1,5 +1,5 @@
 Feature: List Contacts
-  In order to discover information about and contact by customers and suppliers
+  In order to contact and discover information about customers and suppliers
   As a user
   I want to be able to view customer and supplier data
 
