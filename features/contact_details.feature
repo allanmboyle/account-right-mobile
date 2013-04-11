@@ -15,7 +15,6 @@ Scenario: Contact contains comprehensive set of data
   And the email address of the contact should be shown
   And the address of the contact should be shown
 
-@wip
 Scenario: Contact contains minimal data
   Given the user intends to access a Contact with a minimal set of data
   And the user has accessed a Customer File

@@ -2,10 +2,20 @@ Given /^the API is unable to return contacts data due to an arbitrary problem$/ 
   @api_service.return_contacts_error
 end
 
+Given /^the user intends to access the established Contact$/ do
+  @api_service.return_contacts(customers: [@contact], suppliers: [])
+end
+
 Given /^the user intends to access a Contact with a comprehensive set of data$/ do
   @contact = @api_data_factory.create_company()
   @contact_type = "Customer"
-  @api_service.return_contacts(customers: [@contact], suppliers: [])
+  step "the user intends to access the established Contact"
+end
+
+Given /^the user intends to access a Contact with a minimal set of data$/ do
+  @contact = @api_data_factory.create_contact_with_minimal_data()
+  @contact_type = "Customer"
+  step "the user intends to access the established Contact"
 end
 
 When /^the Customer File contains multiple contacts$/ do
@@ -36,17 +46,18 @@ Then /^a message should be displayed indicating the file contains no contacts$/ 
   @current_page.should have_no_contacts_available_message
 end
 
-Then /^the ([^\s]*) of the contact should be shown$/ do |field|
+Then /^the (.*) of the contact should be shown$/ do |field_description|
+  field = to_field_symbol(field_description)
   @expected_contact ||= to_detail_fragment(@contact, @contact_type)
-  @current_page.contact.send(field.to_sym).should eql(@expected_contact.send(field.to_sym))
+  @current_page.contact.send(field).should eql(@expected_contact.send(field))
 end
 
-Then /^the phone numbers of the contact should be shown$/ do
-  step "the phone_numbers of the contact should be shown"
+Then /^no (.*) should be shown$/ do |field_description|
+  @current_page.contact.send(to_field_symbol(field_description)).should be_empty
 end
 
-Then /^the email address of the contact should be shown$/ do
-  step "the email_address of the contact should be shown"
+def to_field_symbol(description)
+  description.gsub(/\s/, "_").to_sym
 end
 
 def to_overview_fragments(api_models, type)

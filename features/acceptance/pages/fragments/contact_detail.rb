@@ -12,9 +12,9 @@ module AccountRightMobile
               self.new(name: node.find(".name").text(),
                        type: node.find(".type").text(),
                        balance: node.find(".balance").text(),
-                       phone_numbers: node.all(".phoneNumber").map { |nested_node| nested_node.text() },
-                       email_address: node.find(".emailAddress").text(),
-                       address: node.all(".address .line").map { |nested_node| nested_node.text() })
+                       phone_numbers: text_from(node.all(".phoneNumber")),
+                       email_address: text_from(node.first(".emailAddress")),
+                       address: text_from(node.all(".address .line")))
             end
 
             def from_api_model(model, type)
@@ -24,6 +24,20 @@ module AccountRightMobile
                                       email_address: address[:Email],
                                       address: address.values_at(:Street, :City).compact <<
                                                address.values_at(:State, :PostCode, :Country).compact.join(" ")))
+            end
+
+            private
+
+            def text_from(node_or_nodes)
+              node_or_nodes.is_a?(Enumerable) ? text_from_nodes(node_or_nodes) : text_from_node(node_or_nodes)
+            end
+
+            def text_from_nodes(nodes)
+              nodes.map { |node| node.text() }
+            end
+
+            def text_from_node(node)
+              node ? node.text() : ""
             end
 
           end

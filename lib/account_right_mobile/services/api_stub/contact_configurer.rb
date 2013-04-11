@@ -47,10 +47,7 @@ module AccountRightMobile
             stub_activator("/return_customer_with_minimal_data", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
                            response: { status: 200, body:
-                               { "Items" => [
-                                   { CoLastName: ::Faker::Company.name, FirstName: "", IsIndividual: false,
-                                     CurrentBalance: ::AccountRightMobile::Faker::Money.random, Addresses: [ {} ] }
-                               ]}.to_json
+                               { "Items" => [ DataFactory.create_contact_with_minimal_data() ]}.to_json
                            })
 
             stub_activator("/return_customers_error", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,

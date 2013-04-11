@@ -19,6 +19,11 @@ module AccountRightMobile
                              IsIndividual: true }.merge(options))
           end
 
+          def create_contact_with_minimal_data
+            { CoLastName: ::Faker::Company.name, FirstName: "", IsIndividual: false,
+              CurrentBalance: ::AccountRightMobile::Faker::Money.random, Addresses: [ {} ] }
+          end
+
           private
 
           def create_contact(options)
