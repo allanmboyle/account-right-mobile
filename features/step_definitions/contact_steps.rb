@@ -36,11 +36,6 @@ When /^the user accesses the Contacts Details$/ do
   @current_page.access_a_contact
 end
 
-Then /^the Contacts page for the Customer File should be shown$/ do
-  step "the Contacts page should be shown"
-  @current_page.customer_file_name.should eql(@accessed_customer_file_name)
-end
-
 Then /^all the Contacts are shown$/ do
   expected_contacts = (to_overview_fragments(@customers, "Customer") +
                        to_overview_fragments(@suppliers, "Supplier")).sort_by { |contact| contact.name }

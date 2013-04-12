@@ -7,7 +7,7 @@ Scenario: Contact contains comprehensive set of data
   Given the user intends to access a Contact with a comprehensive set of data
   And the user has accessed a Customer File
   When the user accesses the Contacts Details
-  Then the Contact Details page should be shown
+  Then the Contact Details page for the Customer File should be shown
   And the name of the contact should be shown
   And the type of the contact should be shown
   And the balance of the contact should be shown
@@ -19,7 +19,7 @@ Scenario: Contact contains minimal data
   Given the user intends to access a Contact with a minimal set of data
   And the user has accessed a Customer File
   When the user accesses the Contacts Details
-  Then the Contact Details page should be shown
+  Then the Contact Details page for the Customer File should be shown
   And the name of the contact should be shown
   And the type of the contact should be shown
   And the balance of the contact should be shown

@@ -64,6 +64,11 @@ Then /^the Customer File is shown$/ do
   @current_page.customer_file_names.should eql([@customer_file[:Name]])
 end
 
+Then /^the (.*) page for the Customer File should be shown$/ do |page_name|
+  step "the #{page_name} page should be shown"
+  @current_page.customer_file_name.should eql(@accessed_customer_file_name)
+end
+
 Then /^a message should be displayed indicating no customer files are available to access$/ do
   @current_page.should have_no_customer_files_available_message
 end
