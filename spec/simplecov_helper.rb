@@ -7,7 +7,8 @@ SimpleCov.start do # Based on the rails adapter
     file.filename.starts_with?(RAILS_CONFIG_DIR) && !file.filename.include?("config_customizations")
   end
   add_filter '/db/'
-  add_filter '/lib/account_right_mobile/services/.*configurer.*'
+  add_filter '/lib/account_right/.*/stub/.*configurer.*'  # Stubs are configured out-of-process
+  add_filter '/lib/.*/pty_.*'                             # PTY not supported on all OS's
   add_filter '/vendor/bundle/'
 
   add_group 'Controllers', 'app/controllers'
@@ -17,6 +18,6 @@ SimpleCov.start do # Based on the rails adapter
   add_group 'Helpers', 'app/helpers'
   add_group 'Libraries', 'lib'
 
-  minimum_coverage 99.1
+  minimum_coverage 100
   refuse_coverage_drop
 end if ENV["coverage"]

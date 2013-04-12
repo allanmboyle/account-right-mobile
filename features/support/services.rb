@@ -4,14 +4,14 @@ AfterConfiguration { |config| SMOKE_TEST_RUNNING = config.filters.include?("@smo
 
 Before do
   oauth_service_class = SMOKE_TEST_RUNNING ?
-      AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::OAuthStub::Configurer
+      AccountRightMobile::Services::NoOpService : AccountRight::OAuth::Stub::Configurer
   oauth_service_class.initialize!
   @oauth_service = @authentication_service = oauth_service_class.new
 
   api_service_class = SMOKE_TEST_RUNNING ?
-      AccountRightMobile::Services::NoOpService : AccountRightMobile::Services::ApiStub::Configurer
+      AccountRightMobile::Services::NoOpService : AccountRight::API::Stub::Configurer
   api_service_class.initialize!
   @api_service = api_service_class.new
 
-  @api_data_factory = AccountRightMobile::Services::ApiStub::DataFactory
+  @api_data_factory = AccountRight::API::DataFactory
 end

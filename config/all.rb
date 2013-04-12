@@ -7,4 +7,4 @@ require "rails"
   end
 end
 
-require File.expand_path('../../lib/account_right_mobile/core', __FILE__)
+require File.expand_path('../../lib/extensions/core', __FILE__)

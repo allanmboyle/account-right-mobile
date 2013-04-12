@@ -5,6 +5,6 @@ require 'http_server_manager/rake/task_generators'
 
 namespace :api_stub_server do
 
-  ::HttpServerManager::Rake::ServerTasks.new(AccountRightMobile::Services::ApiStub::Server.new(port: 3003))
+  ::HttpServerManager::Rake::ServerTasks.new(AccountRight::API::Stub::Server.new(port: 3003))
 
 end

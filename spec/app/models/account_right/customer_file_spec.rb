@@ -1,6 +1,6 @@
 describe AccountRight::CustomerFile do
 
-  let(:id) { 8 }
+  let(:id) { "8" }
   let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
   let(:customer_file) { AccountRight::CustomerFile.new(id: id) }
 
@@ -25,6 +25,44 @@ describe AccountRight::CustomerFile do
       AccountRight::API.stub!(:invoke).and_raise(forced_error)
 
       lambda { AccountRight::CustomerFile.all(client_application_state) }.should raise_error(forced_error)
+    end
+
+  end
+
+  describe ".find" do
+
+    let(:customer_file_hash) { AccountRight::API::DataFactory.create_customer_file(Id: id) }
+    let(:customer_files_response) { [ AccountRight::API::DataFactory.create_customer_file(),
+                                      customer_file_hash,
+                                      AccountRight::API::DataFactory.create_customer_file() ].to_json }
+
+    before(:each) do
+      AccountRight::CustomerFile.stub!(:all).and_return(customer_files_response)
+      client_application_state.stub!(:[]).with(:cf_id).and_return(id)
+    end
+
+    it "should retrieve all customer files" do
+      AccountRight::CustomerFile.should_receive(:all).and_return(customer_files_response)
+
+      AccountRight::CustomerFile.find(client_application_state)
+    end
+
+    describe "when the customer files response contains the customer file in the client application state" do
+
+      it "should return the json representation of the customer file" do
+        AccountRight::CustomerFile.find(client_application_state).should eql(customer_file_hash.to_json)
+      end
+
+    end
+
+    describe "when the customer files response does not contain the customer file in the client application state" do
+
+      let(:customer_files_response) { [].to_json }
+
+      it "should return an empty string" do
+        AccountRight::CustomerFile.find(client_application_state).should eql("")
+      end
+
     end
 
   end

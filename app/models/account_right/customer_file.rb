@@ -2,10 +2,20 @@ module AccountRight
 
   class CustomerFile < Model::Base
 
-    attr_accessor :id
+    attr_accessor :id, :name
 
-    def self.all(client_application_state)
-      AccountRight::API.invoke("accountright", client_application_state)
+    class << self
+
+      def all(client_application_state)
+        AccountRight::API.invoke("accountright", client_application_state)
+      end
+
+      def find(client_application_state)
+        customer_files = JSON.parse(self.all(client_application_state))
+        customer_file = customer_files.find { |customer_file| customer_file["Id"] == client_application_state[:cf_id] }
+        customer_file ? customer_file.to_json : ""
+      end
+
     end
 
     def initialize(attributes = {})

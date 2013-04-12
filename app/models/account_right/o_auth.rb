@@ -1,6 +1,6 @@
 module AccountRight
 
-  class OAuth
+  module OAuth
     include HTTParty
 
     base_uri AccountRightMobile::Application.config.live_login["base_uri"]

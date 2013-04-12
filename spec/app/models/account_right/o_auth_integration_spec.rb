@@ -3,7 +3,7 @@ describe AccountRight::OAuth, "integrating with an OAuth server" do
 
   let(:client_id) { "some_client_id" }
   let(:client_secret) { "some_client_secret" }
-  let(:oauth_service) { AccountRightMobile::Services::OAuthStub::Configurer.new }
+  let(:oauth_service) { AccountRight::OAuth::Stub::Configurer.new }
 
   before(:each) { force_server_start! }
 
