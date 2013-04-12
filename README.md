@@ -14,31 +14,43 @@ Build:
 * jsl (metrics check dependency)
 * Firefox (acceptance testing dependency - default browser)
 
-Client Web App
-==============
-JQuery 1.9.1
-JQuery Mobile 1.3
+Client Web App:
+
+* Backbone 0.9.9
+* JQuery Mobile 1.3
+* RequireJS 2.1.4
+* JQuery 1.9.1
 
 Simon's Command Cheat Sheet
-===========================
-rake acceptance:ok			<--- Run without restarting the servers
-rake assets:clean
-rake servers:stop
-rake servers:start
-rails s 					<--- use this to start the servers in test mode (no caching). Port 3000.
-rake commit acceptance:ok
+---------------------------
 
-The API stub server:
+Rake Tasks:
+* Acceptance tests without starting servers: ```rake acceptance:ok```
+* Run app server with no caching, port 3000: ```rails s```
+* Others:
+
+```rake assets:clean```
+```rake servers:stop```
+```rake servers:start```
+```rake commit acceptance:ok```
+
+Jasmine tests:
+* Via PhantomJS: ```rake jasmine```
+* Via browser: ```rake jasmine:browser```
+
+API Stub:
 http://localhost:3003/stubs/aliases
 http://localhost:3003/grant_access
 http://localhost:3003/unavailable
 
-The oAuth stub server:
+OAuth Stub:
 http://localhost:3002/stubs/aliases
 http://localhost:3002/grant_access
 http://localhost:3002/unavailable
-http://localhost:3001 		<--- The main app started with servers:start
-http://127.0.0.1:8888/tmp/spec/javascripts/_SpecRunner.html
+
+Application server:
+http://localhost:3000 (when started via ```rails s```)
+http://localhost:3001 (when started via ```servers:start```)
 
 License
 =======
