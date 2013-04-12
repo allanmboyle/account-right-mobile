@@ -24,7 +24,7 @@ define([ "backbone",
       @contacts.fetch()
 
     render: () ->
-      @$el.html(@compiledTemplate(contacts: @contacts))
+      @$el.html(@compiledTemplate(customerFile: @applicationState.openedCustomerFile, contacts: @contacts))
       $.mobile.changePage("#contacts", reverse: false, changeHash: false)
       this
 

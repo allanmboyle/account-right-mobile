@@ -1,15 +1,20 @@
 describe("ContactsDetailsView", () ->
 
   ContactDetailsView = null
-  applicationState = null
   Contact = null
+  customerFile = null
+  applicationState = null
 
   jasmineRequire(this, [ "app/views/contact_details",
-                         "app/models/application_state"
-                         "app/models/contact" ], (LoadedContactDetailsView, ApplicationState, LoadedContact) ->
+                         "app/models/contact",
+                         "app/models/customer_file",
+                         "app/models/application_state" ], (LoadedContactDetailsView, LoadedContact,
+                                                            CustomerFile, ApplicationState) ->
     ContactDetailsView = LoadedContactDetailsView
-    applicationState = new ApplicationState()
     Contact = LoadedContact
+    applicationState = new ApplicationState()
+    customerFile = new CustomerFile(Name: "Some Customer File Name")
+    applicationState.openedCustomerFile = customerFile
   )
 
   afterEach(() ->
@@ -44,6 +49,12 @@ describe("ContactsDetailsView", () ->
               CoLastName: "a Company", IsIndividual: false, FirstName: "",
               Type: "Customer", CurrentBalance: 100.00, Addresses: [ address ]
             )
+          )
+
+          it("should render the opened customer file's name", () ->
+            contactDetailsView.render()
+
+            expect($(".customer-file-name")).toHaveText("Some Customer File Name")
           )
 
           it("should render the details of the contact", () ->

@@ -1,7 +1,7 @@
 module AccountRight
   module API
 
-    class Error < Exception
+    class Error < AccountRight::API::Exception
 
       attr_reader :response_code
 

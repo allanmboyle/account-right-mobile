@@ -3,14 +3,17 @@ describe("CustomerFilesView", () ->
   CustomerFilesView = null
   CustomerFile = null
   CustomerFileUser = null
+  applicationState = null
 
   jasmineRequire(this, [ "app/views/customer_files",
                          "app/models/customer_file",
-                         "app/models/customer_file_user" ], (LoadedCustomerFilesView, LoadedCustomerFile,
-                                                             LoadedCustomerFileUser) ->
+                         "app/models/customer_file_user",
+                         "app/models/application_state" ], (LoadedCustomerFilesView, LoadedCustomerFile,
+                                                            LoadedCustomerFileUser, ApplicationState) ->
     CustomerFilesView = LoadedCustomerFilesView
     CustomerFile = LoadedCustomerFile
     CustomerFileUser = LoadedCustomerFileUser
+    applicationState = new ApplicationState()
   )
 
   beforeEach(() ->
@@ -39,7 +42,7 @@ describe("CustomerFilesView", () ->
 
     beforeEach(() ->
       initialPrototype = _.extend({}, CustomerFilesView.prototype)
-      customerFilesView = new CustomerFilesView()
+      customerFilesView = instantiateView()
       customerFiles = customerFilesView.customerFiles
       customerFileUser = customerFilesView.customerFileUser
     )
@@ -64,7 +67,7 @@ describe("CustomerFilesView", () ->
         loginFailSpy = CustomerFilesView.prototype.loginFail = jasmine.createSpy()
         loginErrorSpy = CustomerFilesView.prototype.loginError = jasmine.createSpy()
 
-        customerFilesView = new CustomerFilesView()
+        customerFilesView = instantiateView()
         customerFileUser = customerFilesView.customerFileUser
       )
 
@@ -235,7 +238,7 @@ describe("CustomerFilesView", () ->
 
         it("should render the view", () ->
           renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
-          customerFilesView = new CustomerFilesView()
+          customerFilesView = instantiateView()
 
           customerFilesView.update()
 
@@ -259,7 +262,7 @@ describe("CustomerFilesView", () ->
 
         it("should render the view", () ->
           renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
-          customerFilesView = new CustomerFilesView()
+          customerFilesView = instantiateView()
 
           customerFilesView.update()
 
@@ -331,12 +334,22 @@ describe("CustomerFilesView", () ->
 
     describe("#loginSuccess", () ->
 
+      customerFile = null
+
       beforeEach(() ->
+        customerFile = new CustomerFile(Name: "Some File")
+
         location.hash = ""
       )
 
+      it("should establish the customer file the user has logged-in to in the application state", () ->
+        customerFilesView.loginSuccess(customerFile)
+
+        expect(applicationState.openedCustomerFile).toBe(customerFile)
+      )
+
       it("should navigate the user to the contacts page", () ->
-        customerFilesView.loginSuccess({})
+        customerFilesView.loginSuccess(customerFile)
 
         expect(location.hash).toBe("#contacts")
       )
@@ -394,6 +407,8 @@ describe("CustomerFilesView", () ->
       )
 
     )
+
+    instantiateView = () -> new CustomerFilesView(applicationState)
 
   )
 

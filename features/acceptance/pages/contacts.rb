@@ -16,6 +16,11 @@ module AccountRightMobile
           "/#contacts"
         end
 
+        def customer_file_name
+          wait_until_customer_file_is_shown
+          @session.find("#contacts .customer-file-name").text()
+        end
+
         def contacts
           wait_until_all_contacts_are_shown
           @session.all("#contacts .contact").map { |node| Fragments::ContactOverview.from_page_node(node) }
@@ -40,6 +45,10 @@ module AccountRightMobile
         end
 
         private
+
+        def wait_until_customer_file_is_shown
+          wait_until_all_contain_text("#contacts .customer-file-name")
+        end
 
         def wait_until_all_contacts_are_shown
           wait_until_all_contain_text("#contacts .contact .name")

@@ -31,36 +31,51 @@ describe AccountRight::CustomerFile do
 
   describe ".find" do
 
-    let(:customer_file_hash) { AccountRight::API::DataFactory.create_customer_file(Id: id) }
-    let(:customer_files_response) { [ AccountRight::API::DataFactory.create_customer_file(),
-                                      customer_file_hash,
-                                      AccountRight::API::DataFactory.create_customer_file() ].to_json }
+    describe "when the client application state contains a customer file" do
 
-    before(:each) do
-      AccountRight::CustomerFile.stub!(:all).and_return(customer_files_response)
-      client_application_state.stub!(:[]).with(:cf_id).and_return(id)
-    end
+      let(:customer_file_hash) { AccountRight::API::DataFactory.create_customer_file(Id: id) }
+      let(:customer_files_response) { [ AccountRight::API::DataFactory.create_customer_file(),
+                                        customer_file_hash,
+                                        AccountRight::API::DataFactory.create_customer_file() ].to_json }
 
-    it "should retrieve all customer files" do
-      AccountRight::CustomerFile.should_receive(:all).and_return(customer_files_response)
+      before(:each) do
+        client_application_state.stub!(:contains_customer_file?).and_return(true)
+        client_application_state.stub!(:[]).with(:cf_id).and_return(id)
+        AccountRight::CustomerFile.stub!(:all).and_return(customer_files_response)
+      end
 
-      AccountRight::CustomerFile.find(client_application_state)
-    end
+      it "should retrieve all customer files" do
+        AccountRight::CustomerFile.should_receive(:all).and_return(customer_files_response)
 
-    describe "when the customer files response contains the customer file in the client application state" do
+        AccountRight::CustomerFile.find(client_application_state)
+      end
 
-      it "should return the json representation of the customer file" do
-        AccountRight::CustomerFile.find(client_application_state).should eql(customer_file_hash.to_json)
+      describe "when the customer files response contains the customer file in the client application state" do
+
+        it "should return the json representation of the customer file" do
+          AccountRight::CustomerFile.find(client_application_state).should eql(customer_file_hash.to_json)
+        end
+
+      end
+
+      describe "when the customer files response does not contain the customer file in the client application state" do
+
+        let(:customer_files_response) { [].to_json }
+
+        it "should return an empty json hash" do
+          AccountRight::CustomerFile.find(client_application_state).should eql("{}")
+        end
+
       end
 
     end
 
-    describe "when the customer files response does not contain the customer file in the client application state" do
+    describe "when the client application state does not contain a customer file" do
 
-      let(:customer_files_response) { [].to_json }
+      before(:each) { client_application_state.stub!(:contains_customer_file?).and_return(false) }
 
-      it "should return an empty string" do
-        AccountRight::CustomerFile.find(client_application_state).should eql("")
+      it "should return an empty json hash" do
+        AccountRight::CustomerFile.find(client_application_state).should eql("{}")
       end
 
     end

@@ -1,7 +1,7 @@
 module AccountRight
   module API
 
-    class AuthorizationFailure < Exception
+    class AuthorizationFailure < AccountRight::API::Exception
 
       def initialize(response)
         super(response.body)

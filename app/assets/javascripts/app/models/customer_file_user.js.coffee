@@ -12,7 +12,7 @@ define([ "backbone", "underscore", "./ajax" ], (Backbone, _, Ajax) ->
         type: "POST"
         url: "/customer_file/login",
         data: _.extend({ fileId: customerFile.get("Id") }, @attributes)
-        success: () => @trigger("login:success")
+        success: () => @trigger("login:success", customerFile)
         error: (jqXHR) =>
           eventToTrigger = if jqXHR.status == 401 then "fail" else "error"
           @trigger("login:#{eventToTrigger}")

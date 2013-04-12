@@ -13,7 +13,10 @@ define([ "backbone",
     el: $("#contact-details")
 
     render: () ->
-      @$el.html(@compiledTemplate(contact: @applicationState.openedContact))
+      @$el.html(@compiledTemplate(
+        customerFile: @applicationState.openedCustomerFile
+        contact: @applicationState.openedContact
+      ))
       $.mobile.changePage("#contact-details", reverse: false, changeHash: false, transition: "slide")
       this
 

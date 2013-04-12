@@ -29,6 +29,10 @@ module AccountRightMobile
       @session.update(@state)
     end
 
+    def contains_customer_file?
+      !!(@state[:cf_token] && @state[:cf_id])
+    end
+
   end
 
 end

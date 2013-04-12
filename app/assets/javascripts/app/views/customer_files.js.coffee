@@ -12,7 +12,7 @@ define([ "backbone",
 
   class CustomerFilesView extends Backbone.View
 
-    initialize: () ->
+    initialize: (@applicationState) ->
       @compiledContentTemplate = _.template(ContentTemplate)
       @customerFiles = new CustomerFiles().on("reset", @render, this)
                                           .on("error", @render, this)
@@ -45,7 +45,8 @@ define([ "backbone",
     syncUser: () ->
       @customerFileUser.set(username: $("#customer-file-username").val(), password: $("#customer-file-password").val())
 
-    loginSuccess: () ->
+    loginSuccess: (customerFile) ->
+      @applicationState.openedCustomerFile = customerFile
       location.hash = "contacts"
 
     loginFail: () ->

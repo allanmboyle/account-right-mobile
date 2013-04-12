@@ -21,13 +21,15 @@ module AccountRightMobile
         end
 
         def access_a_file
-          @session.all("#customer-files-list a").first.click unless customer_file_names.size == 1
+          customer_file_link = @session.all("#customer-files-list a").first
+          customer_file_link.click unless customer_file_names.size == 1
           wait_until_login_is_shown
+          customer_file_link.find(".customer-file-name").text()
         end
 
         def customer_file_names
           wait_until_all_customer_files_are_shown
-          @session.all(".customer-file-name").map { |node| node.text() }
+          @session.all("#customer-files .customer-file-name").map { |node| node.text() }
         end
 
         memoize :customer_file_names
@@ -82,7 +84,7 @@ module AccountRightMobile
         end
 
         def wait_until_all_customer_files_are_shown
-          wait_until_all_contain_text(".customer-file-name")
+          wait_until_all_contain_text("#customer-files .customer-file-name")
         end
 
       end

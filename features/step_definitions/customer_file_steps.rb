@@ -29,7 +29,7 @@ Given /^the user has accessed a Customer File$/ do
 end
 
 When /^the user has chosen to access a Customer File$/ do
-  @current_page.access_a_file
+  @accessed_customer_file_name = @current_page.access_a_file
   @authentication_service = @api_service
 end
 

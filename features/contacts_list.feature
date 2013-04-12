@@ -6,13 +6,13 @@ Feature: List Contacts
 Scenario: Customer File contains multiple contacts
   Given the user has logged-in to AccountRight Live
   When the user logs-in to a Customer File with multiple contacts
-  Then the Contacts page should be shown
+  Then the Contacts page for the Customer File should be shown
   And all the Contacts are shown
 
 Scenario: Customer File contains no contacts
   Given the user has logged-in to AccountRight Live
   When the user logs-in to a Customer File with no contacts
-  Then the Contacts page should be shown
+  Then the Contacts page for the Customer File should be shown
   And a message should be displayed indicating the file contains no contacts
 
 Scenario: Error is shown when an unexpected API error occurs

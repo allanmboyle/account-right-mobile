@@ -11,9 +11,15 @@ module AccountRight
       end
 
       def find(client_application_state)
-        customer_files = JSON.parse(self.all(client_application_state))
-        customer_file = customer_files.find { |customer_file| customer_file["Id"] == client_application_state[:cf_id] }
-        customer_file ? customer_file.to_json : ""
+        client_application_state.contains_customer_file? ? find_in_all_files(client_application_state) : "{}"
+      end
+
+      private
+
+      def find_in_all_files(client_application_state)
+        customer_files = JSON.parse(all(client_application_state))
+        found_file = customer_files.find { |customer_file| customer_file["Id"] == client_application_state[:cf_id] }
+        found_file ? found_file.to_json : "{}"
       end
 
     end

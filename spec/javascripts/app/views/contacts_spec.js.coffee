@@ -2,17 +2,22 @@ describe("ContactsView", () ->
 
   Backbone = null
   ContactsView = null
-  applicationState = null
   Contact = null
+  customerFile = null
+  applicationState = null
 
   jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
-                         "app/models/application_state"
-                         "app/models/contact" ], (LoadedBackbone, LoadedContactsView, ApplicationState, LoadedContact) ->
+                         "app/models/contact",
+                         "app/models/customer_file",
+                         "app/models/application_state" ], (LoadedBackbone, LoadedContactsView, LoadedContact,
+                                                            CustomerFile, ApplicationState) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
-    applicationState = new ApplicationState()
     Contact = LoadedContact
+    customerFile = new CustomerFile(Name: "Some File Name")
+    applicationState = new ApplicationState()
+    applicationState.openedCustomerFile = customerFile
   )
 
   beforeEach(() ->
@@ -39,7 +44,7 @@ describe("ContactsView", () ->
 
     beforeEach(() ->
       initialPrototype = _.extend({}, ContactsView.prototype)
-      contactsView = new ContactsView(applicationState)
+      contactsView = instantiateView()
     )
 
     afterEach(() ->
@@ -59,7 +64,7 @@ describe("ContactsView", () ->
 
         it("should render the view", () ->
           renderSpy = ContactsView.prototype.render = jasmine.createSpy()
-          contactsView = new ContactsView(applicationState)
+          contactsView = instantiateView()
 
           contactsView.update()
 
@@ -67,7 +72,13 @@ describe("ContactsView", () ->
           waitsFor(renderToBeCalled, "update action to eventually trigger render", 5000)
         )
 
-        it("should place the retrieved contacts in the dom", () ->
+        it("should render the opened customer file's name", () ->
+          contactsView.update()
+
+          expect($(".customer-file-name")).toHaveText("Some File Name")
+        )
+
+        it("should render an overview of the contacts", () ->
            contactsView.update()
 
            contacts = $(".contact")
@@ -92,7 +103,7 @@ describe("ContactsView", () ->
 
         it("should render the view", () ->
           renderSpy = ContactsView.prototype.render = jasmine.createSpy()
-          contactsView = new ContactsView(applicationState)
+          contactsView = instantiateView()
 
           contactsView.update()
 
@@ -229,6 +240,8 @@ describe("ContactsView", () ->
       )
 
     )
+
+    instantiateView = () -> new ContactsView(applicationState)
 
     assertContact = (container, expectedValues) ->
       jqueryContainer = $(container)

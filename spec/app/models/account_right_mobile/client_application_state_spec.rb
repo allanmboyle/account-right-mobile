@@ -117,4 +117,49 @@ describe AccountRightMobile::ClientApplicationState do
 
   end
 
+  describe "#contains_customer_file" do
+
+    describe "when a customer file token and id has been added" do
+
+      before(:each) do
+        client_application_state[:cf_token] = "some customer file token"
+        client_application_state[:cf_id] = "some customer file id"
+      end
+
+      it "should return true" do
+        client_application_state.contains_customer_file?.should be_true
+      end
+
+    end
+
+    describe "when a customer file token has been added" do
+
+      before(:each) { client_application_state[:cf_token] = "some customer file token" }
+
+      it "should return false" do
+        client_application_state.contains_customer_file?.should be_false
+      end
+
+    end
+
+    describe "when a customer file id has been added" do
+
+      before(:each) { client_application_state[:cf_id] = "some customer file id" }
+
+      it "should return false" do
+        client_application_state.contains_customer_file?.should be_false
+      end
+
+    end
+
+    describe "when no customer file values have been added" do
+
+      it "should return false" do
+        client_application_state.contains_customer_file?.should be_false
+      end
+
+    end
+
+  end
+
 end

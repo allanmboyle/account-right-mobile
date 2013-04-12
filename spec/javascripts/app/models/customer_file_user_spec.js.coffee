@@ -34,12 +34,12 @@ describe("customerFileUser", () ->
         spyOn(Ajax, "submit").andCallFake((options) -> options.success())
       )
 
-      it("should trigger a login:success event", () ->
+      it("should trigger a login:success event with the customer file to which the user has logged-in", () ->
         spyOn(customerFileUser, "trigger")
 
         customerFileUser.loginTo(customerFile)
 
-        expect(customerFileUser.trigger).toHaveBeenCalledWith("login:success")
+        expect(customerFileUser.trigger).toHaveBeenCalledWith("login:success", customerFile)
       )
 
     )

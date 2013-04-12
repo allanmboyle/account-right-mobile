@@ -4,8 +4,8 @@ describe AccountRight::API::AuthorizationFailure do
 
   let(:authorization_failure) { AccountRight::API::AuthorizationFailure.new(response) }
 
-  it "should be an standard Ruby exception" do
-    authorization_failure.should be_an(Exception)
+  it "should be an API exception" do
+    authorization_failure.should be_an(AccountRight::API::Exception)
   end
 
   describe "#message" do
