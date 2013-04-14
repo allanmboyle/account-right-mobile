@@ -1,14 +1,19 @@
+$standardLeftSpacing: 15px
+$headerTopSpacing: 10px
+
 /* MYOB Styles */
 .myob-homepage-header
-  font-size: 20px
-  font-weight: bold
-  text-align: center
-  text-shadow: 0 1px 0 #7D7373
-  padding: 0 0.6em
   background:
     image: image_url('logo_myob.png')
     repeat: no-repeat
-    position: 15px 50%
+    position: $standardLeftSpacing 50%
+
+.site-version
+  position: relative
+  top: -20px
+  font-size: 12px
+  font-weight: 100
+  text-align: right
 
 .myob-hidden
   visibility: hidden
@@ -32,6 +37,9 @@
 
 #customer-files-content
   padding: 0
+
+  .description
+    padding-left: $standardLeftSpacing
 
 .customer-file-name
   @extend .myob-wrap
@@ -122,17 +130,25 @@
   border-width: 0
 
 .ui-mobile .ui-header
-  padding: 0.8em 10%
+  padding: $headerTopSpacing $standardLeftSpacing
 
 .ui-header .ui-title, .ui-footer .ui-title
-  font-size: 18px
-  font-weight: 100
+  position: relative
+  top: 6px
+  width: 100%
   padding: 0
   margin: 0
+  font-size: 20px
+  font-weight: 500
+  text-align: center
+  text-shadow: 0 1px 0 #7D7373
+
+  *
+    overflow: hidden
 
 .ui-header .ui-btn-left, .ui-footer .ui-btn-left
-  left: 0.4em
-  top: 0.45em
+  top: $headerTopSpacing + 3
+  left: $standardLeftSpacing
 
 .ui-collapsible-content
   background-color: #C1C1C1
@@ -143,7 +159,7 @@
 
 .ui-li-divider
   font-weight: normal
-  padding: 0.25em 15px
+  padding: 0.25em $standardLeftSpacing
 
 /* Responsive Styles */
 @media handheld, only screen and (min-width: 480px)
