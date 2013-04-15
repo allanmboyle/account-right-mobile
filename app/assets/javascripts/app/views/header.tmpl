@@ -1,0 +1,7 @@
+<div <%= header.elementClass %> data-role="header">
+    <% if (button.isShown) { %>
+    <a <%= button.elementId %> href="<%= button.href %>" data-role="button" data-inline="true" data-theme="b"><%= button.label %></a>
+    <% } %>
+    <h1 <%= title.elementClass %>><%= title.label %></h1>
+    <div class="site-version">Alpha</div>
+</div>

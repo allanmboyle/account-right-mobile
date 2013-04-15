@@ -1,12 +1,12 @@
-define([ "backbone",
-         "jquery",
+define([ "jquery",
          "underscore",
+         "./base_view",
          "../models/contacts",
-         "text!./contacts.tmpl" ], (Backbone, $, _, Contacts, Template) ->
+         "text!./contacts.tmpl" ], ($, _, BaseView, Contacts, Template) ->
 
   $("body").append("<div id='contacts' data-role='page' data-title='Contacts'></div>")
 
-  class ContactsView extends Backbone.View
+  class ContactsView extends BaseView
 
     initialize: (@applicationState) ->
       @compiledTemplate = _.template(Template)
@@ -24,7 +24,7 @@ define([ "backbone",
       @contacts.fetch()
 
     render: () ->
-      @$el.html(@compiledTemplate(customerFile: @applicationState.openedCustomerFile, contacts: @contacts))
+      @$el.html(@compiledTemplate(header: @_headerContent(), contacts: @contacts))
       $.mobile.changePage("#contacts", reverse: false, changeHash: false)
       this
 
@@ -32,13 +32,22 @@ define([ "backbone",
       @applicationState.openedContact = @_contactFrom(event)
       location.hash = "contact_details"
 
+    _headerContent: () ->
+      customerFileName = @applicationState.openedCustomerFile.get("Name")
+      @renderHeader(
+        button: { href: "#customer_files", label: "Back" },
+        title: { elementClass: "customer-file-name", label: customerFileName }
+      )
+
     _pageBeforeShow: () ->
       @_refreshAutoDividers()
       @_showNoContactsMessageIfNecessary()
 
     _refreshAutoDividers: () ->
-      $("#contacts-list").listview(autodividers: true,
-                                   autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase())
+      $("#contacts-list").listview(
+        autodividers: true,
+        autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase()
+      )
       $("#contacts-list").listview("refresh")
 
     _showNoContactsMessageIfNecessary: () ->

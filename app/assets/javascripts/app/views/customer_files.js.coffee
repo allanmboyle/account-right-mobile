@@ -1,16 +1,16 @@
-define([ "backbone",
-         "jquery",
+define([ "jquery",
          "underscore",
+         "./base_view",
          "../models/customer_files",
          "../models/customer_file_user",
          "text!./customer_files_layout.tmpl",
          "text!./customer_files_content.tmpl",
-         "text!./customer_files_login.tmpl" ], (Backbone, $, _, CustomerFiles, CustomerFileUser,
+         "text!./customer_files_login.tmpl" ], ($, _, BaseView, CustomerFiles, CustomerFileUser,
                                                 LayoutTemplate, ContentTemplate, LoginTemplate) ->
 
   $("body").append("<div id='customer-files' data-role='page' data-title='Customer Files'></div>")
 
-  class CustomerFilesView extends Backbone.View
+  class CustomerFilesView extends BaseView
 
     initialize: (@applicationState) ->
       @compiledContentTemplate = _.template(ContentTemplate)
@@ -19,7 +19,7 @@ define([ "backbone",
       @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
                                                 .on("login:fail", @loginFail, this)
                                                 .on("login:error", @loginError, this)
-      @$el.html(_.template(LayoutTemplate))
+      @$el.html(_.template(LayoutTemplate, header: @_headerContent()))
       @_loginContent().hide().append(_.template(LoginTemplate))
 
     el: $("#customer-files")
@@ -54,6 +54,12 @@ define([ "backbone",
 
     loginError: () ->
       $("#customer-file-login-error-message").popup().popup("open")
+
+    _headerContent: () ->
+      @renderHeader(
+        button: { elementId: "live-logout", href: "#live_login", label: "Logout" },
+        title: { label: "Login To File" }
+      )
 
     _pageBeforeShow: () ->
       @_showLoginAndUpdateModelWhenFileIsExpanded()

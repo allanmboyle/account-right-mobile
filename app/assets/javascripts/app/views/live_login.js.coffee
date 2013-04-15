@@ -1,12 +1,12 @@
-define([ "backbone",
-         "jquery",
+define([ "jquery",
          "underscore",
+         "./base_view",
          "text!./live_login.tmpl",
-         "app/models/live_user" ], (Backbone, $, _, Template, LiveUser) ->
+         "app/models/live_user" ], ($, _, BaseView, Template, LiveUser) ->
 
   $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live Login'></div>")
 
-  class LiveLoginView extends Backbone.View
+  class LiveLoginView extends BaseView
 
     initialize: () ->
       @user = new LiveUser().on("reset:success", @resetSuccess, this)
@@ -14,7 +14,8 @@ define([ "backbone",
                             .on("login:success", @loginSuccess, this)
                             .on("login:fail", @loginFail, this)
                             .on("login:error", @loginError, this)
-      @$el.html(_.template(Template))
+      @$el.html(_.template(Template,
+                           header: @renderHeader(elementClass: "myob-homepage-header", title: { label: "Contacts" })))
       @$el.on("pageshow", () -> $("#live_email_address").focus())
 
     el: $("#live_login")
