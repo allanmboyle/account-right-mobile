@@ -124,6 +124,12 @@ describe("ContactsView", () ->
 
     describe("#render", () ->
 
+      it("should render a back button that redirects the user to the customer files page", () ->
+        contactsView.render()
+
+        expect($("#customer-file-logout")).toHaveAttr("href", "#customer_files")
+      )
+
       describe("when contacts have been added", () ->
 
         beforeEach(() ->

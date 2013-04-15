@@ -41,14 +41,24 @@ describe("ContactsDetailsView", () ->
 
       describe("when an opened contact has been established in the application state", () ->
 
+        beforeEach(() ->
+          applicationState.openedContact = new Contact(
+            CoLastName: "a Company", IsIndividual: false, FirstName: "",
+            Type: "Customer", CurrentBalance: 100.00, Addresses: []
+          )
+        )
+
+        it("should render a back button that redirects the user to the customer files page", () ->
+           contactDetailsView.render()
+
+           expect($("#contacts-back")).toHaveAttr("href", "#contacts")
+        )
+
         describe("that has a comprehensive set of data", () ->
 
           beforeEach(() ->
             address = { Index: 1, Phone1: "111111111", Phone2: "222222222", Phone3: "333333333", Email: "someone@test.com", Street: "8 Some Place", City: "Somewhere", State: "VIC", PostCode: "3002", Country: "Australia" }
-            applicationState.openedContact = new Contact(
-              CoLastName: "a Company", IsIndividual: false, FirstName: "",
-              Type: "Customer", CurrentBalance: 100.00, Addresses: [ address ]
-            )
+            applicationState.openedContact.set("Addresses", [ address ])
           )
 
           it("should render the opened customer file's name", () ->
@@ -76,10 +86,7 @@ describe("ContactsDetailsView", () ->
 
           beforeEach(() ->
             address = { Index: 1, Phone1: "", Phone2: "", Phone3: "", Email: "", Street: "", City: "", State: "", PostCode: "", Country: "" }
-            applicationState.openedContact = new Contact(
-              CoLastName: "a Company", IsIndividual: false, FirstName: "",
-              Type: "Customer", CurrentBalance: 100.00, Addresses: [ address ]
-            )
+            applicationState.openedContact.set("Addresses", [ address ])
           )
 
           it("should not render any address details", () ->
@@ -93,13 +100,6 @@ describe("ContactsDetailsView", () ->
         )
 
         describe("that has no address data", () ->
-
-          beforeEach(() ->
-            applicationState.openedContact = new Contact(
-              CoLastName: "a Company", IsIndividual: false, FirstName: "",
-              Type: "Customer", CurrentBalance: 100.00, Addresses: []
-            )
-          )
 
           it("should not render any address details", () ->
             contactDetailsView.render()

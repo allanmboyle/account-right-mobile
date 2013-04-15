@@ -26,3 +26,8 @@ Scenario: Contact contains minimal data
   And no phone numbers should be shown
   And no email address should be shown
   And no address should be shown
+
+Scenario: Return to Contacts List
+  Given the user has accessed a Contacts Details
+  When the user navigates back
+  Then the Contacts page should be shown

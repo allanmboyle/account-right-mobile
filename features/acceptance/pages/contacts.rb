@@ -17,12 +17,12 @@ module AccountRightMobile
         end
 
         def customer_file_name
-          wait_until_customer_file_is_shown
+          wait_until_page_is_completely_shown
           @session.find("#contacts .customer-file-name").text()
         end
 
         def contacts
-          wait_until_all_contacts_are_shown
+          wait_until_page_is_completely_shown
           @session.all("#contacts .contact").map { |node| Fragments::ContactOverview.from_page_node(node) }
         end
 
@@ -30,6 +30,11 @@ module AccountRightMobile
 
         def access_a_contact
           @session.all("#contacts .contact .name").first.click
+        end
+
+        def logout
+          wait_until_page_is_completely_shown
+          @session.click_link("customer-file-logout")
         end
 
         def has_no_contacts_available_message?
@@ -45,6 +50,16 @@ module AccountRightMobile
         end
 
         private
+
+        def wait_until_page_is_completely_shown
+          wait_until_logout_button_is_shown
+          wait_until_customer_file_is_shown
+          wait_until_all_contacts_are_shown
+        end
+
+        def wait_until_logout_button_is_shown
+          wait_until_all_contain_text("#customer-file-logout .ui-btn-text")
+        end
 
         def wait_until_customer_file_is_shown
           wait_until_all_contain_text("#contacts .customer-file-name")

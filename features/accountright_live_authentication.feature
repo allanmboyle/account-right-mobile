@@ -10,6 +10,19 @@ Feature: Authenticated AccountRight Live Access
     When the user attempts to login
     Then the Customer Files page should be shown
 
+  Scenario: Logout of AccountRight Live
+    Given the user has logged-in to AccountRight Live
+    And the Customer Files page is shown
+    When the user logs-out
+    Then the AccountRight Live Login page should be shown
+
+  Scenario: User is automatically re-logged-in when AccountRight Live login expires
+    Given the user has logged-in to AccountRight Live
+    And the Customer Files page is shown
+    And the users AccountRight Live login has expired
+    When the user logs-in to a Customer File
+    Then the Contacts page should be shown
+
   Scenario: Error is shown when invalid credentials are provided
     Given the user visits the AccountRight Live Login page
     And the user enters invalid login credentials
@@ -32,16 +45,3 @@ Feature: Authenticated AccountRight Live Access
     When the user attempts to login
     Then the AccountRight Live Login page should be shown
     And an error should be displayed indicating an error occurred during authentication
-
-  Scenario: Logout of AccountRight Live
-    Given the user has logged-in to AccountRight Live
-    And the Customer Files page is shown
-    When the user logs-out
-    Then the AccountRight Live Login page should be shown
-
-  Scenario: User is automatically re-logged-in when AccountRight Live login expires
-    Given the user has logged-in to AccountRight Live
-    And the Customer Files page is shown
-    And the users AccountRight Live login has expired
-    When the user logs-in to a Customer File
-    Then the Contacts page should be shown

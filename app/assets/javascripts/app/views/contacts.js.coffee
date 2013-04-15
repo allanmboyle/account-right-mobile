@@ -33,7 +33,7 @@ define([ "jquery",
     _headerContent: () ->
       customerFileName = @applicationState.openedCustomerFile.get("Name")
       @renderHeader(
-        button: { href: "#customer_files", label: "Back" },
+        button: { elementId: "customer-file-logout", href: "#customer_files", label: "Back" },
         title: { elementClass: "customer-file-name", label: customerFileName }
       )
 

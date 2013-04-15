@@ -18,6 +18,12 @@ Given /^the user intends to access a Contact with a minimal set of data$/ do
   step "the user intends to access the established Contact"
 end
 
+Given /^the user has accessed a Contacts Details$/ do
+  step "the user has accessed a Customer File"
+  step "the user accesses a Contacts Details"
+  step "the Contact Details page is shown"
+end
+
 When /^the Customer File contains multiple contacts$/ do
   @customers = [ @api_data_factory.create_company(),
                  @api_data_factory.create_individual(),
@@ -32,7 +38,7 @@ When /^the Customer File contains no contacts$/ do
   @api_service.return_no_contacts
 end
 
-When /^the user accesses the Contacts Details$/ do
+When /^the user accesses (?:the|a) Contacts Details$/ do
   @current_page.access_a_contact
 end
 

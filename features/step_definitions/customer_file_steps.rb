@@ -25,16 +25,12 @@ end
 Given /^the user has accessed a Customer File$/ do
   step "the user has logged-in to AccountRight Live"
   step "the user has logged-in to a Customer File"
-  step "the Contacts page should be shown"
+  step "the Contacts page is shown"
 end
 
 When /^the user has chosen to access a Customer File$/ do
   @accessed_customer_file_name = @current_page.access_a_file
   @authentication_service = @api_service
-end
-
-When /^the user logs-out$/ do
-  @current_page.logout
 end
 
 When /^the user logs-in to a Customer File$/ do

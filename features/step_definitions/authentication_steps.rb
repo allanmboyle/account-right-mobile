@@ -43,6 +43,11 @@ When /^the user logs-in to AccountRight Live$/ do
   step "the user has logged-in to AccountRight Live"
 end
 
+When /^the user logs-out.*$/ do
+  @current_page.logout
+  puts "test"
+end
+
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
   @current_page.should have_invalid_credentials_message
 end
