@@ -71,7 +71,7 @@ GEM
     haml (4.0.1)
       tilt
     hike (1.2.1)
-    http_server_manager (0.1.1)
+    http_server_manager (0.2.0)
       rake (~> 10.0.3)
       sys-proctree (~> 0.0.4)
       wait_until (~> 0.0.1)
@@ -194,7 +194,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (~> 1.3)
   faker (~> 1.1.2)
-  http_server_manager (~> 0.1.1)
+  http_server_manager (~> 0.2.0)
   http_stub (~> 0.6.0)
   httparty (~> 0.10.2)
   immutable_struct (~> 1.1.0)

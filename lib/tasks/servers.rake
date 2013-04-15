@@ -3,6 +3,9 @@ namespace :servers  do
   desc "Starts servers necessary for acceptance"
   task :start => %w{ rails_server:start stubs:start }
 
+  desc "Restarts servers necessary for acceptance"
+  task :restart => %w{ rails_server:restart stubs:restart }
+
   desc "Stops servers necessary for acceptance"
   task :stop do
     exceptions = []
