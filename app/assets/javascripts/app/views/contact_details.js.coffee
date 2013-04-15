@@ -12,10 +12,8 @@ define([ "jquery",
 
     el: $("#contact-details")
 
-    render: () ->
+    prepareDom: () ->
       @$el.html(@compiledTemplate(header: @_headerContent(), contact: @applicationState.openedContact))
-      $.mobile.changePage("#contact-details", reverse: false, changeHash: false, transition: "slide")
-      this
 
     _headerContent: () ->
       customerFileName = @applicationState.openedCustomerFile.get("Name")

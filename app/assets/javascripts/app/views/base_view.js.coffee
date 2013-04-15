@@ -1,6 +1,12 @@
-define([ "backbone", "underscore", "text!./header.tmpl" ], (Backbone, _, HeaderTemplate) ->
+define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbone, _, HeaderTemplate) ->
 
   class BaseView extends Backbone.View
+
+    render: () ->
+      @$el.page().page("destroy").empty()
+      @prepareDom()
+      $.mobile.changePage("##{@$el.attr("id")}", reverse: false, changeHash: false)
+      this
 
     renderHeader: (options) ->
       resolvedOptions = _.extend({}, options)

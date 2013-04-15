@@ -51,11 +51,6 @@ describe("CustomerFilesView", () ->
       CustomerFilesView.prototype = initialPrototype
     )
 
-    it("should add customer file login content to the page which is initially hidden", () ->
-      expect($("#customer-file-login-content")).toExist()
-      expect($("#customer-file-login-content")).toBeHidden()
-    )
-
     describe("model event configuration", () ->
 
       loginSuccessSpy = null
@@ -91,7 +86,20 @@ describe("CustomerFilesView", () ->
 
     )
 
-    describe("and rendered", () ->
+    describe("#render", () ->
+
+      it("should render a logout button that redirects the user to the live login page", () ->
+        customerFilesView.render()
+
+        expect($("#live-logout")).toHaveAttr("href", "#live_login")
+      )
+
+      it("should insert login content to the page that is initially hidden", () ->
+        customerFilesView.render()
+
+        expect($("#customer-file-login-content")).toExist()
+        expect($("#customer-file-login-content")).toBeHidden()
+      )
 
       describe("with multiple customer files", () ->
 
@@ -214,18 +222,6 @@ describe("CustomerFilesView", () ->
 
       )
 
-      describe("the logout button", () ->
-
-        beforeEach(() ->
-          customerFilesView.render()
-        )
-
-        it("should redirect the user to the live login page", () ->
-          expect($("#live-logout")).toHaveAttr("href", "#live_login")
-        )
-
-      )
-
     )
 
     describe("#update", () ->
@@ -283,127 +279,135 @@ describe("CustomerFilesView", () ->
 
     )
 
-    describe("#syncUser", () ->
+    describe("and rendered", () ->
 
       beforeEach(() ->
-        $("#customer-file-username").val("some_user_name")
-        $("#customer-file-password").val("some_password")
+        customerFilesView.render()
       )
 
-      it("should update the user with the form field values", () ->
-        customerFilesView.syncUser()
+      describe("#syncUser", () ->
 
-        expect(customerFileUser.get("username")).toBe("some_user_name")
-        expect(customerFileUser.get("password")).toBe("some_password")
+        beforeEach(() ->
+          $("#customer-file-username").val("some_user_name")
+          $("#customer-file-password").val("some_password")
+        )
+
+        it("should update the user with the form field values", () ->
+          customerFilesView.syncUser()
+
+          expect(customerFileUser.get("username")).toBe("some_user_name")
+          expect(customerFileUser.get("password")).toBe("some_password")
+        )
+
       )
 
-    )
+      describe("#login", () ->
 
-    describe("#login", () ->
+        event = null
 
-      event = null
+        beforeEach(() ->
+          event = new StubEvent()
 
-      beforeEach(() ->
-        event = new StubEvent()
+          spyOn(customerFilesView, "syncUser")
+          spyOn(customerFilesView.customerFiles, "login")
+        )
 
-        spyOn(customerFilesView, "syncUser")
-        spyOn(customerFilesView.customerFiles, "login")
+        it("should update the user model to include the entered credentials", () ->
+          customerFilesView.login(event)
+
+          expect(customerFilesView.syncUser).toHaveBeenCalled()
+        )
+
+        it("should login the user via the model", () ->
+          customerFilesView.login(event)
+
+          expect(customerFiles.login).toHaveBeenCalledWith(customerFileUser)
+        )
+
+        it("should prevent propogation of the event", () ->
+          spyOn(event, "preventDefault")
+
+          customerFilesView.login(event)
+
+          expect(event.preventDefault).toHaveBeenCalled()
+        )
+
       )
 
-      it("should update the user model to include the entered credentials", () ->
-        customerFilesView.login(event)
+      describe("#loginSuccess", () ->
 
-        expect(customerFilesView.syncUser).toHaveBeenCalled()
+        customerFile = null
+
+        beforeEach(() ->
+          customerFile = new CustomerFile(Name: "Some File")
+
+          location.hash = ""
+        )
+
+        it("should establish the customer file the user has logged-in to in the application state", () ->
+          customerFilesView.loginSuccess(customerFile)
+
+          expect(applicationState.openedCustomerFile).toBe(customerFile)
+        )
+
+        it("should navigate the user to the contacts page", () ->
+          customerFilesView.loginSuccess(customerFile)
+
+          expect(location.hash).toBe("#contacts")
+        )
+
       )
 
-      it("should login the user via the model", () ->
-        customerFilesView.login(event)
+      describe("#loginFail", () ->
 
-        expect(customerFiles.login).toHaveBeenCalledWith(customerFileUser)
+        beforeEach(() ->
+          location.hash = "#customer_files"
+        )
+
+        it("should leave the user on the customer files page", () ->
+          customerFilesView.loginFail()
+
+          expect(location.hash).toMatch(/^#customer_files/)
+        )
+
+        it("should make the login failure popup visible", () ->
+          customerFilesView.loginFail()
+
+          expect($("#customer-file-login-fail-message-popup")).toHaveClass("ui-popup-active")
+        )
+
+        it("should display a popup with a message indicating the login attempt failed", () ->
+          customerFilesView.loginFail()
+
+          expect($("#customer-file-login-fail-message")).toHaveText("The username or password you entered is incorrect")
+        )
+
       )
 
-      it("should prevent propogation of the event", () ->
-        spyOn(event, "preventDefault")
+      describe("#loginError", () ->
 
-        customerFilesView.login(event)
+        beforeEach(() ->
+          location.hash = "#customer_files"
+        )
 
-        expect(event.preventDefault).toHaveBeenCalled()
-      )
+        it("should leave the user on the customer files page", () ->
+          customerFilesView.loginError()
 
-    )
+          expect(location.hash).toMatch(/^#customer_files/)
+        )
 
-    describe("#loginSuccess", () ->
+        it("should make the login error popup visible", () ->
+          customerFilesView.loginError()
 
-      customerFile = null
+          expect($("#customer-file-login-error-message-popup")).toHaveClass("ui-popup-active")
+        )
 
-      beforeEach(() ->
-        customerFile = new CustomerFile(Name: "Some File")
+        it("should display a popup with a message indicating an error occurred during the login attempt", () ->
+          customerFilesView.loginError()
 
-        location.hash = ""
-      )
+          expect($("#customer-file-login-error-message")).toHaveText("We can't confirm your details at the moment, try again shortly")
+        )
 
-      it("should establish the customer file the user has logged-in to in the application state", () ->
-        customerFilesView.loginSuccess(customerFile)
-
-        expect(applicationState.openedCustomerFile).toBe(customerFile)
-      )
-
-      it("should navigate the user to the contacts page", () ->
-        customerFilesView.loginSuccess(customerFile)
-
-        expect(location.hash).toBe("#contacts")
-      )
-
-    )
-
-    describe("#loginFail", () ->
-
-      beforeEach(() ->
-        location.hash = "#customer_files"
-      )
-
-      it("should leave the user on the customer files page", () ->
-        customerFilesView.loginFail()
-
-        expect(location.hash).toMatch(/^#customer_files/)
-      )
-
-      it("should make the login failure popup visible", () ->
-        customerFilesView.loginFail()
-
-        expect($("#customer-file-login-fail-message-popup")).toHaveClass("ui-popup-active")
-      )
-
-      it("should display a popup with a message indicating the login attempt failed", () ->
-        customerFilesView.loginFail()
-
-        expect($("#customer-file-login-fail-message")).toHaveText("The username or password you entered is incorrect")
-      )
-
-    )
-
-    describe("#loginError", () ->
-
-      beforeEach(() ->
-        location.hash = "#customer_files"
-      )
-
-      it("should leave the user on the customer files page", () ->
-        customerFilesView.loginError()
-
-        expect(location.hash).toMatch(/^#customer_files/)
-      )
-
-      it("should make the login error popup visible", () ->
-        customerFilesView.loginError()
-
-        expect($("#customer-file-login-error-message-popup")).toHaveClass("ui-popup-active")
-      )
-
-      it("should display a popup with a message indicating an error occurred during the login attempt", () ->
-        customerFilesView.loginError()
-
-        expect($("#customer-file-login-error-message")).toHaveText("We can't confirm your details at the moment, try again shortly")
       )
 
     )

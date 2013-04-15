@@ -23,10 +23,8 @@ define([ "jquery",
     update: () ->
       @contacts.fetch()
 
-    render: () ->
+    prepareDom: () ->
       @$el.html(@compiledTemplate(header: @_headerContent(), contacts: @contacts))
-      $.mobile.changePage("#contacts", reverse: false, changeHash: false)
-      this
 
     open: (event) ->
       @applicationState.openedContact = @_contactFrom(event)
@@ -40,15 +38,14 @@ define([ "jquery",
       )
 
     _pageBeforeShow: () ->
-      @_refreshAutoDividers()
+      @_refreshList()
       @_showNoContactsMessageIfNecessary()
 
-    _refreshAutoDividers: () ->
+    _refreshList: () ->
       $("#contacts-list").listview(
         autodividers: true,
         autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase()
       )
-      $("#contacts-list").listview("refresh")
 
     _showNoContactsMessageIfNecessary: () ->
       if (@contacts.isEmpty()) then @_noContactsMessage().show() else @_noContactsMessage().hide()

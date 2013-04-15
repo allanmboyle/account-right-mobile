@@ -3,24 +3,22 @@ define([ "jquery",
          "./base_view",
          "../models/customer_files",
          "../models/customer_file_user",
-         "text!./customer_files_layout.tmpl",
-         "text!./customer_files_content.tmpl",
+         "text!./customer_files.tmpl",
          "text!./customer_files_login.tmpl" ], ($, _, BaseView, CustomerFiles, CustomerFileUser,
-                                                LayoutTemplate, ContentTemplate, LoginTemplate) ->
+                                                Template, LoginTemplate) ->
 
   $("body").append("<div id='customer-files' data-role='page' data-title='Customer Files'></div>")
 
   class CustomerFilesView extends BaseView
 
     initialize: (@applicationState) ->
-      @compiledContentTemplate = _.template(ContentTemplate)
+      @compiledTemplate = _.template(Template)
+      @compiledLoginTemplate = _.template(LoginTemplate)
       @customerFiles = new CustomerFiles().on("reset", @render, this)
                                           .on("error", @render, this)
       @customerFileUser = new CustomerFileUser().on("login:success", @loginSuccess, this)
                                                 .on("login:fail", @loginFail, this)
                                                 .on("login:error", @loginError, this)
-      @$el.html(_.template(LayoutTemplate, header: @_headerContent()))
-      @_loginContent().hide().append(_.template(LoginTemplate))
 
     el: $("#customer-files")
 
@@ -32,10 +30,9 @@ define([ "jquery",
     update: () ->
       @customerFiles.fetch()
 
-    render: () ->
-      $("#customer-files-content").html(@compiledContentTemplate(customerFiles: @customerFiles))
-      $.mobile.changePage("#customer-files", reverse: false, changeHash: false)
-      this
+    prepareDom:() ->
+      @$el.html(@compiledTemplate(header: @_headerContent(), customerFiles: @customerFiles))
+      @_loginContent().hide().append(@compiledLoginTemplate)
 
     login: (event) ->
       @syncUser()

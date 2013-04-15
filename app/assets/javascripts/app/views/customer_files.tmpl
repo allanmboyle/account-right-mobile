@@ -1,0 +1,19 @@
+<%= header %>
+<div id="customer-files-content" data-role="content">
+    <p class="description">Select the file you would like to view contacts and outstanding amounts</p>
+    <div id="customer-files-list" data-role="collapsible-set" data-theme="d">
+        <% customerFiles.each(function(customerFile) { %>
+            <div class="customer-file" data-role="collapsible" data-iconpos="right" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+                <h3>
+                    <div class="customer-file-name"><%= customerFile.get('Name') %></div>
+                </h3>
+            </div>
+        <% }); %>
+    </div>
+    <div id="no-customer-files-message">It looks like you're not online yet</div>
+    <div id="customer-files-general-error-message" data-role="popup" data-overlay-theme="b">
+        <p>An unexpected error has occurred</p>
+    </div>
+</div>
+<div id="customer-file-login-content">
+</div>

@@ -103,6 +103,9 @@ $headerTopSpacing: 10px
     background-color: #d7d9db
     box-shadow: 0 2px 1px #3c4246 inset
 
+    *
+      font-weight: 100
+
     ul
       margin: 0
       padding: 1.2em 0 0 0
@@ -110,7 +113,6 @@ $headerTopSpacing: 10px
 
       li
         padding-left: 4em
-        font-weight: 100
         background:
           repeat: no-repeat
           position: 1.2em 50%
@@ -126,13 +128,11 @@ $headerTopSpacing: 10px
         background-image: image_url('icon_address.png')
 
 /* JQueryMobile Overriddes */
-.ui-mobile .ui-header, .ui-mobile .ui-footer
-  border-width: 0
-
 .ui-mobile .ui-header
+  border-width: 0
   padding: $headerTopSpacing $standardLeftSpacing
 
-.ui-header .ui-title, .ui-footer .ui-title
+.ui-header .ui-title
   position: relative
   top: 6px
   width: 100%
@@ -146,7 +146,7 @@ $headerTopSpacing: 10px
   *
     overflow: hidden
 
-.ui-header .ui-btn-left, .ui-footer .ui-btn-left
+.ui-header .ui-btn-left
   top: $headerTopSpacing + 3
   left: $standardLeftSpacing
 
