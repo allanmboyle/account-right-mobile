@@ -31,6 +31,46 @@ describe("BaseView", () ->
 
   )
 
+  describe("#render", () ->
+
+    beforeEach(() ->
+      $("body").append("<div id='testable-base-view' data-role='page'></div>")
+      class TestableBaseView extends BaseView
+
+        el: $("#testable-base-view")
+
+        prepareDom: () ->
+          @$el.html("Some Content")
+
+      testableView = new TestableBaseView()
+    )
+
+    afterEach(() ->
+      $("#testable-base-view").remove()
+    )
+
+    it("should destroy any previously rendered page", () ->
+      pageMethodSpy = spyOn(testableView.$el, "page").andReturn(testableView.$el)
+
+      testableView.render()
+
+      expect(pageMethodSpy).toHaveBeenCalledWith("destroy")
+    )
+
+    it("should delegate to prepareDom to insert content in the DOM", () ->
+      testableView.render()
+
+      expect($("#testable-base-view")).toHaveText("Some Content")
+    )
+
+    it("should make the page the active JQueryMobile page", () ->
+      testableView.render()
+
+      expect($.mobile.activePage).toHaveAttr("id", "testable-base-view")
+    )
+
+  )
+
   describe("#renderHeader", () ->
 
     options = null
