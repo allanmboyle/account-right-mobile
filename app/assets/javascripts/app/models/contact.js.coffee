@@ -18,6 +18,9 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
       oweingEntity = if balance < 0 then "I" else "They"
       "#{oweingEntity} owe #{Math.abs(balance).toFixed(2)}"
 
+    balanceClass: () ->
+      if @get("CurrentBalance") < 0 then "negative" else "positive"
+
     phoneNumbers: () ->
       address = @_firstAddress()
       _.filter([address["Phone1"], address["Phone2"], address["Phone3"]], (phoneNumber) -> !!phoneNumber)

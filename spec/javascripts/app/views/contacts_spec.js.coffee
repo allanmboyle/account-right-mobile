@@ -132,19 +132,42 @@ describe("ContactsView", () ->
 
       describe("when contacts have been added", () ->
 
+        contacts = null
+
         beforeEach(() ->
-          contactsView.contacts.add([new Contact(CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00),
+          contactsView.contacts.add([new Contact(CoLastName: "a Company", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: -100.00),
                                      new Contact(CoLastName: "Another Company", IsIndividual: false, FirstName: "", Type: "Supplier", CurrentBalance: 200.00)])
+          contacts = contactsView.contacts
         )
 
         it("should group contacts by their case-insensitive CoLastName", () ->
           contactsView.render()
 
-          group_letters = $(".ui-li-divider").text()
-          expect(group_letters).toBe("A")
-          contacts = $(".contact")
-          assertContact(contacts[0], { name: "a Company", type: "Customer", balance: "100.00" })
-          assertContact(contacts[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
+          groupLetters = $(".ui-li-divider").text()
+          expect(groupLetters).toBe("A")
+          contactElements = $(".contact")
+          assertContact(contactElements[0], { name: "a Company", type: "Customer", balance: "100.00" })
+          assertContact(contactElements[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
+        )
+
+        it("should render the balance as the contacts balance description", () ->
+          spyOn(contacts.at(0), "balanceDescription").andReturn("first description")
+          spyOn(contacts.at(1), "balanceDescription").andReturn("second description")
+          contactsView.render()
+
+          contactElements = $(".contact")
+          expect($(contactElements[0]).find(".balance")).toHaveText("first description")
+          expect($(contactElements[1]).find(".balance")).toHaveText("second description")
+        )
+
+        it("should render the balance in an element that has a class indicating the contacts balance", () ->
+          spyOn(contacts.at(0), "balanceClass").andReturn("firstClass")
+          spyOn(contacts.at(1), "balanceClass").andReturn("secondClass")
+          contactsView.render()
+
+          contactElements = $(".contact")
+          expect($(contactElements[0]).find(".balance")).toHaveClass("firstClass")
+          expect($(contactElements[1]).find(".balance")).toHaveClass("secondClass")
         )
 
         it("should not show a message indicating no contacts are available", () ->

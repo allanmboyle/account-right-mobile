@@ -54,6 +54,14 @@ describe("ContactsDetailsView", () ->
            expect($("#contacts-back")).toHaveAttr("href", "#contacts")
         )
 
+        it("should render the balance in an element that has a class indicating the contacts balance", () ->
+           spyOn(applicationState.openedContact, "balanceClass").andReturn("someBalanceClass")
+
+           contactDetailsView.render()
+
+           expect($(".contact .balance")).toHaveClass("someBalanceClass")
+        )
+
         describe("that has a comprehensive set of data", () ->
 
           beforeEach(() ->

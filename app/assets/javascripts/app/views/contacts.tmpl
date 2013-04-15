@@ -6,7 +6,7 @@
             <h3 class="name"><%= contact.name() %></h3>
             <div class="small-print">
                 <p class="type"><%= contact.get("Type") %></p>
-                <p class="balance"><%= contact.balanceDescription() %></p>
+                <p class="balance <%= contact.balanceClass() %>"><%= contact.balanceDescription() %></p>
             </div>
         </li>
         <% }); %>

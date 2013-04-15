@@ -4,7 +4,7 @@
         <h3 class="name"><%= contact.name() %></h3>
         <div class="small-print">
             <div class="type"><%= contact.get("Type") %></div>
-            <div class="balance"><%= contact.balanceDescription() %></div>
+            <div class="balance <%= contact.balanceClass() %>"><%= contact.balanceDescription() %></div>
         </div>
     </div>
     <div class="detail">

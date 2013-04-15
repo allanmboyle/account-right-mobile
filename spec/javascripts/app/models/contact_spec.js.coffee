@@ -37,23 +37,6 @@ describe("Contact", () ->
 
   describe("#balanceDescription", () ->
 
-    describe("when a contacts balance is negative", () ->
-
-      beforeEach(() -> 
-        contact = createContactWithBalance(-1)
-      )
-
-      it("should return a string containing 'I owe'", () ->
-        expect(contact.balanceDescription()).toContain("I owe")
-      )
-
-      it("should display the negative balance as a positive number", () ->
-        expect(contact.balanceDescription()).not.toContain("-1")
-        expect(contact.balanceDescription()).toContain("1")
-      )
-
-    )
-
     describe("when a contacts balance is positive", () ->
 
       beforeEach(() ->
@@ -78,8 +61,62 @@ describe("Contact", () ->
 
     )
 
-    createContactWithBalance = (balance) ->
-      new Contact(CoLastName: "Pelovic", FirstName: "Sasha", IsIndividual: true, Type: "Supplier", CurrentBalance: balance)
+    describe("when a contacts balance is negative", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(-1)
+      )
+
+      it("should return a string containing 'I owe'", () ->
+        expect(contact.balanceDescription()).toContain("I owe")
+      )
+
+      it("should display the negative balance as a positive number", () ->
+        expect(contact.balanceDescription()).not.toContain("-1")
+        expect(contact.balanceDescription()).toContain("1")
+      )
+
+    )
+
+  )
+
+  describe("#balanceClass", () ->
+
+    describe("when a contacts balance is positive", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(1)
+      )
+
+      it("should return 'positive'", () ->
+        expect(contact.balanceClass()).toContain("positive")
+      )
+
+    )
+
+    describe("when a contacts balance is zero", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(0)
+      )
+
+      it("should return 'positive'", () ->
+        expect(contact.balanceClass()).toContain("positive")
+      )
+
+    )
+
+    describe("when a contacts balance is negative", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(-1)
+      )
+
+      it("should return 'negative'", () ->
+        expect(contact.balanceClass()).toBe("negative")
+      )
+
+    )
 
   )
 
@@ -406,5 +443,14 @@ describe("Contact", () ->
     )
 
   )
+
+  createContactWithBalance = (balance) ->
+    new Contact(
+      CoLastName: "Pelovic",
+      FirstName: "Sasha",
+      IsIndividual: true,
+      Type: "Supplier",
+      CurrentBalance: balance
+    )
 
 )
