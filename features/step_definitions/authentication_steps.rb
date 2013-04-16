@@ -45,7 +45,6 @@ end
 
 When /^the user logs-out.*$/ do
   @current_page.logout
-  puts "test"
 end
 
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
