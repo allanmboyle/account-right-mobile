@@ -4,7 +4,7 @@ define([ "jquery",
          "text!./live_login.tmpl",
          "app/models/live_user" ], ($, _, BaseView, Template, LiveUser) ->
 
-  $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live Login'></div>")
+  $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live log in'></div>")
 
   class LiveLoginView extends BaseView
 

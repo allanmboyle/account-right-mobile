@@ -37,6 +37,8 @@ require([ "require", "jquery", "backbone", "underscore" ], (require, $, Backbone
     $.mobile.linkBindingEnabled = false
     $.mobile.hashListeningEnabled = false
     $.mobile.pushStateEnabled = false
+    # Improve touch visual feedback
+    $.mobile.buttonMarkup.hoverDelay = 100
     # Show Loading Overlay during AJAX calls
     $(document).ajaxStart(() -> $.mobile.loading("show"))
     $(document).ajaxStop(() -> $.mobile.loading("hide"))

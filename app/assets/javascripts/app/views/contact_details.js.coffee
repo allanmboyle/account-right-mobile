@@ -3,7 +3,7 @@ define([ "jquery",
          "./base_view",
          "text!./contact_details.tmpl" ], ($, _, BaseView, Template) ->
 
-  $("body").append("<div id='contact-details' data-role='page' data-title='Contact Details'></div>")
+  $("body").append("<div id='contact-details' data-role='page' data-title='Contact details'></div>")
 
   class ContactsView extends BaseView
 

@@ -21,7 +21,7 @@ end
 Given /^the user has accessed a Contacts Details$/ do
   step "the user has accessed a Customer File"
   step "the user accesses a Contacts Details"
-  step "the Contact Details page is shown"
+  step "the Contact details page is shown"
 end
 
 When /^the Customer File contains multiple contacts$/ do

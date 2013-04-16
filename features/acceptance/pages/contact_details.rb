@@ -5,7 +5,7 @@ module AccountRightMobile
       class ContactDetails < Pages::Base
 
         def self.title
-          "Contact Details"
+          "Contact details"
         end
 
         def initialize(session, configuration)

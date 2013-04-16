@@ -1,4 +1,4 @@
-Given /^the user enters valid login credentials$/ do
+Given /^the user enters valid log in credentials$/ do
   @authentication_service.grant_access
   if @authentication_service.is_a?(AccountRight::OAuth::Stub::Configurer)
     @api_service.with_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}")
@@ -6,18 +6,18 @@ Given /^the user enters valid login credentials$/ do
   @current_page.enter_credentials
 end
 
-Given /^the user enters invalid login credentials$/ do
+Given /^the user enters invalid log in credentials$/ do
   @authentication_service.deny_access
   @current_page.enter_credentials
 end
 
 Given /^the user logs-in with valid credentials$/ do
-  step "the user enters valid login credentials"
-  step "the user attempts to login"
+  step "the user enters valid log in credentials"
+  step "the user attempts to log in"
 end
 
 Given /^the user has logged-in to AccountRight Live$/ do
-  step "the user visits the AccountRight Live Login page"
+  step "the user visits the AccountRight Live log in page"
   step "the user logs-in with valid credentials"
   step "the Customer Files page should be shown"
 end
@@ -30,12 +30,12 @@ Given /^the AccountRight Live authentication service is mis-configured/ do
   @oauth_service.misconfigure
 end
 
-Given /^the users AccountRight Live login has expired$/ do
+Given /^the users AccountRight Live log in has expired$/ do
   @api_service.deny_access_for_current_headers
   @oauth_service.grant_access
 end
 
-When /^the user attempts to login$/ do
+When /^the user attempts to log in$/ do
   @current_page.login
 end
 

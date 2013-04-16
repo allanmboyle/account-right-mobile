@@ -5,43 +5,43 @@ Feature: Authenticated AccountRight Live Access
 
   @smoke
   Scenario: Access is granted when valid credentials are provided
-    Given the user visits the AccountRight Live Login page
-    And the user enters valid login credentials
-    When the user attempts to login
+    Given the user visits the AccountRight Live log in page
+    And the user enters valid log in credentials
+    When the user attempts to log in
     Then the Customer Files page should be shown
 
   Scenario: Logout of AccountRight Live
     Given the user has logged-in to AccountRight Live
     And the Customer Files page is shown
     When the user logs-out
-    Then the AccountRight Live Login page should be shown
+    Then the AccountRight Live log in page should be shown
 
-  Scenario: User is automatically re-logged-in when AccountRight Live login expires
+  Scenario: User is automatically re-logged-in when AccountRight Live log in expires
     Given the user has logged-in to AccountRight Live
     And the Customer Files page is shown
-    And the users AccountRight Live login has expired
+    And the users AccountRight Live log in has expired
     When the user logs-in to a Customer File
     Then the Contacts page should be shown
 
   Scenario: Error is shown when invalid credentials are provided
-    Given the user visits the AccountRight Live Login page
-    And the user enters invalid login credentials
-    When the user attempts to login
-    Then the AccountRight Live Login page should be shown
+    Given the user visits the AccountRight Live log in page
+    And the user enters invalid log in credentials
+    When the user attempts to log in
+    Then the AccountRight Live log in page should be shown
     And an error should be displayed indicating the provided credentials were invalid
 
   Scenario: Error is shown when authentication provider is unavailable
-    Given the user visits the AccountRight Live Login page
-    And the user enters valid login credentials
+    Given the user visits the AccountRight Live log in page
+    And the user enters valid log in credentials
     And the AccountRight Live authentication service is unavailable
-    When the user attempts to login
-    Then the AccountRight Live Login page should be shown
+    When the user attempts to log in
+    Then the AccountRight Live log in page should be shown
     And an error should be displayed indicating an error occurred during authentication
 
   Scenario: Error is shown when integration with the provider is mis-configured
-    Given the user visits the AccountRight Live Login page
-    And the user enters valid login credentials
+    Given the user visits the AccountRight Live log in page
+    And the user enters valid log in credentials
     And the AccountRight Live authentication service is mis-configured
-    When the user attempts to login
-    Then the AccountRight Live Login page should be shown
+    When the user attempts to log in
+    Then the AccountRight Live log in page should be shown
     And an error should be displayed indicating an error occurred during authentication
