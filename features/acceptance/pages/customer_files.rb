@@ -28,7 +28,6 @@ module AccountRightMobile
         end
 
         def customer_file_names
-          wait_until_all_customer_files_are_shown
           @session.all("#customer-files .customer-file-name").map { |node| node.text() }
         end
 
@@ -59,6 +58,12 @@ module AccountRightMobile
                             visible: true)
         end
 
+        def has_login_required_message?
+          @session.has_css?("#customer-file-login-required-message",
+                            text: "Please log in to continue",
+                            visible: true)
+        end
+
         def has_application_unavailable_message?
           @session.has_css?("#customer-files-general-error-message-popup.ui-popup-active",
                             text: GENERAL_ERROR_MESSAGE,
@@ -79,12 +84,12 @@ module AccountRightMobile
 
         private
 
-        def wait_until_login_is_shown
-          ::Wait.until_true!("login is shown") { @session.find("#customer-file-login-content").visible? }
+        def wait_until_completely_shown
+          wait_until_all_contain_text("#customer-files .customer-file-name")
         end
 
-        def wait_until_all_customer_files_are_shown
-          wait_until_all_contain_text("#customer-files .customer-file-name")
+        def wait_until_login_is_shown
+          ::Wait.until_true!("login is shown") { @session.find("#customer-file-login-content").visible? }
         end
 
       end

@@ -36,7 +36,9 @@ module AccountRightMobile
         end
 
         def shown?
-          @session.has_selector?('title', text: self.class.title)
+          @session.has_selector?('title', text: self.class.title).tap do |is_shown|
+            wait_until_completely_shown if is_shown
+          end
         end
 
         def shown_without_error?
@@ -49,6 +51,12 @@ module AccountRightMobile
           ::Wait.until_true!("all nodes matching '#{locator}' contain text") do
             @session.all(locator).reduce(true) { |result, node| result && !node.text().empty? }
           end
+        end
+
+        private
+
+        def wait_until_completely_shown
+          # Intentionally blank
         end
 
       end

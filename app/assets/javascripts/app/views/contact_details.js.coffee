@@ -7,7 +7,8 @@ define([ "jquery",
 
   class ContactsView extends BaseView
 
-    initialize: (@applicationState) ->
+    initialize: (applicationState) ->
+      super
       @compiledTemplate = _.template(Template)
 
     el: $("#contact-details")

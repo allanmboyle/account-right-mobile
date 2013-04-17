@@ -16,18 +16,18 @@ Feature: Authenticated AccountRight Live Access
     When the user logs-out
     Then the AccountRight Live log in page should be shown
 
+  @wip
+  Scenario: User must log in to view secure pages
+    When the user attempts to visit the Contacts page
+    Then the AccountRight Live log in page should be shown
+    And a message should be displayed indicating the user must log in to continue
+
   Scenario: User is automatically re-logged-in when AccountRight Live log in expires
     Given the user has logged-in to AccountRight Live
     And the Customer Files page is shown
     And the users AccountRight Live log in has expired
     When the user logs-in to a Customer File
     Then the Contacts page should be shown
-
-  @wip
-  Scenario: User must log in to view secure pages
-    When the user attempts to visit the Contacts page
-    Then the AccountRight Live log in page should be shown
-    And a message should be displayed indicating the user must log in to continue
 
   Scenario: Error is shown when invalid credentials are provided
     Given the user visits the AccountRight Live log in page

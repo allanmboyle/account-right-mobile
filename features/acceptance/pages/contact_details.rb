@@ -17,12 +17,10 @@ module AccountRightMobile
         end
 
         def customer_file_name
-          wait_until_page_is_completely_shown
           @session.find("#contact-details .customer-file-name").text()
         end
 
         def contact
-          wait_until_page_is_completely_shown
           node = @session.find("#contact-details .contact")
           node ? Fragments::ContactDetail.from_page_node(node) : Fragments::ContactDetail.new()
         end
@@ -30,7 +28,6 @@ module AccountRightMobile
         memoize :contact
 
         def back
-          wait_until_page_is_completely_shown
           @session.click_link("contacts-back")
         end
 
@@ -48,7 +45,7 @@ module AccountRightMobile
 
         private
 
-        def wait_until_page_is_completely_shown
+        def wait_until_completely_shown
           wait_until_back_button_is_shown
           wait_until_customer_file_is_shown
           wait_until_contact_is_shown

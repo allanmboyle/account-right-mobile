@@ -38,7 +38,7 @@ When /^the user logs-in to a Customer File$/ do
   step "the user logs-in with valid credentials"
 end
 
-When /^the user logs-in to a Customer File with (.*)$/ do |contacts_expression|
+When /^the user logs-in to a Customer File with (.+)$/ do |contacts_expression|
   step "the user has chosen to access a Customer File"
   step "the Customer File contains #{contacts_expression}"
   step "the user logs-in with valid credentials"
@@ -48,7 +48,7 @@ Then /^the Customer File log in is shown$/ do
   @current_page.shows_login_within?(@customer_file[:Name]).should be_true
 end
 
-Then /^the log in username should default to '([^']*)'$/ do |expected_username|
+Then /^the log in username should default to '([^']+)'$/ do |expected_username|
   @current_page.username.should eql(expected_username)
 end
 
@@ -60,7 +60,7 @@ Then /^the Customer File is shown$/ do
   @current_page.customer_file_names.should eql([@customer_file[:Name]])
 end
 
-Then /^the (.*) page for the Customer File should be shown$/ do |page_name|
+Then /^the (.+) page for the Customer File should be shown$/ do |page_name|
   step "the #{page_name} page should be shown"
   @current_page.customer_file_name.should eql(@accessed_customer_file_name)
 end

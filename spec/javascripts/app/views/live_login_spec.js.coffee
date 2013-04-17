@@ -28,11 +28,12 @@ describe("LiveLoginView", () ->
 
     initialPrototype = null
     liveLoginView = null
+    applicationState = {}
     liveUser = null
 
     beforeEach(() ->
       initialPrototype = _.extend({}, LiveLoginView.prototype)
-      liveLoginView = new LiveLoginView()
+      liveLoginView = new LiveLoginView(applicationState)
       liveUser = liveLoginView.user
     )
 
@@ -55,7 +56,7 @@ describe("LiveLoginView", () ->
         loginFailSpy = LiveLoginView.prototype.loginFail = jasmine.createSpy()
         loginErrorSpy = LiveLoginView.prototype.loginError = jasmine.createSpy()
 
-        liveLoginView = new LiveLoginView()
+        liveLoginView = new LiveLoginView(applicationState)
         liveUser = liveLoginView.user
       )
 

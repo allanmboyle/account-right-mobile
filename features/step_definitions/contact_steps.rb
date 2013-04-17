@@ -52,13 +52,13 @@ Then /^a message should be displayed indicating the file contains no contacts$/ 
   @current_page.should have_no_contacts_available_message
 end
 
-Then /^the (.*) of the contact should be shown$/ do |field_description|
+Then /^the (.+) of the contact should be shown$/ do |field_description|
   field = to_field_symbol(field_description)
   @expected_contact ||= to_detail_fragment(@contact, @contact_type)
   @current_page.contact.send(field).should eql(@expected_contact.send(field))
 end
 
-Then /^no (.*) should be shown$/ do |field_description|
+Then /^no (.+) should be shown$/ do |field_description|
   @current_page.contact.send(to_field_symbol(field_description)).should be_empty
 end
 

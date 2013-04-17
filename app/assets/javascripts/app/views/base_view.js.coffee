@@ -2,13 +2,19 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
 
   class BaseView extends Backbone.View
 
-    render: () ->
-      @$el.page().page("destroy").empty()
-      @prepareDom()
-      $.mobile.changePage("##{@$el.attr("id")}", _.extend({ reverse: false, changeHash: false }, @renderOptions))
-      this
+    liveLoginRequired: false
 
     renderOptions: {}
+
+    initialize: (@applicationState) ->
+
+    render: () ->
+      if (@liveLoginRequired && !@applicationState.isLoggedInToLive)
+        location.hash = "#live_login"
+      else
+        @$el.page().page("destroy").empty()
+        @prepareDom()
+        $.mobile.changePage("##{@$el.attr("id")}", _.extend({ reverse: false, changeHash: false }, @renderOptions))
 
     renderHeader: (options) ->
       resolvedOptions = _.extend({}, options)

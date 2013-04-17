@@ -1,74 +1,135 @@
 describe("BaseView", () ->
 
   BaseView = null
+  applicationState = null
   testableView = null
 
-  jasmineRequire(this, [ "app/views/base_view" ], (LoadedBaseView) ->
+  jasmineRequire(this, [ "app/views/base_view", "app/models/application_state" ], (LoadedBaseView, ApplicationState) ->
     BaseView = LoadedBaseView
+    applicationState = new ApplicationState()
   )
 
   describe("when subclassed", () ->
 
     beforeEach(() ->
       class TestableBaseView extends BaseView
-        initialize: () ->
+        initialize: (applicationState) ->
+          super
           @someAttr = "Some Value"
 
-      testableView = new TestableBaseView()
+      testableView = new TestableBaseView(applicationState)
     )
 
     it("should allow a header to be rendered", () ->
       expect(testableView.renderHeader(title: { label: "Some Title" })).not.toBe("")
     )
 
+    it("should establish the application state", () ->
+      expect(testableView.applicationState).toBe(applicationState)
+    )
+
     describe("#render", () ->
 
       beforeEach(() ->
         $("body").append("<div id='testable-base-view' data-role='page'></div>")
-        class TestableBaseView extends BaseView
-
-          el: $("#testable-base-view")
-
-          renderOptions: { anOption: "some_option_value" }
-
-          prepareDom: () ->
-            @$el.html("Some Content")
-
-        testableView = new TestableBaseView()
       )
 
       afterEach(() ->
         $("#testable-base-view").remove()
       )
 
-      it("should destroy any previously rendered page", () ->
-        pageMethodSpy = spyOn(testableView.$el, "page").andReturn(testableView.$el)
+      describe("when authentication requirements have been satisifed", () ->
 
-        testableView.render()
+        beforeEach(() ->
+          class TestableBaseView extends BaseView
 
-        expect(pageMethodSpy).toHaveBeenCalledWith("destroy")
-      )
+            el: $("#testable-base-view")
 
-      it("should delegate to prepareDom to insert content in the DOM", () ->
-        testableView.render()
+            renderOptions: { anOption: "some_option_value" }
 
-        expect($("#testable-base-view")).toHaveText("Some Content")
-      )
+            prepareDom: () ->
+              @$el.html("Some Content")
 
-      it("should inform JQueryMobile to make the view the current page using renderOptions declared in the subclass", () ->
-        spyOn($.mobile, "changePage")
-
-        testableView.render()
-
-        expect($.mobile.changePage).toHaveBeenCalledWith(
-          "#testable-base-view", { reverse: false, changeHash: false, anOption: "some_option_value" }
+          testableView = new TestableBaseView(applicationState)
         )
+
+        it("should destroy any previously rendered page", () ->
+          pageMethodSpy = spyOn(testableView.$el, "page").andReturn(testableView.$el)
+
+          testableView.render()
+
+          expect(pageMethodSpy).toHaveBeenCalledWith("destroy")
+        )
+
+        it("should delegate to prepareDom to insert content in the DOM", () ->
+          testableView.render()
+
+          expect($("#testable-base-view")).toHaveText("Some Content")
+        )
+
+        it("should inform JQueryMobile to make the view the current page using renderOptions declared in the subclass", () ->
+          spyOn($.mobile, "changePage")
+
+          testableView.render()
+
+          expect($.mobile.changePage).toHaveBeenCalledWith(
+            "#testable-base-view", { reverse: false, changeHash: false, anOption: "some_option_value" }
+          )
+        )
+
+        it("should make the page the active JQueryMobile page", () ->
+          testableView.render()
+
+          expect($.mobile.activePage).toHaveAttr("id", "testable-base-view")
+        )
+
       )
 
-      it("should make the page the active JQueryMobile page", () ->
-        testableView.render()
+      describe("when live authentication is required", () ->
 
-        expect($.mobile.activePage).toHaveAttr("id", "testable-base-view")
+        beforeEach(() ->
+          class TestableBaseView extends BaseView
+
+            el: $("#testable-base-view")
+
+            liveLoginRequired: true
+
+            prepareDom: () ->
+              @$el.html("Some Content")
+
+          testableView = new TestableBaseView(applicationState)
+        )
+
+        describe("and the user has logged into to AccountRight Live", () ->
+
+          beforeEach(() ->
+            applicationState.isLoggedInToLive = true
+          )
+
+          it("should render the view", () ->
+            testableView.render()
+
+            expect($("#testable-base-view")).toHaveText("Some Content")
+          )
+
+        )
+
+        describe("and the user has not logged into AccountRight Live", () ->
+
+          beforeEach(() ->
+            applicationState.isLoggedInToLive = false
+          )
+
+          it("should redirect the user to the live login page", () ->
+            testableView.render()
+
+            navigationToTheLiveLoginPage = () -> location.hash == "#live_login"
+            waitsFor(navigationToTheLiveLoginPage,
+                     "rendering view to result in redirection of user to the live login page", 5000)
+          )
+
+        )
+
       )
 
     )
@@ -79,7 +140,7 @@ describe("BaseView", () ->
 
       beforeEach(() ->
         class TestableBaseView extends BaseView
-        testableView = new TestableBaseView()
+        testableView = new TestableBaseView(applicationState)
 
         options = { title: { label: "Some Title" } }
       )

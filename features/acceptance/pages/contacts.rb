@@ -17,12 +17,10 @@ module AccountRightMobile
         end
 
         def customer_file_name
-          wait_until_page_is_completely_shown
           @session.find("#contacts .customer-file-name").text()
         end
 
         def contacts
-          wait_until_page_is_completely_shown
           @session.all("#contacts .contact").map { |node| Fragments::ContactOverview.from_page_node(node) }
         end
 
@@ -33,7 +31,6 @@ module AccountRightMobile
         end
 
         def logout
-          wait_until_page_is_completely_shown
           @session.click_link("customer-file-logout")
         end
 
@@ -51,7 +48,7 @@ module AccountRightMobile
 
         private
 
-        def wait_until_page_is_completely_shown
+        def wait_until_completely_shown
           wait_until_logout_button_is_shown
           wait_until_customer_file_is_shown
           wait_until_all_contacts_are_shown

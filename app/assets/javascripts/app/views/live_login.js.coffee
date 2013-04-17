@@ -8,7 +8,8 @@ define([ "jquery",
 
   class LiveLoginView extends BaseView
 
-    initialize: () ->
+    initialize: (applicationState) ->
+      super
       @user = new LiveUser().on("reset:success", @resetSuccess, this)
                             .on("reset:error", @resetError, this)
                             .on("login:success", @loginSuccess, this)

@@ -21,6 +21,13 @@ Feature: Authenticated Customer File Access
     When the user logs-out of the Customer File
     Then the Customer Files page should be shown
 
+  @wip
+  Scenario: User must log in to view secure pages
+    Given the user has logged-in to AccountRight Live
+    When the user attempts to visit the Contacts page
+    Then the Customer Files page should be shown
+    And a message should be displayed indicating the user must log in to continue
+
   Scenario: Error is shown when invalid credentials are provided
     Given the user has logged-in to AccountRight Live
     And the user has chosen to access a Customer File

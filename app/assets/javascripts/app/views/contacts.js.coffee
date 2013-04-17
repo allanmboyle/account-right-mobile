@@ -8,7 +8,8 @@ define([ "jquery",
 
   class ContactsView extends BaseView
 
-    initialize: (@applicationState) ->
+    initialize: (applicationState) ->
+      super
       @compiledTemplate = _.template(Template)
       @contacts = new Contacts().on("reset", @render, this)
                                 .on("error", @render, this)

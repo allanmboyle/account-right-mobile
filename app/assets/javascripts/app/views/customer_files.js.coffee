@@ -11,7 +11,8 @@ define([ "jquery",
 
   class CustomerFilesView extends BaseView
 
-    initialize: (@applicationState) ->
+    initialize: (applicationState) ->
+      super
       @compiledTemplate = _.template(Template)
       @compiledLoginTemplate = _.template(LoginTemplate)
       @customerFiles = new CustomerFiles().on("reset", @render, this)
