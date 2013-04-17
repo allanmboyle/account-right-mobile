@@ -12,6 +12,8 @@ define([ "jquery",
 
     el: $("#contact-details")
 
+    renderOptions: { transition: "slide" }
+
     prepareDom: () ->
       @$el.html(@compiledTemplate(header: @_headerContent(), contact: @applicationState.openedContact))
 

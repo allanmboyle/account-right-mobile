@@ -123,6 +123,14 @@ describe("ContactsDetailsView", () ->
 
     )
 
+    describe("#renderOptions", () ->
+
+      it("should render the page via a slide transition", () ->
+        expect(contactDetailsView.renderOptions["transition"]).toBe("slide")
+      )
+
+    )
+
   )
 
 )

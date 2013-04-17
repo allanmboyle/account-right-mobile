@@ -55,7 +55,7 @@ define([ "jquery",
     _headerContent: () ->
       @renderHeader(
         button: { elementId: "live-logout", href: "#live_login", label: "Logout" },
-        title: { label: "Login to file" }
+        title: { label: "Log in to file" }
       )
 
     _pageBeforeShow: () ->
