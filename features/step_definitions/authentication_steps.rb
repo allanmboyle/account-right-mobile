@@ -47,10 +47,20 @@ When /^the user logs-out.*$/ do
   @current_page.logout
 end
 
+Given /^the users session has expired$/ do
+  session_cookie = @session.get_cookie("_account-right-mobile_session")
+  session_cookie[:expires] = DateTime.parse(1.minute.ago.to_s)
+  @session.add_cookie(session_cookie)
+end
+
 Then /^an error should be displayed indicating the provided credentials were invalid$/ do
   @current_page.should have_invalid_credentials_message
 end
 
 Then /^an error should be displayed indicating an error occurred during authentication/ do
   @current_page.should have_authentication_error_message
+end
+
+Then /^a message should be displayed indicating the user must log in to continue$/ do
+  @current_page.should have_login_required_message
 end

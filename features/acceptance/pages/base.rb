@@ -31,6 +31,10 @@ module AccountRightMobile
           @session.visit(url)
         end
 
+        def refresh
+          @session.refresh
+        end
+
         def shown?
           @session.has_selector?('title', text: self.class.title)
         end

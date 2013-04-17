@@ -1,0 +1,8 @@
+require File.expand_path('../selenium/drivers/dimensions', __FILE__)
+require File.expand_path('../selenium/drivers/base', __FILE__)
+require File.expand_path('../selenium/drivers/default', __FILE__)
+require File.expand_path('../selenium/drivers/iphone', __FILE__)
+require File.expand_path('../selenium/drivers/iphone_firefox', __FILE__)
+require File.expand_path('../selenium/drivers/driver_factory', __FILE__)
+require File.expand_path('../selenium/cookies', __FILE__)
+require File.expand_path('../selenium/navigation', __FILE__)

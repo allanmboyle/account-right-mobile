@@ -26,6 +26,12 @@ module AccountRightMobile
           @session.click_button("live-login-submit")
         end
 
+        def has_login_required_message?
+          @session.has_css?("#live-login-required-message",
+                            text: "Please log in to continue",
+                            visible: true)
+        end
+
         def has_invalid_credentials_message?
           @session.has_css?("#live-login-fail-message-popup.ui-popup-active",
                             text: "The username or password you entered is incorrect",
