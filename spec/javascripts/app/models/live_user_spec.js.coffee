@@ -1,11 +1,35 @@
 describe("LiveUser", () ->
 
   Ajax = null
+  LiveUser = null
   liveUser = null
 
-  jasmineRequire(this, [ "app/models/ajax", "app/models/live_user" ], (LoadedAjax, LiveUser) ->
+  jasmineRequire(this, [ "app/models/ajax", "app/models/live_user" ], (LoadedAjax, LoadedLiveUser) ->
     Ajax = LoadedAjax
+    LiveUser = LoadedLiveUser
     liveUser = new LiveUser(username: "someUsername", password: "somePassword")
+  )
+
+  describe("constructor", () ->
+
+   describe("when the window contains a flag indicating the user is logged-in to AccountRight Live", () ->
+
+      beforeEach(() ->
+        window.isLoggedInToLive = true
+
+        liveUser = new LiveUser()
+      )
+
+      afterEach(() ->
+        window.isLoggedInToLive = null
+      )
+
+      it("should mark the user as logged-in", () ->
+        expect(liveUser.isLoggedIn).toBeTruthy()
+      )
+
+    )
+
   )
 
   describe("#reset", () ->
@@ -32,6 +56,14 @@ describe("LiveUser", () ->
         liveUser.reset()
 
         expect(liveUser.trigger).toHaveBeenCalledWith("reset:success")
+      )
+
+      it("should mark the user as not logged-in", () ->
+        liveUser.isLoggedIn = true
+
+        liveUser.reset()
+
+        expect(liveUser.isLoggedIn).toBeFalsy()
       )
 
     )
@@ -81,6 +113,14 @@ describe("LiveUser", () ->
         liveUser.login()
 
         expect(liveUser.trigger).toHaveBeenCalledWith("login:success")
+      )
+
+      it("should mark the user as logged-in", () ->
+        liveUser.isLoggedIn = false
+
+        liveUser.login()
+
+        expect(liveUser.isLoggedIn).toBeTruthy()
       )
 
     )

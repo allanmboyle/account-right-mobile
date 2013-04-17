@@ -3,13 +3,17 @@ describe("LiveLoginView", () ->
   _ = null
   LiveLoginView = null
   LiveUser = null
+  ApplicationState = null
 
   jasmineRequire(this, [ "underscore",
                          "app/views/live_login",
-                         "app/models/live_user" ], (Underscore, LoadedLiveLoginView, LoadedLiveUser) ->
+                         "app/models/live_user",
+                         "app/models/application_state" ], (Underscore, LoadedLiveLoginView,
+                                                            LoadedLiveUser, LoadedApplicationState) ->
     _ = Underscore
     LiveLoginView = LoadedLiveLoginView
     LiveUser = LoadedLiveUser
+    ApplicationState = LoadedApplicationState
   )
 
   afterEach(() ->
@@ -28,13 +32,14 @@ describe("LiveLoginView", () ->
 
     initialPrototype = null
     liveLoginView = null
-    applicationState = {}
+    applicationState = null
     liveUser = null
 
     beforeEach(() ->
       initialPrototype = _.extend({}, LiveLoginView.prototype)
+      applicationState = new ApplicationState()
+      liveUser = applicationState.liveUser
       liveLoginView = new LiveLoginView(applicationState)
-      liveUser = liveLoginView.user
     )
 
     afterEach(() ->
@@ -57,7 +62,6 @@ describe("LiveLoginView", () ->
         loginErrorSpy = LiveLoginView.prototype.loginError = jasmine.createSpy()
 
         liveLoginView = new LiveLoginView(applicationState)
-        liveUser = liveLoginView.user
       )
 
       it("should cause the resetSuccess action to be invoked when the users reset:success event occurs", () ->

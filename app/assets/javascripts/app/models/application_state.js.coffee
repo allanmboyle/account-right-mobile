@@ -1,9 +1,12 @@
-define([ "./customer_file" ], (CustomerFile) ->
+define([ "./live_user", "./customer_file" ], (LiveUser, CustomerFile) ->
 
   class ApplicationState
 
     constructor: () ->
-      @isLoggedInToLive = window.isLoggedInToLive
+      @liveUser = new LiveUser()
       @openedCustomerFile = new CustomerFile(window.openedCustomerFile)
+
+    isLoggedInToLive: () ->
+      @liveUser.isLoggedIn
 
 )

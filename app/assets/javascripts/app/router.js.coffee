@@ -4,8 +4,8 @@ define([ "jquery",
          "./views/live_login",
          "./views/customer_files",
          "./views/contacts",
-         "./views/contact_details"], ($, Backbone, ApplicationState, LiveLoginView,
-                                      CustomerFilesView, ContactsView, ContactDetailsView) ->
+         "./views/contact_details"], ($, Backbone, ApplicationState,
+                                      LiveLoginView, CustomerFilesView, ContactsView, ContactDetailsView) ->
 
   class AccountRightRouter extends Backbone.Router
 

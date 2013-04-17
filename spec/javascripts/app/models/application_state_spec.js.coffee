@@ -3,6 +3,7 @@ describe("ApplicationState", () ->
   ApplicationState = null
   CustomerFile = null
   applicationState = null
+  liveUser = null
 
   jasmineRequire(this, [ "app/models/application_state",
                          "app/models/customer_file" ], (LoadedApplicationState, LoadedCustomerFile) ->
@@ -24,7 +25,7 @@ describe("ApplicationState", () ->
           customerFileHash = { Id: "some-customer-file-id", Name: "Some Customer File Name" }
           window.openedCustomerFile = customerFileHash
 
-          applicationState = new ApplicationState()
+          establishApplicationState()
         )
 
         it("should return a CustomerFile whose values match those in the window hash", () ->
@@ -41,7 +42,7 @@ describe("ApplicationState", () ->
         beforeEach(() ->
           window.openedCustomerFile = {}
 
-          applicationState = new ApplicationState()
+          establishApplicationState()
         )
 
         it("should return a CustomerFile with default values", () ->
@@ -59,24 +60,38 @@ describe("ApplicationState", () ->
 
   describe("#isLoggedInToLive", () ->
 
-    describe("when the window contains a flag indicating if the user is logged in to AccountRight Live", () ->
+    describe("when the user has logged-in to AccountRight Live", () ->
 
       beforeEach(() ->
-        window.isLoggedInToLive = true
+        establishApplicationState()
 
-        applicationState = new ApplicationState()
+        liveUser.isLoggedIn = true
       )
 
-      afterEach(() ->
-        window.isLoggedInToLive = null
+      it("should return true", () ->
+        expect(applicationState.isLoggedInToLive()).toBeTruthy()
       )
 
-      it("should return the value established in the window", () ->
-        expect(applicationState.isLoggedInToLive).toBeTruthy()
+    )
+
+    describe("when the user has not logged-in to AccountRight Live", () ->
+
+      beforeEach(() ->
+        establishApplicationState()
+
+        liveUser.isLoggedIn = false
+      )
+
+      it("should return false", () ->
+        expect(applicationState.isLoggedInToLive()).toBeFalsy()
       )
 
     )
 
   )
+
+  establishApplicationState = () ->
+    applicationState = new ApplicationState()
+    liveUser = applicationState.liveUser
 
 )

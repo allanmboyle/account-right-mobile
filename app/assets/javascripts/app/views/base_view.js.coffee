@@ -9,7 +9,7 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
     initialize: (@applicationState) ->
 
     render: () ->
-      if (@liveLoginRequired && !@applicationState.isLoggedInToLive)
+      if (@liveLoginRequired && !@applicationState.isLoggedInToLive())
         location.hash = "#live_login"
       else
         @$el.page().page("destroy").empty()

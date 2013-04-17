@@ -1,8 +1,7 @@
 define([ "jquery",
          "underscore",
          "./base_view",
-         "text!./live_login.tmpl",
-         "app/models/live_user" ], ($, _, BaseView, Template, LiveUser) ->
+         "text!./live_login.tmpl" ], ($, _, BaseView, Template) ->
 
   $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live log in'></div>")
 
@@ -10,11 +9,11 @@ define([ "jquery",
 
     initialize: (applicationState) ->
       super
-      @user = new LiveUser().on("reset:success", @resetSuccess, this)
-                            .on("reset:error", @resetError, this)
-                            .on("login:success", @loginSuccess, this)
-                            .on("login:fail", @loginFail, this)
-                            .on("login:error", @loginError, this)
+      @user = @applicationState.liveUser.on("reset:success", @resetSuccess, this)
+                                        .on("reset:error", @resetError, this)
+                                        .on("login:success", @loginSuccess, this)
+                                        .on("login:fail", @loginFail, this)
+                                        .on("login:error", @loginError, this)
       @$el.html(_.template(Template,
                            header: @renderHeader(elementClass: "myob-homepage-header", title: { label: "Contacts" })))
       @$el.on("pageshow", () -> $("#live_email_address").focus())

@@ -103,7 +103,7 @@ describe("BaseView", () ->
         describe("and the user has logged into to AccountRight Live", () ->
 
           beforeEach(() ->
-            applicationState.isLoggedInToLive = true
+            spyOn(applicationState, "isLoggedInToLive").andReturn(true)
           )
 
           it("should render the view", () ->
@@ -117,7 +117,7 @@ describe("BaseView", () ->
         describe("and the user has not logged into AccountRight Live", () ->
 
           beforeEach(() ->
-            applicationState.isLoggedInToLive = false
+            spyOn(applicationState, "isLoggedInToLive").andReturn(false)
           )
 
           it("should redirect the user to the live login page", () ->

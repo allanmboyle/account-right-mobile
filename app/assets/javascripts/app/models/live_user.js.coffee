@@ -7,11 +7,16 @@ define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
       password: "Not specified"
     }
 
+    initialize: () ->
+      @isLoggedIn = window.isLoggedInToLive
+
     reset: () ->
       Ajax.submit(
         type: "GET"
         url: "/live_user/reset"
-        success: () => @trigger("reset:success")
+        success: () =>
+          @isLoggedIn = false
+          @trigger("reset:success")
         error: () => @trigger("reset:error")
       )
 
@@ -20,7 +25,9 @@ define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
         type: "POST"
         url: "/live_user/login"
         data: @attributes
-        success: () => @trigger("login:success")
+        success: () =>
+          @isLoggedIn = true
+          @trigger("login:success")
         error: (jqXHR) =>
           eventToTrigger = if jqXHR.status == 401 then "fail" else "error"
           @trigger("login:#{eventToTrigger}")
