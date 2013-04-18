@@ -51,10 +51,26 @@ describe CustomerFileController, type: :controller do
 
         end
 
-        it "should retain the cross site request forgery token in the users session" do
-          get_index
+        describe "and the users session contains a cross-site request forgery token" do
 
-          session[:_csrf_token].should eql(csrf_token)
+          it "should retain the token" do
+            get_index
+
+            session[:_csrf_token].should eql(csrf_token)
+          end
+
+        end
+
+        describe "and the users session does not contain a cross-site request forgery token" do
+
+          let(:_csrf_token) { nil }
+
+          it "should establish a new token" do
+            get_index
+
+            session[:_csrf_token].should_not be_nil
+          end
+
         end
 
         it "should empty other data in the users session" do
@@ -127,7 +143,7 @@ describe CustomerFileController, type: :controller do
               response.status.should eql(200)
             end
 
-            it "should retain the cross site request forgery token in the users session" do
+            it "should retain the cross-site request forgery token in the users session" do
               post_login
 
               session[:_csrf_token].should eql(csrf_token)
@@ -146,10 +162,12 @@ describe CustomerFileController, type: :controller do
               post_login
             end
 
-            it "should respond with an empty json body" do
+            it "should respond with the default json response" do
+              controller.stub!(:default_json_response).and_return("some json response")
+
               post_login
 
-              response.body.should eql({}.to_json)
+              response.body.should eql("some json response")
             end
 
           end

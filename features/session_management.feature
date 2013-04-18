@@ -3,7 +3,6 @@ Feature: User session management
   As a user
   I want my log in to expire after a period of inactivity
 
-  @wip
   Scenario: User successfully re-logs-in even though session has expired
     Given the user visits the AccountRight Live log in page
     And the users session has expired

@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :establish_client_application_state
 
+  private
+
   def establish_client_application_state
     @client_application_state = AccountRightMobile::ClientApplicationState.new(session)
   end
@@ -11,6 +13,10 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json { yield }
     end
+  end
+
+  def default_json_response
+    { "csrf-token" => form_authenticity_token }.to_json
   end
 
 end

@@ -1,8 +1,8 @@
 describe LiveUserController, type: :controller do
 
-  let(:_csrf_token) { "some_csrf_token" }
+  let(:csrf_token) { "some_csrf_token" }
 
-  before(:each) { session[:_csrf_token] = _csrf_token }
+  before(:each) { session[:_csrf_token] = csrf_token }
 
   describe "#reset" do
 
@@ -16,20 +16,44 @@ describe LiveUserController, type: :controller do
           response.status.should eql(200)
         end
 
+        it "should respond with the default json response" do
+          controller.stub!(:default_json_response).and_return("some json response")
+
+          get_reset
+
+          response.body.should eql("some json response")
+        end
+
         describe "and the users session contains data" do
 
           before(:each) { session[:key] = "value" }
 
-          it "should retain the cross site request forgery token in the users session" do
-            get_reset
+          describe "and contains a cross-site request forgery token" do
 
-            session[:_csrf_token].should eql(_csrf_token)
+            it "should retain the token in the users session" do
+              get_reset
+
+              session[:_csrf_token].should eql(csrf_token)
+            end
+
           end
 
           it "should empty other data in the users session" do
             get_reset
 
             session[:key].should be_nil
+          end
+
+        end
+
+        describe "and the users session does not contain a cross-site request forgery token" do
+
+          let(:csrf_token) { nil }
+
+          it "should establish a new token" do
+            get_reset
+
+            session[:_csrf_token].should_not be_nil
           end
 
         end
@@ -108,10 +132,12 @@ describe LiveUserController, type: :controller do
               post_login
             end
 
-            it "should respond with an empty json body" do
+            it "should respond with the default json response" do
+              controller.stub!(:default_json_response).and_return("some json response")
+
               post_login
 
-              response.body.should eql({}.to_json)
+              response.body.should eql("some json response")
             end
 
           end
