@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         main: 'tmp/spec/javascripts/spec_main.js'
       },
       'runner-dir': 'tmp/spec/javascripts',
-      timeout : 3000
+      timeout : 5500
     }
   });
 
