@@ -29,6 +29,10 @@ module AccountRightMobile
       @session.update(@state)
     end
 
+    def logged_in_to_live?
+      !!@state[:access_token]
+    end
+
     def contains_customer_file?
       !!(@state[:cf_token] && @state[:cf_id])
     end

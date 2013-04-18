@@ -1,10 +1,12 @@
 define([ "jquery",
          "underscore",
-         "./base_view",
+         "./base/view",
+         "./filters/live_login_required",
          "../models/customer_files",
          "../models/customer_file_user",
          "text!./customer_files.tmpl",
-         "text!./customer_files_login.tmpl" ], ($, _, BaseView, CustomerFiles, CustomerFileUser,
+         "text!./customer_files_login.tmpl" ], ($, _, BaseView, LiveLoginRequiredFilter,
+                                                CustomerFiles, CustomerFileUser,
                                                 Template, LoginTemplate) ->
 
   $("body").append("<div id='customer-files' data-role='page' data-title='Customer Files'></div>")
@@ -12,7 +14,7 @@ define([ "jquery",
   class CustomerFilesView extends BaseView
 
     initialize: (applicationState) ->
-      super
+      super(applicationState, [ new LiveLoginRequiredFilter() ])
       @compiledTemplate = _.template(Template)
       @compiledLoginTemplate = _.template(LoginTemplate)
       @customerFiles = new CustomerFiles().on("reset", @render, this)
@@ -27,6 +29,8 @@ define([ "jquery",
       "pagebeforeshow": "_pageBeforeShow"
       "pageshow": "_showErrorIfNecessary"
       "click #customer-file-login-submit": "login"
+
+    liveLoginRequired: true
 
     update: () ->
       @customerFiles.fetch()

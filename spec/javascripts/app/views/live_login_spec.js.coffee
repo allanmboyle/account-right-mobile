@@ -16,6 +16,11 @@ describe("LiveLoginView", () ->
     ApplicationState = LoadedApplicationState
   )
 
+  beforeEach(() ->
+    # Compensation for pageshow not being triggered in behaviours
+    $("#live_login").on("pagebeforeshow", () -> $("#live_login").trigger("pageshow"))
+  )
+
   afterEach(() ->
     $("#live_login").remove()
   )
@@ -104,6 +109,43 @@ describe("LiveLoginView", () ->
         liveLoginView.render()
 
         expect(liveUser.reset).toHaveBeenCalled()
+      )
+
+    )
+
+    describe("#resetSuccess", () ->
+
+      describe("when re-login is required", () ->
+
+        beforeEach(() ->
+          applicationState.reLoginRequired = true
+        )
+
+        it("should show a message indicating re-login is required", () ->
+          liveLoginView.resetSuccess()
+
+          reLoginMessageToBeVisible = () -> $("#live-re-login-required-message").is(":visible")
+          waitsFor(reLoginMessageToBeVisible, "re-login message to be visible", 5000)
+        )
+
+        it("should remove the marker from the application state that indicates re-login is required", () ->
+          liveLoginView.resetSuccess()
+
+          reLoginRequiredFlagToBeFalse = () -> applicationState.reLoginRequired == false
+          waitsFor(reLoginRequiredFlagToBeFalse, "re-login required flag to be false", 5000)
+        )
+
+      )
+
+      describe("when re-login is not required", () ->
+
+        it("should not show a message indicating re-login is required", () ->
+          liveLoginView.resetSuccess()
+
+          reLoginMessageToBeHidden = () -> $("#live-re-login-required-message").is(":hidden")
+          waitsFor(reLoginMessageToBeHidden, "re-login message to be hidden", 5000)
+        )
+
       )
 
     )

@@ -16,11 +16,16 @@ Feature: Authenticated AccountRight Live Access
     When the user logs-out
     Then the AccountRight Live log in page should be shown
 
-  @wip
-  Scenario: User must log in to view secure pages
+  Scenario: User must re-log in when attempting to land on a secure pages
     When the user attempts to visit the Contacts page
     Then the AccountRight Live log in page should be shown
-    And a message should be displayed indicating the user must log in to continue
+    And a message should be displayed indicating the user must re-log in to continue
+
+  Scenario: User must re-log when attempting to navigate to secure page from the log in page
+    Given the user visits the AccountRight Live log in page
+    When the user attempts to visit the Contacts page
+    Then the AccountRight Live log in page should be shown
+    And a message should be displayed indicating the user must re-log in to continue
 
   Scenario: User is automatically re-logged-in when AccountRight Live log in expires
     Given the user has logged-in to AccountRight Live

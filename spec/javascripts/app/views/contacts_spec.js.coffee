@@ -2,22 +2,27 @@ describe("ContactsView", () ->
 
   Backbone = null
   ContactsView = null
+  LiveLoginRequiredFilter = null
   Contact = null
   customerFile = null
   applicationState = null
 
   jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
+                         "app/views/filters/live_login_required",
                          "app/models/contact",
                          "app/models/customer_file",
-                         "app/models/application_state" ], (LoadedBackbone, LoadedContactsView, LoadedContact,
+                         "app/models/application_state" ], (LoadedBackbone, LoadedContactsView,
+                                                            LoadedLiveLoginRequiredFilter, LoadedContact,
                                                             CustomerFile, ApplicationState) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
+    LiveLoginRequiredFilter = LoadedLiveLoginRequiredFilter
     Contact = LoadedContact
     customerFile = new CustomerFile(Name: "Some File Name")
     applicationState = new ApplicationState()
     applicationState.openedCustomerFile = customerFile
+    spyOn(applicationState, "isLoggedInToLive").andReturn(true)
   )
 
   beforeEach(() ->
@@ -44,11 +49,15 @@ describe("ContactsView", () ->
 
     beforeEach(() ->
       initialPrototype = _.extend({}, ContactsView.prototype)
-      contactsView = instantiateView()
+      establishView()
     )
 
     afterEach(() ->
       ContactsView.prototype = initialPrototype
+    )
+
+    it("should require the user to be logged-in to AccountRight Live", () ->
+      expect(new ContactsView(applicationState).filters[0] instanceof LiveLoginRequiredFilter).toBeTruthy()
     )
 
     describe("#update", () ->
@@ -64,7 +73,7 @@ describe("ContactsView", () ->
 
         it("should render the view", () ->
           renderSpy = ContactsView.prototype.render = jasmine.createSpy()
-          contactsView = instantiateView()
+          establishView()
 
           contactsView.update()
 
@@ -103,7 +112,7 @@ describe("ContactsView", () ->
 
         it("should render the view", () ->
           renderSpy = ContactsView.prototype.render = jasmine.createSpy()
-          contactsView = instantiateView()
+          establishView()
 
           contactsView.update()
 
@@ -270,7 +279,9 @@ describe("ContactsView", () ->
 
     )
 
-    instantiateView = () -> new ContactsView(applicationState)
+    establishView = () ->
+      contactsView = new ContactsView(applicationState)
+      contactsView.filters = []
 
     assertContact = (container, expectedValues) ->
       jqueryContainer = $(container)

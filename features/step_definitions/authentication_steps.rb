@@ -1,8 +1,4 @@
 Given /^the user enters valid log in credentials$/ do
-  @authentication_service.grant_access
-  if @authentication_service.is_a?(AccountRight::OAuth::Stub::Configurer)
-    @api_service.with_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}")
-  end
   @current_page.enter_credentials
 end
 
@@ -31,8 +27,9 @@ Given /^the AccountRight Live authentication service is mis-configured/ do
 end
 
 Given /^the users AccountRight Live log in has expired$/ do
-  @api_service.deny_access_for_current_headers
+  @api_service.deny_access
   @oauth_service.grant_access
+  @api_service.with_headers("Authorization" => "Bearer #{@oauth_service.last_access_token}").grant_access
 end
 
 When /^the user attempts to log in$/ do
@@ -61,6 +58,6 @@ Then /^an error should be displayed indicating an error occurred during authenti
   @current_page.should have_authentication_error_message
 end
 
-Then /^a message should be displayed indicating the user must log in to continue$/ do
-  @current_page.should have_login_required_message
+Then /^a message should be displayed indicating the user must re-log in to continue$/ do
+  @current_page.should have_re_login_required_message
 end

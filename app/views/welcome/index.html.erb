@@ -14,7 +14,11 @@
 
   <%= csrf_meta_tags %>
 
-  <%= javascript_tag "window.openedCustomerFile = #{@opened_customer_file}" %>
+  <%= javascript_tag <<-JAVASCRIPT
+        window.isLoggedInToLive = #{@client_application_state.logged_in_to_live?}
+        window.openedCustomerFile = #{@opened_customer_file}
+    JAVASCRIPT
+  %>
 
 </head>
 <body>

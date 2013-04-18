@@ -58,9 +58,9 @@ module AccountRightMobile
                             visible: true)
         end
 
-        def has_login_required_message?
-          @session.has_css?("#customer-file-login-required-message",
-                            text: "Please log in to continue",
+        def has_re_login_required_message?
+          @session.has_css?("#customer-file-re-login-required-message",
+                            text: "Please log in again to continue",
                             visible: true)
         end
 

@@ -1,19 +1,24 @@
 describe("CustomerFilesView", () ->
 
   CustomerFilesView = null
+  LiveLoginRequiredFilter = null
   CustomerFile = null
   CustomerFileUser = null
   applicationState = null
 
   jasmineRequire(this, [ "app/views/customer_files",
+                         "app/views/filters/live_login_required",
                          "app/models/customer_file",
                          "app/models/customer_file_user",
-                         "app/models/application_state" ], (LoadedCustomerFilesView, LoadedCustomerFile,
-                                                            LoadedCustomerFileUser, ApplicationState) ->
+                         "app/models/application_state" ], (LoadedCustomerFilesView, LoadedLiveLoginRequiredFilter,
+                                                            LoadedCustomerFile, LoadedCustomerFileUser,
+                                                            ApplicationState) ->
     CustomerFilesView = LoadedCustomerFilesView
+    LiveLoginRequiredFilter = LoadedLiveLoginRequiredFilter
     CustomerFile = LoadedCustomerFile
     CustomerFileUser = LoadedCustomerFileUser
     applicationState = new ApplicationState()
+    spyOn(applicationState, "isLoggedInToLive").andReturn(true)
   )
 
   beforeEach(() ->
@@ -42,13 +47,16 @@ describe("CustomerFilesView", () ->
 
     beforeEach(() ->
       initialPrototype = _.extend({}, CustomerFilesView.prototype)
-      customerFilesView = instantiateView()
-      customerFiles = customerFilesView.customerFiles
-      customerFileUser = customerFilesView.customerFileUser
+
+      establishView()
     )
 
     afterEach(() ->
       CustomerFilesView.prototype = initialPrototype
+    )
+
+    it("should require the user to be logged-in to AccountRight Live", () ->
+      expect(new CustomerFilesView(applicationState).filters[0] instanceof LiveLoginRequiredFilter).toBeTruthy()
     )
 
     describe("model event configuration", () ->
@@ -62,8 +70,7 @@ describe("CustomerFilesView", () ->
         loginFailSpy = CustomerFilesView.prototype.loginFail = jasmine.createSpy()
         loginErrorSpy = CustomerFilesView.prototype.loginError = jasmine.createSpy()
 
-        customerFilesView = instantiateView()
-        customerFileUser = customerFilesView.customerFileUser
+        establishView()
       )
 
       it("should trigger the loginSuccess action when the customer file user's login:success event occurs", () ->
@@ -234,7 +241,7 @@ describe("CustomerFilesView", () ->
 
         it("should render the view", () ->
           renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
-          customerFilesView = instantiateView()
+          establishView()
 
           customerFilesView.update()
 
@@ -258,7 +265,7 @@ describe("CustomerFilesView", () ->
 
         it("should render the view", () ->
           renderSpy = CustomerFilesView.prototype.render = jasmine.createSpy()
-          customerFilesView = instantiateView()
+          establishView()
 
           customerFilesView.update()
 
@@ -412,7 +419,11 @@ describe("CustomerFilesView", () ->
 
     )
 
-    instantiateView = () -> new CustomerFilesView(applicationState)
+    establishView = () ->
+      customerFilesView = new CustomerFilesView(applicationState)
+      customerFilesView.filters = []
+      customerFiles = customerFilesView.customerFiles
+      customerFileUser = customerFilesView.customerFileUser
 
   )
 

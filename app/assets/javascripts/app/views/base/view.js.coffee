@@ -2,16 +2,12 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
 
   class BaseView extends Backbone.View
 
-    liveLoginRequired: false
-
     renderOptions: {}
 
-    initialize: (@applicationState) ->
+    initialize: (@applicationState, @filters=[]) ->
 
     render: () ->
-      if (@liveLoginRequired && !@applicationState.isLoggedInToLive())
-        location.hash = "#live_login"
-      else
+      if (@_executeFilters())
         @$el.page().page("destroy").empty()
         @prepareDom()
         $.mobile.changePage("##{@$el.attr("id")}", _.extend({ reverse: false, changeHash: false }, @renderOptions))
@@ -35,5 +31,8 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
 
     _optionalAttribute: (name, value) ->
       if value then "#{name}=\"#{value}\"" else ""
+
+    _executeFilters: () ->
+      !_.find(@filters, (filter) => !filter.filter(this))
 
 )

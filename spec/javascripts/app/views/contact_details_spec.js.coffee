@@ -1,19 +1,22 @@
 describe("ContactsDetailsView", () ->
 
   ContactDetailsView = null
+  LiveLoginRequiredFilter = null
   Contact = null
   customerFile = null
   applicationState = null
 
   jasmineRequire(this, [ "app/views/contact_details",
+                         "app/views/filters/live_login_required",
                          "app/models/contact",
                          "app/models/customer_file",
-                         "app/models/application_state" ], (LoadedContactDetailsView, LoadedContact,
-                                                            CustomerFile, ApplicationState) ->
+                         "app/models/application_state" ], (LoadedContactDetailsView, LoadedLiveLoginRequiredFilter,
+                                                            LoadedContact, CustomerFile, ApplicationState) ->
     ContactDetailsView = LoadedContactDetailsView
+    LiveLoginRequiredFilter = LoadedLiveLoginRequiredFilter
     Contact = LoadedContact
-    applicationState = new ApplicationState()
     customerFile = new CustomerFile(Name: "Some Customer File Name")
+    applicationState = new ApplicationState()
     applicationState.openedCustomerFile = customerFile
   )
 
@@ -37,7 +40,15 @@ describe("ContactsDetailsView", () ->
       contactDetailsView = new ContactDetailsView(applicationState)
     )
 
+    it("should require the user to be logged-in to AccountRight Live", () ->
+      expect(contactDetailsView.filters[0] instanceof LiveLoginRequiredFilter).toBeTruthy()
+    )
+
     describe("#render", () ->
+
+      beforeEach(() ->
+        contactDetailsView.filters = []
+      )
 
       describe("when an opened contact has been established in the application state", () ->
 

@@ -4,19 +4,22 @@ describe("BaseView", () ->
   applicationState = null
   testableView = null
 
-  jasmineRequire(this, [ "app/views/base_view", "app/models/application_state" ], (LoadedBaseView, ApplicationState) ->
+  jasmineRequire(this, [ "app/views/base/view", "app/models/application_state" ], (LoadedBaseView, ApplicationState) ->
     BaseView = LoadedBaseView
     applicationState = new ApplicationState()
   )
 
   describe("when subclassed", () ->
 
+    TestableBaseView = null
+
     beforeEach(() ->
-      class TestableBaseView extends BaseView
+      class ABaseView extends BaseView
         initialize: (applicationState) ->
           super
           @someAttr = "Some Value"
 
+      TestableBaseView = ABaseView
       testableView = new TestableBaseView(applicationState)
     )
 
@@ -30,28 +33,28 @@ describe("BaseView", () ->
 
     describe("#render", () ->
 
+      filters = []
+
       beforeEach(() ->
         $("body").append("<div id='testable-base-view' data-role='page'></div>")
+
+        class TestableBaseView extends BaseView
+
+          el: $("#testable-base-view")
+
+          renderOptions: { anOption: "some_option_value" }
+
+          prepareDom: () ->
+            @$el.html("Some Content")
+
+        testableView = new TestableBaseView(applicationState)
       )
 
       afterEach(() ->
         $("#testable-base-view").remove()
       )
 
-      describe("when authentication requirements have been satisifed", () ->
-
-        beforeEach(() ->
-          class TestableBaseView extends BaseView
-
-            el: $("#testable-base-view")
-
-            renderOptions: { anOption: "some_option_value" }
-
-            prepareDom: () ->
-              @$el.html("Some Content")
-
-          testableView = new TestableBaseView(applicationState)
-        )
+      describe("when no filters are provided", () ->
 
         it("should destroy any previously rendered page", () ->
           pageMethodSpy = spyOn(testableView.$el, "page").andReturn(testableView.$el)
@@ -85,25 +88,25 @@ describe("BaseView", () ->
 
       )
 
-      describe("when live authentication is required", () ->
+      describe("when multiple filters are provided", () ->
 
         beforeEach(() ->
-          class TestableBaseView extends BaseView
-
-            el: $("#testable-base-view")
-
-            liveLoginRequired: true
-
-            prepareDom: () ->
-              @$el.html("Some Content")
-
-          testableView = new TestableBaseView(applicationState)
+          filters = [ new StubFilter(), new StubFilter(), new StubFilter() ]
+          testableView = new TestableBaseView(applicationState, filters)
         )
 
-        describe("and the user has logged into to AccountRight Live", () ->
+        describe("and all the filters return true", () ->
 
           beforeEach(() ->
-            spyOn(applicationState, "isLoggedInToLive").andReturn(true)
+            _.each(filters, (filter) -> spyOn(filter, "filter").andReturn(true))
+          )
+
+          it("should execute all filters providing the view as an argument", () ->
+            testableView.render()
+
+            _.each(filters, (filter) ->
+                   expect(filter.filter).toHaveBeenCalledWith(testableView)
+            )
           )
 
           it("should render the view", () ->
@@ -114,18 +117,61 @@ describe("BaseView", () ->
 
         )
 
-        describe("and the user has not logged into AccountRight Live", () ->
+        describe("and a filter returns false", () ->
 
           beforeEach(() ->
-            spyOn(applicationState, "isLoggedInToLive").andReturn(false)
+            spyOn(filters[0], "filter").andReturn(true)
+            spyOn(filters[1], "filter").andReturn(false)
+            spyOn(filters[2], "filter").andReturn(true)
           )
 
-          it("should redirect the user to the live login page", () ->
+          it("should not render the view", () ->
             testableView.render()
 
-            navigationToTheLiveLoginPage = () -> location.hash == "#live_login"
-            waitsFor(navigationToTheLiveLoginPage,
-                     "rendering view to result in redirection of user to the live login page", 5000)
+            expect($("#testable-base-view")).not.toHaveText("Some Content")
+          )
+
+          it("should not execute any filters after the filter that failed", () ->
+            testableView.render()
+
+            expect(filters[2].filter).not.toHaveBeenCalled
+          )
+
+        )
+
+      )
+
+      describe("when a filter is provided", () ->
+
+        beforeEach(() ->
+          filters = [ new StubFilter() ]
+          testableView = new TestableBaseView(applicationState, filters)
+        )
+
+        describe("that returns true", () ->
+
+          beforeEach(() ->
+            spyOn(filters[0], "filter").andReturn(true)
+          )
+
+          it("should render the view", () ->
+            testableView.render()
+
+            expect($("#testable-base-view")).toHaveText("Some Content")
+          )
+
+        )
+
+        describe("that returns false", () ->
+
+          beforeEach(() ->
+            spyOn(filters[0], "filter").andReturn(false)
+          )
+
+          it("should not render the view", () ->
+            testableView.render()
+
+            expect($("#testable-base-view")).not.toHaveText("Some Content")
           )
 
         )
@@ -140,6 +186,7 @@ describe("BaseView", () ->
 
       beforeEach(() ->
         class TestableBaseView extends BaseView
+
         testableView = new TestableBaseView(applicationState)
 
         options = { title: { label: "Some Title" } }

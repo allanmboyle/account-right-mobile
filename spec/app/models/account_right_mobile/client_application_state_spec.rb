@@ -117,6 +117,28 @@ describe AccountRightMobile::ClientApplicationState do
 
   end
 
+  describe "#logged_in_to_live" do
+
+    describe "when an access token has been established" do
+
+      before(:each) { client_application_state[:access_token] = "some access token" }
+
+      it "should return true" do
+        client_application_state.logged_in_to_live?.should be_true
+      end
+
+    end
+
+    describe "when an access token has not been established" do
+
+      it "should return false" do
+        client_application_state.logged_in_to_live?.should be_false
+      end
+
+    end
+
+  end
+
   describe "#contains_customer_file" do
 
     describe "when a customer file token and id has been added" do

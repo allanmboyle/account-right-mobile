@@ -1,6 +1,6 @@
 define([ "jquery",
          "underscore",
-         "./base_view",
+         "./base/view",
          "text!./live_login.tmpl" ], ($, _, BaseView, Template) ->
 
   $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live log in'></div>")
@@ -16,11 +16,12 @@ define([ "jquery",
                                         .on("login:error", @loginError, this)
       @$el.html(_.template(Template,
                            header: @renderHeader(elementClass: "myob-homepage-header", title: { label: "Contacts" })))
-      @$el.on("pageshow", () -> $("#live_email_address").focus())
 
     el: $("#live_login")
 
     events: () ->
+      "pagebeforeshow": "_showReLoginMessageIfNecessary"
+      "pageshow": "_focusOnFirstFormElement"
       "click #live-login-submit": "login"
 
     render: () ->
@@ -32,7 +33,7 @@ define([ "jquery",
       event.preventDefault()
 
     resetSuccess: () ->
-      $.mobile.changePage("#live_login", reverse: false, changeHash: false)
+      $.mobile.changePage("#live_login", reverse: false, changeHash: false, allowSamePageTransition: true)
 
     resetError: () ->
       $("#live-login-general-error-message").popup().popup("open")
@@ -48,5 +49,13 @@ define([ "jquery",
 
     syncUser: () ->
       @user.set(emailAddress: $("#live_email_address").val(), password: $("#live_password").val())
+
+    _showReLoginMessageIfNecessary: () ->
+      message = $("#live-re-login-required-message")
+      if @applicationState.reLoginRequired then message.show() else message.hide()
+      @applicationState.reLoginRequired = false
+
+    _focusOnFirstFormElement: () ->
+      $("#live_email_address").focus()
 
 )

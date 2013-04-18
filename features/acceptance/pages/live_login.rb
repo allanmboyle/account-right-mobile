@@ -26,9 +26,9 @@ module AccountRightMobile
           @session.click_button("live-login-submit")
         end
 
-        def has_login_required_message?
-          @session.has_css?("#live-login-required-message",
-                            text: "Please log in to continue",
+        def has_re_login_required_message?
+          @session.has_css?("#live-re-login-required-message",
+                            text: "Please log in again to continue",
                             visible: true)
         end
 
