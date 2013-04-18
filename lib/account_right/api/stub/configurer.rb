@@ -16,11 +16,11 @@ module AccountRight
                        response: { status: 500, body: "A general error occurred" })
 
         def initialize
-          @headers = {}
+          @headers = NORMAL_HEADERS
         end
 
         def with_headers(headers)
-          @headers = headers
+          @headers.merge!(headers)
           self
         end
 

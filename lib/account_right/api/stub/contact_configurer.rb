@@ -14,6 +14,7 @@ module AccountRight
           def register_contact_stubs
             stub_activator("/return_multiple_customers", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body:
                                { "Items" => [ DataFactory.create_company(),
                                               DataFactory.create_individual(),
@@ -22,6 +23,7 @@ module AccountRight
 
             stub_activator("/return_multiple_suppliers", /#{COMPANY_FILE_URI}\/[^\/]+\/Supplier/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body:
                                { "Items" => [ DataFactory.create_individual(),
                                               DataFactory.create_company(),
@@ -30,14 +32,17 @@ module AccountRight
 
             stub_activator("/return_no_customers", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body: { "Items" => [] }.to_json })
 
             stub_activator("/return_no_suppliers", /#{COMPANY_FILE_URI}\/[^\/]+\/Supplier/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body: { "Items" => [] }.to_json })
 
             stub_activator("/return_customer_with_long_name", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body:
                                { "Items" => [
                                    DataFactory.create_company(CoLastName: ::Faker::Lorem.characters(255)) ] }.to_json
@@ -45,6 +50,7 @@ module AccountRight
 
             stub_activator("/return_customer_with_minimal_data", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
+                           headers: NORMAL_HEADERS,
                            response: { status: 200, body:
                                { "Items" => [ 
                                    DataFactory.create_contact_with_minimal_data() ]}.to_json
