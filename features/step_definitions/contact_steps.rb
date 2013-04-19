@@ -68,6 +68,14 @@ Then /^the (.+) of the contact should be shown$/ do |field_description|
   @current_page.contact.send(field).should eql(@expected_contact.send(field))
 end
 
+Then /^the user should be able to call the phone numbers via a tap$/ do
+  @current_page.contact.should have_callable_phone_numbers
+end
+
+Then /^the user should be able to send a message to the email address via tap$/ do
+  @current_page.contact.should be_emailable
+end
+
 Then /^no (.+) of the contact should be shown$/ do |field_description|
   @current_page.contact.send(to_field_symbol(field_description)).should be_empty
 end

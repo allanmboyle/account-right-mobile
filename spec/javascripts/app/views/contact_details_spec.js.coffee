@@ -99,6 +99,19 @@ describe("ContactsDetailsView", () ->
             expect(renderedAddressLines).toEqual(["8 Some Place", "Somewhere", "VIC 3002 Australia"])
           )
 
+          it("should render phone numbers that can be called via a click", () ->
+            contactDetailsView.render()
+
+            phoneNumberLinks = _.map($(".contact .phoneNumber a"), (element) -> $(element).attr("href"))
+            expect(phoneNumberLinks).toEqual([ "tel:111111111", "tel:222222222", "tel:333333333" ])
+          )
+
+          it("should render an email address that can be sent a message via a click", () ->
+            contactDetailsView.render()
+
+            expect($(".contact .emailAddress a")).toHaveAttr("href", "mailto:someone@test.com")
+          )
+
         )
 
         describe("that has address data whose values are empty", () ->

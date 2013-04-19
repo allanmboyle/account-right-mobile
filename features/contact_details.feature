@@ -12,7 +12,9 @@ Scenario: Contact contains comprehensive set of data
   And the type of the contact should be shown
   And the balance of the contact should be shown
   And the phone numbers of the contact should be shown
+  And the user should be able to call the phone numbers via a tap
   And the email address of the contact should be shown
+  And the user should be able to send a message to the email address via tap
   And the address of the contact should be shown
 
 Scenario: Contact contains minimal data

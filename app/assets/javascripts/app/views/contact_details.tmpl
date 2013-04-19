@@ -8,14 +8,16 @@
         </div>
     </div>
     <div class="detail">
-        <ul data-role="listview" data-inset="true">
+        <ul data-role="listview" data-inset="true" data-icon="false">
             <% _.each(contact.phoneNumbers(), function(phoneNumber) { %>
-            <li class="phoneNumber"><%= phoneNumber %></li>
+            <li class="phoneNumber"><a href="tel:<%= phoneNumber %>"><%= phoneNumber %></a></li>
             <% }); %>
         </ul>
         <% if (contact.hasEmailAddress()) { %>
-        <ul data-role="listview" data-inset="true">
-            <li class="emailAddress"><%= contact.emailAddress() %></li>
+        <ul data-role="listview" data-inset="true" data-icon="false">
+            <li class="emailAddress">
+                <a href="mailto:<%= contact.emailAddress() %>"><%= contact.emailAddress() %></a>
+            </li>
         </ul>
         <% } %>
         <% if (contact.hasAddress()) { %>

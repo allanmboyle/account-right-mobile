@@ -3,8 +3,10 @@ module AccountRightMobile
     module Pages
       module Fragments
 
-        class ContactDetail < ImmutableStruct.new(:name, :type, :balance, :phone_numbers,
-                                                  :email_address, :address)
+        class ContactDetail < ImmutableStruct.new(:name, :type, :balance,
+                                                  :phone_numbers, :callable_phone_numbers,
+                                                  :email_address, :mailable_email_address,
+                                                  :address)
 
           class << self
 
@@ -13,15 +15,19 @@ module AccountRightMobile
                        type: node.find(".type").text(),
                        balance: node.find(".balance").text(),
                        phone_numbers: text_from(node.all(".phoneNumber")),
+                       callable_phone_numbers: text_from(node.all(".phoneNumber a[href^='tel:']")),
                        email_address: text_from(node.first(".emailAddress")),
+                       mailable_email_address: text_from(node.first(".emailAddress a[href^='mailto:']")),
                        address: text_from(node.all(".address .line")))
             end
 
             def from_api_model(model, type)
               overview = ContactOverview.from_api_model(model, type).to_h
               address = model[:Addresses].empty? ? {} : model[:Addresses][0]
-              self.new(overview.merge(phone_numbers: address.values_at(:Phone1, :Phone2, :Phone3).compact,
-                                      email_address: address[:Email],
+              phone_numbers = address.values_at(:Phone1, :Phone2, :Phone3).compact
+              email_address = address[:Email]
+              self.new(overview.merge(phone_numbers: phone_numbers, callable_phone_numbers: phone_numbers,
+                                      email_address: email_address, mailable_email_address: email_address,
                                       address: address.values_at(:Street, :City).compact <<
                                                address.values_at(:State, :PostCode, :Country).compact.join(" ")))
             end
@@ -40,6 +46,14 @@ module AccountRightMobile
               node ? node.text() : ""
             end
 
+          end
+
+          def has_callable_phone_numbers?
+            phone_numbers == callable_phone_numbers
+          end
+
+          def emailable?
+            email_address == mailable_email_address
           end
 
         end
