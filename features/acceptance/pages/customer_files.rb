@@ -28,10 +28,8 @@ module AccountRightMobile
         end
 
         def customer_file_names
-          @session.all("#customer-files .customer-file-name").map { |node| node.text() }
+          @customer_file_names ||= @session.all("#customer-files .customer-file-name").map { |node| node.text() }
         end
-
-        memoize :customer_file_names
 
         def shows_login_within?(file_name)
           node = @session.all(".customer-file").find { |node| node.text().strip() =~ /^#{Regexp.escape(file_name)}/ }

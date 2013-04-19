@@ -14,18 +14,18 @@ Feature: Authenticated Customer File Access
     And the user has chosen to access a Customer File
     And the user enters valid log in credentials
     When the user attempts to log in
-    Then the Contacts page should be shown
+    Then the Contacts page should be shown without error
 
   Scenario: Logout of Customer File
     Given the user has accessed a Customer File
     When the user logs-out of the Customer File
-    Then the Customer Files page should be shown
+    Then the Customer Files page should be shown without error
 
   @wip
   Scenario: User must re-log in to view secure pages
     Given the user has logged-in to AccountRight Live
     When the user attempts to visit the Contacts page
-    Then the Customer Files page should be shown
+    Then the Customer Files page should be shown without error
     And a message should be displayed indicating the user must re-log in to continue
 
   Scenario: Error is shown when invalid credentials are provided

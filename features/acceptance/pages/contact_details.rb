@@ -21,11 +21,8 @@ module AccountRightMobile
         end
 
         def contact
-          node = @session.find("#contact-details .contact")
-          node ? Fragments::ContactDetail.from_page_node(node) : Fragments::ContactDetail.new()
+          @contact ||= create_contact
         end
-
-        memoize :contact
 
         def back
           @session.click_link("contacts-back")
@@ -43,7 +40,16 @@ module AccountRightMobile
                             visible: true)
         end
 
+        def to_fragment(api_model, type)
+          Fragments::ContactDetail.from_api_model(api_model, type)
+        end
+
         private
+
+        def create_contact
+          node = @session.find("#contact-details .contact")
+          node ? Fragments::ContactDetail.from_page_node(node) : Fragments::ContactDetail.new()
+        end
 
         def wait_until_completely_shown
           wait_until_back_button_is_shown

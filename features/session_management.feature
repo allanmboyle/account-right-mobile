@@ -7,16 +7,16 @@ Feature: User session management
     Given the user visits the AccountRight Live log in page
     And the users session has expired
     And the user logs-in with valid credentials
-    And the Customer Files page is shown
+    And the Customer Files page is shown without error
     When the user logs-in to a Customer File
-    Then the Contacts page should be shown
+    Then the Contacts page should be shown without error
 
   @wip
   Scenario: User is redirected to homepage when interacting with secure page after session has expired
     Given the user has logged-in to AccountRight Live
     And the users session has expired
     When the user logs-in to a Customer File
-    Then the AccountRight Live log in page should be shown
+    Then the AccountRight Live log in page should be shown without error
     And a message should be displayed indicating the user must re-log in to continue
 
   @wip
@@ -24,5 +24,5 @@ Feature: User session management
     Given the user has logged-in to AccountRight Live
     And the users session has expired
     When the user refreshes the page
-    Then the AccountRight Live log in page should be shown
-    And a message should be displayed indicating the user must log in to continue
+    Then the AccountRight Live log in page should be shown without error
+    And a message should be displayed indicating the user must re-log in to continue

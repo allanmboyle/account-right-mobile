@@ -10,7 +10,7 @@ test:
   timeout_in_seconds: 3
   app_uri: http://localhost:3001
   live_user:
-    username: arl_user
+    username: arl_user@myob.com
     password: arl_password
   customer_file:
     Id: 123aaaaa-bb98-21cc-dd89-eeeeeeeeeee1

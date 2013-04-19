@@ -1,6 +1,6 @@
 <%= header %>
 <div id="contacts-content" data-role="content" data-theme="d">
-    <ul id="contacts-list" data-role="listview" data-autodividers="true">
+    <ul id="contacts-list" data-role="listview" data-autodividers="true" data-filter="true" data-filter-placeholder="Search" data-filter-theme="d">
         <% contacts.each(function(contact, index) { %>
         <li class="contact" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-position="<%= index %>">
             <h3 class="name"><%= contact.name() %></h3>

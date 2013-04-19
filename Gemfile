@@ -27,7 +27,6 @@ gem 'jquery-rails'
 
 group :test do
   gem 'immutable_struct', '~> 1.1.0'
-  gem 'memoize', '~> 1.3.1'
 
   gem 'rspec-rails', '~> 2.13.0'
   gem 'simplecov', '~> 0.7.1'

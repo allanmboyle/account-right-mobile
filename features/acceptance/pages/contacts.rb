@@ -21,10 +21,15 @@ module AccountRightMobile
         end
 
         def contacts
-          @session.all("#contacts .contact").map { |node| Fragments::ContactOverview.from_page_node(node) }
+          @contacts ||= @session.all("#contacts .contact", visible: true).map do |node|
+            Fragments::ContactOverview.from_page_node(node)
+          end
         end
 
-        memoize :contacts
+        def filter(text)
+          @session.find("#contacts-content input").set(text)
+          @contacts = nil
+        end
 
         def access_a_contact
           @session.all("#contacts .contact .name").first.click
@@ -44,6 +49,10 @@ module AccountRightMobile
           @session.has_css?("#contacts-general-error-message-popup.ui-popup-active",
                             text: GENERAL_ERROR_MESSAGE,
                             visible: true)
+        end
+
+        def to_fragments(api_models, type)
+          api_models.map { |model| Fragments::ContactOverview.from_api_model(model, type) }
         end
 
         private

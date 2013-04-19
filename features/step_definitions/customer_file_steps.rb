@@ -25,7 +25,7 @@ end
 Given /^the user has accessed a Customer File$/ do
   step "the user has logged-in to AccountRight Live"
   step "the user has logged-in to a Customer File"
-  step "the Contacts page is shown"
+  step "the Contacts page is shown without error"
 end
 
 When /^the user has chosen to access a Customer File$/ do
@@ -60,8 +60,8 @@ Then /^the Customer File is shown$/ do
   @current_page.customer_file_names.should eql([@customer_file[:Name]])
 end
 
-Then /^the (.+) page for the Customer File should be shown$/ do |page_name|
-  step "the #{page_name} page should be shown"
+Then /^the (.+) page for the Customer File should be shown without error$/ do |page_name|
+  step "the #{page_name} page should be shown without error"
   @current_page.customer_file_name.should eql(@accessed_customer_file_name)
 end
 

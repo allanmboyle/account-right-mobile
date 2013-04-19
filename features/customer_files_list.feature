@@ -6,21 +6,21 @@ Feature: List Customer Files
 Scenario: User has access to multiple Customer Files
   Given the user has access to multiple Customer Files
   When the user logs-in to AccountRight Live
-  Then the Customer Files page should be shown
+  Then the Customer Files page should be shown without error
   And all the Customer Files are shown
 
 @smoke
 Scenario: User has access to one Customer File
   Given the user has access to one Customer File
   When the user logs-in to AccountRight Live
-  Then the Customer Files page should be shown
+  Then the Customer Files page should be shown without error
   And the Customer File is shown
   And the Customer File log in is shown
 
 Scenario: User does not have access to a Customer File
   Given the user does not have access to any Customer File
   When the user logs-in to AccountRight Live
-  Then the Customer Files page should be shown
+  Then the Customer Files page should be shown without error
   And a message should be displayed indicating no customer files are available to access
 
 Scenario: Error is shown when an unexpected API error occurs
