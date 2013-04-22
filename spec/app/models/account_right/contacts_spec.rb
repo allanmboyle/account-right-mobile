@@ -30,6 +30,10 @@ describe AccountRight::Contacts do
 
   describe "#to_json" do
 
+    it "should accept an argument as required by the JSON API" do
+      lambda { contacts.to_json("some argument") }.should_not raise_error
+    end
+
     describe "when contacts have been added" do
 
       before(:each) { contacts.concat(contacts_json, "Some Type") }

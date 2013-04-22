@@ -13,7 +13,7 @@ module AccountRight
       self
     end
 
-    def to_json
+    def to_json(*args)
       @contacts.to_json
     end
 
