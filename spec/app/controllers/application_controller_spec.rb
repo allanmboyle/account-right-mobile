@@ -57,9 +57,31 @@ describe TestableApplicationController, type: :controller do
       it "should respond with a body indicating an AccountRight Live login is required" do
         post :action_requiring_live_login, format: :json
 
-        response.body.should eql({ liveLoginRequired: true}.to_json)
+        response.body.should eql({ liveLoginRequired: true }.to_json)
       end
 
+    end
+
+  end
+
+  describe "#handle_unexpected_exception" do
+
+    it "should respond with a body containing a description of the exception" do
+      post :action_causing_exception, format: :json
+
+      response.body.should eql("Some general exception")
+    end
+
+    it "should notify the Rails logger that an unexpected exception occurred" do
+      Rails.logger.should_receive(:error).with(/an unexpected exception occurred/i)
+
+      post :action_causing_exception, format: :json
+    end
+
+    it "should log the description of the exception" do
+      Rails.logger.should_receive(:error).with(/Some general exception/)
+
+      post :action_causing_exception, format: :json
     end
 
   end

@@ -5,7 +5,7 @@ class CustomerFileController < ApplicationController
     respond_to_json do
       recreate_session_with(access_token: session[:access_token], refresh_token: session[:refresh_token])
       response = AccountRight::CustomerFile.all(AccountRightMobile::ClientApplicationState.new(session))
-      render :json => response
+      render json: response
     end
   end
 

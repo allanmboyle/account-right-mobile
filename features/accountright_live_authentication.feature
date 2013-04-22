@@ -16,7 +16,7 @@ Feature: Authenticated AccountRight Live Access
     When the user logs-out
     Then the AccountRight Live log in page should be shown without error
 
-  Scenario: User must re-log in when attempting to land on a secure pages
+  Scenario: User must re-log in when attempting to land on secure page
     When the user attempts to visit the Contacts page
     Then the AccountRight Live log in page should be shown without error
     And a message should be displayed indicating the user must re-log in to continue

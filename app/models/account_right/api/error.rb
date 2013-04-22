@@ -7,7 +7,7 @@ module AccountRight
 
       def initialize(response)
         @response_code = response.code
-        super(response.body)
+        super("#{response.code} #{response.body}")
       end
 
     end

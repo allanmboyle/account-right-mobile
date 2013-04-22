@@ -4,7 +4,7 @@ class LiveUserController < ApplicationController
   def reset
     respond_to_json do
       recreate_session
-      render :json => default_json_response
+      render json: default_json_response
     end
   end
 

@@ -14,6 +14,10 @@ class TestableApplicationController < ApplicationController
     respond_to_json { render :json => "Some JSON" }
   end
 
+  def action_causing_exception
+    raise Exception, "Some general exception"
+  end
+
   def action_with_default_json_response
     respond_to_json { render :json => default_json_response }
   end

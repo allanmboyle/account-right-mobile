@@ -1,168 +1,75 @@
 describe("AjaxExtensions", () ->
 
-  Backbone = {
+  Backbone =
     ajax: () -> @originalAjax.apply(this, arguments)
     originalAjax: () ->
-  }
 
-  jasmineRequireWithStubs(this, { "backbone": Backbone }, [ "app/backbone/ajax_extensions" ], (AjaxExtensions) ->
+  CSRFExtensions =
+    extendOptions: (options) ->
+
+  AuthenticationExtensions =
+    extendOptions: (options) ->
+
+  stubs =
+    "backbone": Backbone
+    "app/backbone/ajax/csrf_extensions": CSRFExtensions
+    "app/backbone/ajax/authentication_extensions": AuthenticationExtensions
+
+  jasmineRequireWithStubs(this, stubs, [ "app/backbone/ajax_extensions" ], (AjaxExtensions) ->
     # Intentionally blank
   )
 
   describe("#ajax", () ->
 
-    beforeEach(() ->
-      $("head").append("<meta name='csrf-token' content='some_csrf_token'>")
-    )
+    describe("Backbone delegation", () ->
 
-    afterEach(() ->
-      $("meta[name='csrf-token']").remove()
-    )
-
-    it("should delegate to Backbone's original ajax support", () ->
-      spyOn(Backbone, "originalAjax")
-
-      Backbone.ajax({})
-
-      expect(Backbone.originalAjax).toHaveBeenCalled()
-    )
-
-    describe("when the ajax call is successful", () ->
-
-      successCallback = null
-      response = null
-
-      beforeEach(() ->
-        successCallback = jasmine.createSpy("successCallback")
-      )
-
-      describe("and a cross-site request forgery token is included in the response", () ->
-
-        beforeEach(() ->
-          response = { "csrf-token": "updated_csrf_token" }
-          spyOn(Backbone, "originalAjax").andCallFake((options) -> options.success(response))
-        )
-
-        describe("and a success callback is provided", () ->
-
-          it("should invoke the callback with the response", () ->
-            Backbone.ajax(success: successCallback)
-
-            expect(successCallback).toHaveBeenCalledWith(response)
-          )
-
-          it("should establish the token in the cross-site request forgery meta-tag", () ->
-            Backbone.ajax(success: successCallback)
-
-            expect($("meta[name='csrf-token']")).toHaveAttr("content", "updated_csrf_token")
-          )
-
-        )
-
-        describe("and no success callback is provided", () ->
-
-          it("should establish the token in the cross-site request forgery meta-tag", () ->
-            Backbone.ajax({})
-
-            expect($("meta[name='csrf-token']")).toHaveAttr("content", "updated_csrf_token")
-          )
-
-        )
-
-      )
-
-      describe("and no cross-site request forgery token is included in the response", () ->
-
-        beforeEach(() ->
-          response = { key: "value" }
-          spyOn(Backbone, "originalAjax").andCallFake((options) -> options.success(response))
-        )
-
-        describe("and a success callback is provided", () ->
-
-          it("should invoke the callback with the response", () ->
-            Backbone.ajax(success: successCallback)
-
-            expect(successCallback).toHaveBeenCalledWith(response)
-          )
-
-        )
-
-        it("should not alter the existing value in the cross-site request forgery meta-tag", () ->
-          Backbone.ajax({})
-
-          expect($("meta[name='csrf-token']")).toHaveAttr("content", "some_csrf_token")
-        )
-
-      )
-
-    )
-
-    describe("when a GET request is made", () ->
-
-      it("should delegate to Backbone's ajax support with unmodified options", () ->
-        options = { type: "GET", url: "/some/url", data: { key: "value" } }
+      it("should delegate to Backbone's original ajax support", () ->
         spyOn(Backbone, "originalAjax")
+
+        Backbone.ajax({})
+
+        expect(Backbone.originalAjax).toHaveBeenCalled()
+      )
+
+    )
+
+    describe("cross-site request forgery extensions", () ->
+
+      it("should extend the provided options with cross-site request forgery options", () ->
+        csrfExtendOptionsMethod = CSRFExtensions.extendOptions = jasmine.createSpy().andReturn({ key: "extendedValue" })
+        options = { key: "value" }
 
         Backbone.ajax(options)
 
-        actualOptions = Backbone.originalAjax.mostRecentCall.args[0]
-        expect(actualOptions["type"]).toBe("GET")
-        expect(actualOptions["url"]).toBe("/some/url")
-        expect(actualOptions["data"]).toEqual(key: "value")
+        expect(csrfExtendOptionsMethod).toHaveBeenCalledWith(options)
       )
 
     )
 
-    describe("when a non-GET request is made", () ->
+    describe("authentication extensions", () ->
+
+      csrfExtendedOptions = { key: "csrfValue" }
+      authenticationExtendedOptions = { key: "authenticationValue" }
+      authenticationExtendOptionsMethod = null
 
       beforeEach(() ->
+        CSRFExtensions.extendOptions = jasmine.createSpy().andReturn(csrfExtendedOptions)
+        AuthenticationExtensions.extendOptions = authenticationExtendOptionsMethod =
+          jasmine.createSpy().andReturn(authenticationExtendedOptions)
+      )
+
+      it("should extend the cross-site request forgery options with authentication options", () ->
+        Backbone.ajax(key: "value")
+
+        expect(authenticationExtendOptionsMethod).toHaveBeenCalledWith(csrfExtendedOptions)
+      )
+
+      it("should delegate to Baclbone's original ajax support with the authentication options", () ->
         spyOn(Backbone, "originalAjax")
-      )
 
-      ["POST", "PUT", "DELETE"].forEach((request_type) ->
+        Backbone.ajax(key: "value")
 
-        describe("that is a #{request_type}", () ->
-
-          it("should delegate to Backbone's ajax support without modifying options other than data", () ->
-            errorCallback = () -> "some error callback"
-
-            Backbone.ajax(
-              type: request_type
-              url: "/some/url"
-              error: errorCallback
-            )
-
-            actualOptions = Backbone.originalAjax.mostRecentCall.args[0]
-            expect(actualOptions["type"]).toBe(request_type)
-            expect(actualOptions["url"]).toBe("/some/url")
-            expect(actualOptions["error"]).toBe(errorCallback)
-          )
-
-        )
-
-      )
-
-      describe("when no request data is provided", () ->
-
-        it("should delegate to Backbone with data containing the Rails cross-site request forgery token", () ->
-          Backbone.ajax(type: "POST")
-
-          data = Backbone.originalAjax.mostRecentCall.args[0]["data"]
-          expect(data).toEqual(authenticity_token: "some_csrf_token")
-        )
-
-      )
-
-      describe("when request data is provided", () ->
-
-        it("should delegate to Backbone with the Rails cross-site request forgery token added to the data", () ->
-          Backbone.ajax(type: "POST", data: { key: "value" })
-
-          data = Backbone.originalAjax.mostRecentCall.args[0]["data"]
-          expect(data).toEqual(authenticity_token: "some_csrf_token", key: "value")
-        )
-
+        expect(Backbone.originalAjax).toHaveBeenCalledWith(authenticationExtendedOptions)
       )
 
     )

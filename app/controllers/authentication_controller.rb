@@ -14,11 +14,11 @@ module AuthenticationController
     respond_to_json do
       begin
         block.call
-        render :json => default_json_response
+        render json: default_json_response
       rescue AccountRight::AuthenticationFailure
-        render :json => "", :status => 401
+        render json: "", status: 401
       rescue AccountRight::AuthenticationError
-        render :json => "", :status => 500
+        render json: "", status: 500
       end
     end
   end

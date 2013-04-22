@@ -10,8 +10,12 @@ describe AccountRight::API::Error do
 
   describe "#message" do
 
-    it "should be the response body provided to the error" do
-      error.message.should eql("some response body")
+    it "should contain the code of the response provided to the error" do
+      error.message.should include("500")
+    end
+
+    it "should contain the body of the response provided to the error" do
+      error.message.should include("some response body")
     end
 
   end
@@ -20,6 +24,14 @@ describe AccountRight::API::Error do
 
     it "should return the response code provided to the error" do
       error.response_code.should eql(500)
+    end
+
+  end
+
+  describe "#to_s" do
+
+    it "should return the message" do
+      error.to_s.should eql(error.message)
     end
 
   end
