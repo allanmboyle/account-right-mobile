@@ -1,25 +1,25 @@
 describe("customerFileUser", () ->
 
-  Ajax = null
   customerFile = null
   customerFileUser = null
+  Backbone = null
 
-  jasmineRequire(this, [ "app/models/ajax",
-                         "app/models/customer_file", 
-                         "app/models/customer_file_user" ], (LoadedAjax, CustomerFile, CustomerFileUser) ->
-    Ajax = LoadedAjax
+  jasmineRequire(this, [ "app/models/customer_file",
+                         "app/models/customer_file_user",
+                         "backbone" ], (CustomerFile, CustomerFileUser, LoadedBackbone) ->
     customerFile = new CustomerFile(Id: "0123456789", Name: "Some File Name")
     customerFileUser = new CustomerFileUser(username: "someUsername", password: "somePassword")
+    Backbone = LoadedBackbone
   )
 
   describe("#loginTo", () ->
 
     it("should contact the server in order to login to the customer file", () ->
-      spyOn(Ajax, "submit")
+      spyOn(Backbone, "ajax")
 
       customerFileUser.loginTo(customerFile)
 
-      ajaxOptions = Ajax.submit.mostRecentCall.args[0]
+      ajaxOptions = Backbone.ajax.mostRecentCall.args[0]
       expect(ajaxOptions["type"]).toEqual("POST")
       expect(ajaxOptions["url"]).toEqual("/customer_file/login")
       requestData = ajaxOptions["data"]
@@ -31,7 +31,7 @@ describe("customerFileUser", () ->
     describe("when the login is successful", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.success())
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.success())
       )
 
       it("should trigger a login:success event with the customer file to which the user has logged-in", () ->
@@ -47,7 +47,7 @@ describe("customerFileUser", () ->
     describe("when the login is fails due to invalid credentials", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 401))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 401))
       )
 
       it("should trigger a login:fail event", () ->
@@ -63,7 +63,7 @@ describe("customerFileUser", () ->
     describe("when the login fails due to an arbitrary error", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 500))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 500))
       )
 
       it("should trigger a login:error event", () ->

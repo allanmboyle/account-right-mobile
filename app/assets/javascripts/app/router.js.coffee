@@ -1,11 +1,12 @@
 define([ "jquery",
          "backbone",
-         "./models/application_state"
+         "./backbone/ajax_extensions",
+         "./models/application_state",
          "./views/live_login",
          "./views/customer_files",
          "./views/contacts",
-         "./views/contact_details"], ($, Backbone, ApplicationState,
-                                      LiveLoginView, CustomerFilesView, ContactsView, ContactDetailsView) ->
+         "./views/contact_details" ], ($, Backbone, AjaxExtensions, ApplicationState,
+                                       LiveLoginView, CustomerFilesView, ContactsView, ContactDetailsView) ->
 
   class AccountRightRouter extends Backbone.Router
 

@@ -1,6 +1,6 @@
 define([], () ->
 
-  class LiveLoginRequiredFilter
+  class RequireLiveLogin
 
     filter: (view) ->
       if (!view.applicationState.isLoggedInToLive())

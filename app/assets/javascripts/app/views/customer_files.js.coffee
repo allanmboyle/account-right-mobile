@@ -1,11 +1,11 @@
 define([ "jquery",
          "underscore",
          "./base/view",
-         "./filters/live_login_required",
+         "./filters/require_live_login",
          "../models/customer_files",
          "../models/customer_file_user",
          "text!./customer_files.tmpl",
-         "text!./customer_files_login.tmpl" ], ($, _, BaseView, LiveLoginRequiredFilter,
+         "text!./customer_files_login.tmpl" ], ($, _, BaseView, RequireLiveLoginFilter,
                                                 CustomerFiles, CustomerFileUser,
                                                 Template, LoginTemplate) ->
 
@@ -14,7 +14,7 @@ define([ "jquery",
   class CustomerFilesView extends BaseView
 
     initialize: (applicationState) ->
-      super(applicationState, [ new LiveLoginRequiredFilter() ])
+      super(applicationState, [ new RequireLiveLoginFilter() ])
       @compiledTemplate = _.template(Template)
       @compiledLoginTemplate = _.template(LoginTemplate)
       @customerFiles = new CustomerFiles().on("reset", @render, this)

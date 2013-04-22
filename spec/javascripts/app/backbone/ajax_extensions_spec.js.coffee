@@ -1,14 +1,15 @@
-describe("Ajax", () ->
+describe("AjaxExtensions", () ->
 
-  Backbone = null
-  Ajax = null
+  Backbone = {
+    ajax: () -> @originalAjax.apply(this, arguments)
+    originalAjax: () ->
+  }
 
-  jasmineRequire(this, [ "backbone", "app/models/ajax" ], (LoadedBackbone, LoadedAjax) ->
-    Backbone = LoadedBackbone
-    Ajax = LoadedAjax
+  jasmineRequireWithStubs(this, { "backbone": Backbone }, [ "app/backbone/ajax_extensions" ], (AjaxExtensions) ->
+    # Intentionally blank
   )
 
-  describe("#submit", () ->
+  describe("#ajax", () ->
 
     beforeEach(() ->
       $("head").append("<meta name='csrf-token' content='some_csrf_token'>")
@@ -18,12 +19,12 @@ describe("Ajax", () ->
       $("meta[name='csrf-token']").remove()
     )
 
-    it("should delegate to Backbone's ajax support", () ->
-      spyOn(Backbone, "ajax")
+    it("should delegate to Backbone's original ajax support", () ->
+      spyOn(Backbone, "originalAjax")
 
-      Ajax.submit({})
+      Backbone.ajax({})
 
-      expect(Backbone.ajax).toHaveBeenCalled()
+      expect(Backbone.originalAjax).toHaveBeenCalled()
     )
 
     describe("when the ajax call is successful", () ->
@@ -39,19 +40,19 @@ describe("Ajax", () ->
 
         beforeEach(() ->
           response = { "csrf-token": "updated_csrf_token" }
-          spyOn(Backbone, "ajax").andCallFake((options) -> options.success(response))
+          spyOn(Backbone, "originalAjax").andCallFake((options) -> options.success(response))
         )
 
         describe("and a success callback is provided", () ->
 
           it("should invoke the callback with the response", () ->
-            Ajax.submit(success: successCallback)
+            Backbone.ajax(success: successCallback)
 
             expect(successCallback).toHaveBeenCalledWith(response)
           )
 
           it("should establish the token in the cross-site request forgery meta-tag", () ->
-            Ajax.submit(success: successCallback)
+            Backbone.ajax(success: successCallback)
 
             expect($("meta[name='csrf-token']")).toHaveAttr("content", "updated_csrf_token")
           )
@@ -61,7 +62,7 @@ describe("Ajax", () ->
         describe("and no success callback is provided", () ->
 
           it("should establish the token in the cross-site request forgery meta-tag", () ->
-            Ajax.submit({})
+            Backbone.ajax({})
 
             expect($("meta[name='csrf-token']")).toHaveAttr("content", "updated_csrf_token")
           )
@@ -74,13 +75,13 @@ describe("Ajax", () ->
 
         beforeEach(() ->
           response = { key: "value" }
-          spyOn(Backbone, "ajax").andCallFake((options) -> options.success(response))
+          spyOn(Backbone, "originalAjax").andCallFake((options) -> options.success(response))
         )
 
         describe("and a success callback is provided", () ->
 
           it("should invoke the callback with the response", () ->
-            Ajax.submit(success: successCallback)
+            Backbone.ajax(success: successCallback)
 
             expect(successCallback).toHaveBeenCalledWith(response)
           )
@@ -88,7 +89,7 @@ describe("Ajax", () ->
         )
 
         it("should not alter the existing value in the cross-site request forgery meta-tag", () ->
-          Ajax.submit({})
+          Backbone.ajax({})
 
           expect($("meta[name='csrf-token']")).toHaveAttr("content", "some_csrf_token")
         )
@@ -101,11 +102,11 @@ describe("Ajax", () ->
 
       it("should delegate to Backbone's ajax support with unmodified options", () ->
         options = { type: "GET", url: "/some/url", data: { key: "value" } }
-        spyOn(Backbone, "ajax")
+        spyOn(Backbone, "originalAjax")
 
-        Ajax.submit(options)
+        Backbone.ajax(options)
 
-        actualOptions = Backbone.ajax.mostRecentCall.args[0]
+        actualOptions = Backbone.originalAjax.mostRecentCall.args[0]
         expect(actualOptions["type"]).toBe("GET")
         expect(actualOptions["url"]).toBe("/some/url")
         expect(actualOptions["data"]).toEqual(key: "value")
@@ -116,7 +117,7 @@ describe("Ajax", () ->
     describe("when a non-GET request is made", () ->
 
       beforeEach(() ->
-        spyOn(Backbone, "ajax")
+        spyOn(Backbone, "originalAjax")
       )
 
       ["POST", "PUT", "DELETE"].forEach((request_type) ->
@@ -126,13 +127,13 @@ describe("Ajax", () ->
           it("should delegate to Backbone's ajax support without modifying options other than data", () ->
             errorCallback = () -> "some error callback"
 
-            Ajax.submit(
+            Backbone.ajax(
               type: request_type
               url: "/some/url"
               error: errorCallback
             )
 
-            actualOptions = Backbone.ajax.mostRecentCall.args[0]
+            actualOptions = Backbone.originalAjax.mostRecentCall.args[0]
             expect(actualOptions["type"]).toBe(request_type)
             expect(actualOptions["url"]).toBe("/some/url")
             expect(actualOptions["error"]).toBe(errorCallback)
@@ -145,9 +146,9 @@ describe("Ajax", () ->
       describe("when no request data is provided", () ->
 
         it("should delegate to Backbone with data containing the Rails cross-site request forgery token", () ->
-          Ajax.submit(type: "POST")
+          Backbone.ajax(type: "POST")
 
-          data = Backbone.ajax.mostRecentCall.args[0]["data"]
+          data = Backbone.originalAjax.mostRecentCall.args[0]["data"]
           expect(data).toEqual(authenticity_token: "some_csrf_token")
         )
 
@@ -156,9 +157,9 @@ describe("Ajax", () ->
       describe("when request data is provided", () ->
 
         it("should delegate to Backbone with the Rails cross-site request forgery token added to the data", () ->
-          Ajax.submit(type: "POST", data: { key: "value" })
+          Backbone.ajax(type: "POST", data: { key: "value" })
 
-          data = Backbone.ajax.mostRecentCall.args[0]["data"]
+          data = Backbone.originalAjax.mostRecentCall.args[0]["data"]
           expect(data).toEqual(authenticity_token: "some_csrf_token", key: "value")
         )
 

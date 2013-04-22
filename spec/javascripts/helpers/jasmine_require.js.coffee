@@ -1,6 +1,6 @@
 jasmineContext = (stubs = {}) ->
   map = {}
-  for value, key of stubs
+  for key, value of stubs
     map[key] = 'stub' + key
   newRequire = require.config(
     context: Math.floor(Math.random() * 1000000)
@@ -19,13 +19,13 @@ jasmineContext = (stubs = {}) ->
     map:
       "*": map
   )
-  for value, key of stubs
+  for key, value of stubs
     define('stub' + key, () -> value)
   require: newRequire
 
-jasmineRequire = (executionContext, modulesToRequire, callback) ->
+jasmineRequireWithStubs = (executionContext, stubs, modulesToRequire, callback) ->
   new AsyncSpec(executionContext).beforeEach((done) ->
-    context = jasmineContext()
+    context = jasmineContext(stubs)
     context.require([ "jquery" ], ($) ->
       $(document).on("mobileinit", () ->
         $.mobile.ajaxEnabled = false
@@ -44,4 +44,8 @@ jasmineRequire = (executionContext, modulesToRequire, callback) ->
     $(".ui-loader, .ui-popup-screen, .ui-popup-container").remove()
   )
 
+jasmineRequire = (executionContext, modulesToRequire, callback) ->
+  jasmineRequireWithStubs(executionContext, {}, modulesToRequire, callback)
+
+window.jasmineRequireWithStubs = jasmineRequireWithStubs
 window.jasmineRequire = jasmineRequire

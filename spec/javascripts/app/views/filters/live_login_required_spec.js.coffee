@@ -1,15 +1,15 @@
-describe("LiveLoginRequiredFilter", () ->
+describe("RequireLiveLoginFilter", () ->
 
   view = null
   applicationState = null
   filter = null
 
-  jasmineRequire(this, [ "app/views/filters/live_login_required",
-                         "app/models/application_state" ], (LiveLoginRequiredFilter, ApplicationState) ->
+  jasmineRequire(this, [ "app/views/filters/require_live_login",
+                         "app/models/application_state" ], (RequireLiveLoginFilter, ApplicationState) ->
     view = {}
     applicationState = new ApplicationState()
     view.applicationState = applicationState
-    filter = new LiveLoginRequiredFilter()
+    filter = new RequireLiveLoginFilter()
   )
 
   describe("#filter", () ->

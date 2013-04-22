@@ -2,22 +2,22 @@ describe("ContactsView", () ->
 
   Backbone = null
   ContactsView = null
-  LiveLoginRequiredFilter = null
+  RequireLiveLoginFilter = null
   Contact = null
   customerFile = null
   applicationState = null
 
   jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
-                         "app/views/filters/live_login_required",
+                         "app/views/filters/require_live_login",
                          "app/models/contact",
                          "app/models/customer_file",
                          "app/models/application_state" ], (LoadedBackbone, LoadedContactsView,
-                                                            LoadedLiveLoginRequiredFilter, LoadedContact,
+                                                            LoadedRequireLiveLoginFilter, LoadedContact,
                                                             CustomerFile, ApplicationState) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
-    LiveLoginRequiredFilter = LoadedLiveLoginRequiredFilter
+    RequireLiveLoginFilter = LoadedRequireLiveLoginFilter
     Contact = LoadedContact
     customerFile = new CustomerFile(Name: "Some File Name")
     applicationState = new ApplicationState()
@@ -57,7 +57,7 @@ describe("ContactsView", () ->
     )
 
     it("should require the user to be logged-in to AccountRight Live", () ->
-      expect(new ContactsView(applicationState).filters[0] instanceof LiveLoginRequiredFilter).toBeTruthy()
+      expect(new ContactsView(applicationState).filters[0] instanceof RequireLiveLoginFilter).toBeTruthy()
     )
 
     describe("#update", () ->

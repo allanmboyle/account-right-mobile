@@ -1,4 +1,4 @@
-define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
+define([ "backbone" ], (Backbone) ->
 
   class LiveUser extends Backbone.Model
 
@@ -11,7 +11,7 @@ define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
       @isLoggedIn = window.isLoggedInToLive
 
     reset: () ->
-      Ajax.submit(
+      Backbone.ajax(
         type: "GET"
         url: "/live_user/reset"
         success: () =>
@@ -21,7 +21,7 @@ define([ "backbone", "./ajax" ], (Backbone, Ajax) ->
       )
 
     login: () ->
-      Ajax.submit(
+      Backbone.ajax(
         type: "POST"
         url: "/live_user/login"
         data: @attributes

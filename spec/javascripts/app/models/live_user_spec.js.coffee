@@ -1,13 +1,13 @@
 describe("LiveUser", () ->
 
-  Ajax = null
   LiveUser = null
   liveUser = null
+  Backbone = null
 
-  jasmineRequire(this, [ "app/models/ajax", "app/models/live_user" ], (LoadedAjax, LoadedLiveUser) ->
-    Ajax = LoadedAjax
+  jasmineRequire(this, [ "app/models/live_user", "backbone" ], (LoadedLiveUser, LoadedBackbone) ->
     LiveUser = LoadedLiveUser
     liveUser = new LiveUser(username: "someUsername", password: "somePassword")
+    Backbone = LoadedBackbone
   )
 
   describe("constructor", () ->
@@ -35,11 +35,11 @@ describe("LiveUser", () ->
   describe("#reset", () ->
 
     it("should contact the server in order to reset the current users session", () ->
-      spyOn(Ajax, "submit")
+      spyOn(Backbone, "ajax")
 
       liveUser.reset()
 
-      ajaxOptions = Ajax.submit.mostRecentCall.args[0]
+      ajaxOptions = Backbone.ajax.mostRecentCall.args[0]
       expect(ajaxOptions["type"]).toEqual("GET")
       expect(ajaxOptions["url"]).toEqual("/live_user/reset")
     )
@@ -47,7 +47,7 @@ describe("LiveUser", () ->
     describe("when the reset request is successful", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.success())
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.success())
       )
 
       it("should trigger a reset:success event", () ->
@@ -71,7 +71,7 @@ describe("LiveUser", () ->
     describe("when the reset request fails", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 500))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 500))
       )
 
       it("should trigger a reset:error event", () ->
@@ -89,11 +89,11 @@ describe("LiveUser", () ->
   describe("#login", () ->
 
     it("should contact the server in order to login", () ->
-      spyOn(Ajax, "submit")
+      spyOn(Backbone, "ajax")
 
       liveUser.login()
 
-      ajaxOptions = Ajax.submit.mostRecentCall.args[0]
+      ajaxOptions = Backbone.ajax.mostRecentCall.args[0]
       expect(ajaxOptions["type"]).toEqual("POST")
       expect(ajaxOptions["url"]).toEqual("/live_user/login")
       requestData = ajaxOptions["data"]
@@ -104,7 +104,7 @@ describe("LiveUser", () ->
     describe("when the login is successful", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.success())
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.success())
       )
 
       it("should trigger a login:success event", () ->
@@ -128,7 +128,7 @@ describe("LiveUser", () ->
     describe("when the login fails due to invalid credentials", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 401))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 401))
       )
 
       it("should trigger a login:fail event", () ->
@@ -144,7 +144,7 @@ describe("LiveUser", () ->
     describe("when the login fails due to an arbitrary error", () ->
 
       beforeEach(() ->
-        spyOn(Ajax, "submit").andCallFake((options) -> options.error(status: 500))
+        spyOn(Backbone, "ajax").andCallFake((options) -> options.error(status: 500))
       )
 
       it("should trigger a login:error event", () ->

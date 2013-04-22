@@ -1,15 +1,15 @@
 define([ "jquery",
          "underscore",
          "./base/view",
-         "./filters/live_login_required",
-         "text!./contact_details.tmpl" ], ($, _, BaseView, LiveLoginRequiredFilter, Template) ->
+         "./filters/require_live_login",
+         "text!./contact_details.tmpl" ], ($, _, BaseView, RequireLiveLoginFilter, Template) ->
 
   $("body").append("<div id='contact-details' data-role='page' data-title='Contact details'></div>")
 
   class ContactsView extends BaseView
 
     initialize: (applicationState) ->
-      super(applicationState, [ new LiveLoginRequiredFilter() ])
+      super(applicationState, [ new RequireLiveLoginFilter() ])
       @compiledTemplate = _.template(Template)
 
     el: $("#contact-details")

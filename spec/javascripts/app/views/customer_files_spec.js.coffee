@@ -1,20 +1,20 @@
 describe("CustomerFilesView", () ->
 
   CustomerFilesView = null
-  LiveLoginRequiredFilter = null
+  RequireLiveLoginFilter = null
   CustomerFile = null
   CustomerFileUser = null
   applicationState = null
 
   jasmineRequire(this, [ "app/views/customer_files",
-                         "app/views/filters/live_login_required",
+                         "app/views/filters/require_live_login",
                          "app/models/customer_file",
                          "app/models/customer_file_user",
-                         "app/models/application_state" ], (LoadedCustomerFilesView, LoadedLiveLoginRequiredFilter,
+                         "app/models/application_state" ], (LoadedCustomerFilesView, LoadedRequireLiveLoginFilter,
                                                             LoadedCustomerFile, LoadedCustomerFileUser,
                                                             ApplicationState) ->
     CustomerFilesView = LoadedCustomerFilesView
-    LiveLoginRequiredFilter = LoadedLiveLoginRequiredFilter
+    RequireLiveLoginFilter = LoadedRequireLiveLoginFilter
     CustomerFile = LoadedCustomerFile
     CustomerFileUser = LoadedCustomerFileUser
     applicationState = new ApplicationState()
@@ -56,7 +56,7 @@ describe("CustomerFilesView", () ->
     )
 
     it("should require the user to be logged-in to AccountRight Live", () ->
-      expect(new CustomerFilesView(applicationState).filters[0] instanceof LiveLoginRequiredFilter).toBeTruthy()
+      expect(new CustomerFilesView(applicationState).filters[0] instanceof RequireLiveLoginFilter).toBeTruthy()
     )
 
     describe("model event configuration", () ->
