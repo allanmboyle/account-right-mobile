@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
     @client_application_state = AccountRightMobile::ClientApplicationState.new(session)
   end
 
+  def require_live_login
+    unless @client_application_state.logged_in_to_live?
+      respond_to_json { render :json => { liveLoginRequired: true }, :status => 401 }
+    end
+  end
+
   def respond_to_json
     respond_to do |format|
       format.json { yield }
@@ -16,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def default_json_response
-    { "csrf-token" => form_authenticity_token }.to_json
+    { "csrf-token" => form_authenticity_token }
   end
 
 end
