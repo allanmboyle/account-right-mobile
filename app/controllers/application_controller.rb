@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
   def require_live_login
     unless @client_application_state.logged_in_to_live?
-      respond_to_json { render json: { liveLoginRequired: true }, status: 401 }
+      respond_to_json { render json: { loginRequired: :live_login }, status: 401 }
     end
   end
 

@@ -3,13 +3,16 @@ define([ "backbone",
          "./ajax/csrf_extensions",
          "./ajax/authentication_extensions" ], (Backbone, _, CSRFExtensions, AuthenticationExtensions) ->
 
-  originalAjax = Backbone.ajax
+  class AjaxExtensions
 
-  Backbone.ajax = () ->
-    url = if (typeof arguments[0]) == "string" then arguments[0] else null
-    options = if url then arguments[1] else arguments[0]
-    resolvedOptions = CSRFExtensions.extendOptions(options)
-    resolvedOptions = AuthenticationExtensions.extendOptions(resolvedOptions)
-    originalAjax.apply(Backbone, _.compact([url, resolvedOptions]))
+    constructor: (applicationState) ->
+      @csrfExtensions = new CSRFExtensions()
+      @authenticationExtensions = new AuthenticationExtensions(applicationState)
+      originalAjax = Backbone.ajax
+      Backbone.ajax = () =>
+        url = if (typeof arguments[0]) == "string" then arguments[0] else null
+        options = if url then arguments[1] else arguments[0]
+        resolvedOptions = @authenticationExtensions.extendOptions(@csrfExtensions.extendOptions(options))
+        originalAjax.apply(Backbone, _.compact([url, resolvedOptions]))
 
 )

@@ -12,6 +12,7 @@ define([ "jquery",
 
     initialize: () ->
       @applicationState = new ApplicationState()
+      new AjaxExtensions(@applicationState)
       Backbone.history.start() # Track hashchange events
 
     routes:

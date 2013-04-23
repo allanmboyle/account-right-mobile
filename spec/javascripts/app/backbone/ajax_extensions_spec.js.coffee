@@ -4,19 +4,23 @@ describe("AjaxExtensions", () ->
     ajax: () -> @originalAjax.apply(this, arguments)
     originalAjax: () ->
 
-  CSRFExtensions =
-    extendOptions: (options) ->
+  class ApplicationState
 
-  AuthenticationExtensions =
-    extendOptions: (options) ->
+  applicationState = null
+  ajaxExtensions = null
+  csrfExtensions = null
+  authenticationExtensions = null
 
   stubs =
     "backbone": Backbone
-    "app/backbone/ajax/csrf_extensions": CSRFExtensions
-    "app/backbone/ajax/authentication_extensions": AuthenticationExtensions
+    "app/models/application_state": ApplicationState
 
   jasmineRequireWithStubs(this, stubs, [ "app/backbone/ajax_extensions" ], (AjaxExtensions) ->
-    # Intentionally blank
+    if !ajaxExtensions
+      applicationState = new ApplicationState()
+      ajaxExtensions = new AjaxExtensions(applicationState)
+      csrfExtensions = ajaxExtensions.csrfExtensions
+      authenticationExtensions = ajaxExtensions.authenticationExtensions
   )
 
   describe("#ajax", () ->
@@ -36,7 +40,7 @@ describe("AjaxExtensions", () ->
     describe("cross-site request forgery extensions", () ->
 
       it("should extend the provided options with cross-site request forgery options", () ->
-        csrfExtendOptionsMethod = CSRFExtensions.extendOptions = jasmine.createSpy().andReturn({ key: "extendedValue" })
+        csrfExtendOptionsMethod = csrfExtensions.extendOptions = jasmine.createSpy().andReturn({ key: "extendedValue" })
         options = { key: "value" }
 
         Backbone.ajax(options)
@@ -53,9 +57,13 @@ describe("AjaxExtensions", () ->
       authenticationExtendOptionsMethod = null
 
       beforeEach(() ->
-        CSRFExtensions.extendOptions = jasmine.createSpy().andReturn(csrfExtendedOptions)
-        AuthenticationExtensions.extendOptions = authenticationExtendOptionsMethod =
+        csrfExtensions.extendOptions = jasmine.createSpy().andReturn(csrfExtendedOptions)
+        authenticationExtensions.extendOptions = authenticationExtendOptionsMethod =
           jasmine.createSpy().andReturn(authenticationExtendedOptions)
+      )
+
+      it("should be provided the application state", () ->
+        expect(authenticationExtensions.applicationState).toBe(applicationState)
       )
 
       it("should extend the cross-site request forgery options with authentication options", () ->
@@ -64,7 +72,7 @@ describe("AjaxExtensions", () ->
         expect(authenticationExtendOptionsMethod).toHaveBeenCalledWith(csrfExtendedOptions)
       )
 
-      it("should delegate to Baclbone's original ajax support with the authentication options", () ->
+      it("should delegate to Backbone's original ajax support with the authentication options", () ->
         spyOn(Backbone, "originalAjax")
 
         Backbone.ajax(key: "value")

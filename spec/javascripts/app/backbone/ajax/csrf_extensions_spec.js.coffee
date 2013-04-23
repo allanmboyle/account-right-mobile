@@ -1,9 +1,9 @@
 describe("CSRFExtensions", () ->
 
-  CSRFExtensions = null
+  csrfExtensions = null
 
-  jasmineRequire(this, [ "app/backbone/ajax/csrf_extensions" ], (LoadedCSRFExtensions) ->
-    CSRFExtensions = LoadedCSRFExtensions
+  jasmineRequire(this, [ "app/backbone/ajax/csrf_extensions" ], (CSRFExtensions) ->
+    csrfExtensions = new CSRFExtensions()
   )
 
   describe("#extendOptions", () ->
@@ -23,7 +23,7 @@ describe("CSRFExtensions", () ->
         it("should return unmodified options", () ->
           options = { type: "GET", url: "/some/url", data: { key: "value" } }
 
-          actualOptions = CSRFExtensions.extendOptions(options)
+          actualOptions = csrfExtensions.extendOptions(options)
 
           expect(actualOptions["type"]).toBe("GET")
           expect(actualOptions["url"]).toBe("/some/url")
@@ -39,7 +39,7 @@ describe("CSRFExtensions", () ->
           describe("that is a #{request_type}", () ->
 
             it("should return unmodified non-data options", () ->
-              actualOptions = CSRFExtensions.extendOptions(
+              actualOptions = csrfExtensions.extendOptions(
                 headers: { key: "value" }
                 type: request_type
                 url: "/some/url"
@@ -57,7 +57,7 @@ describe("CSRFExtensions", () ->
         describe("when request data is provided", () ->
 
           it("should return data containing the token", () ->
-            actualOptions = CSRFExtensions.extendOptions(type: "POST", data: { key: "value" })
+            actualOptions = csrfExtensions.extendOptions(type: "POST", data: { key: "value" })
 
             expect(actualOptions["data"]).toEqual(authenticity_token: "some_csrf_token", key: "value")
           )
@@ -67,7 +67,7 @@ describe("CSRFExtensions", () ->
         describe("when no request data is provided", () ->
 
           it("should return data containing the token", () ->
-            actualOptions = CSRFExtensions.extendOptions(type: "POST")
+            actualOptions = csrfExtensions.extendOptions(type: "POST")
 
             expect(actualOptions["data"]).toEqual(authenticity_token: "some_csrf_token")
           )
@@ -148,7 +148,7 @@ describe("CSRFExtensions", () ->
         )
 
         extendOptionsAndInvokeSuccessCallback = (options) ->
-          actualOptions = CSRFExtensions.extendOptions(options)
+          actualOptions = csrfExtensions.extendOptions(options)
           actualOptions.success(response)
 
       )

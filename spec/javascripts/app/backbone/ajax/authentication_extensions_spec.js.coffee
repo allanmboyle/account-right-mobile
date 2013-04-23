@@ -1,9 +1,13 @@
 describe("AuthenticationExtensions", () ->
 
-  AuthenticationExtensions = null
+  applicationState = null
+  authenticationExtensions = null
 
-  jasmineRequire(this, [ "app/backbone/ajax/authentication_extensions" ], (LoadedAuthenticationExtensions) ->
-    AuthenticationExtensions = LoadedAuthenticationExtensions
+  jasmineRequire(this, [ "app/models/application_state",
+                         "app/backbone/ajax/authentication_extensions" ], (ApplicationState,
+                                                                           AuthenticationExtensions) ->
+    applicationState = new ApplicationState()
+    authenticationExtensions = new AuthenticationExtensions(applicationState)
   )
 
   describe("#extendOptions", () ->
@@ -25,7 +29,13 @@ describe("AuthenticationExtensions", () ->
 
           beforeEach(() ->
             responseStatus = 401
-            responseText = JSON.stringify(liveLoginRequired: "true")
+            responseText = JSON.stringify(loginRequired: "live_login")
+          )
+
+          it("should inform the application state that a re-login is required", () ->
+            extendOptionsAndInvokeErrorCallback({})
+
+            expect(applicationState.reLoginRequired).toBeTruthy()
           )
 
           it("should redirect the user to the Live login page", () ->
@@ -57,6 +67,12 @@ describe("AuthenticationExtensions", () ->
           beforeEach(() ->
             responseStatus = 401
             responseText = ""
+          )
+
+          it("should not inform the application state that a re-login is required", () ->
+            extendOptionsAndInvokeErrorCallback({})
+
+            expect(applicationState.reLoginRequired).toBeFalsy()
           )
 
           it("should leave the user on the current page", () ->
@@ -92,6 +108,12 @@ describe("AuthenticationExtensions", () ->
           responseText = "Some error response text"
         )
 
+        it("should not inform the application state that a re-login is required", () ->
+          extendOptionsAndInvokeErrorCallback({})
+
+          expect(applicationState.reLoginRequired).toBeFalsy()
+        )
+
         it("should leave the user on the current page", () ->
           extendOptionsAndInvokeErrorCallback({})
 
@@ -119,7 +141,7 @@ describe("AuthenticationExtensions", () ->
       )
 
       extendOptionsAndInvokeErrorCallback = (options) ->
-        actualOptions = AuthenticationExtensions.extendOptions(options)
+        actualOptions = authenticationExtensions.extendOptions(options)
         xhr = { status: responseStatus }
         xhr["responseText"] = responseText if responseText
         actualOptions.error(xhr, "some status", "some error description")

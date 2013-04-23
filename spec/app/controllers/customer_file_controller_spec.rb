@@ -12,6 +12,8 @@ describe CustomerFileController, type: :controller do
     session[:key] = "value"
 
     AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state)
+
+    controller.stub!(:require_live_login)
   end
 
   describe "#index" do
@@ -21,6 +23,12 @@ describe CustomerFileController, type: :controller do
       describe "when a json request is made" do
 
         before(:each) { AccountRight::CustomerFile.stub!(:all) }
+
+        it "should require the user to be logged-in to AccountRight Live" do
+          controller.should_receive(:require_live_login)
+
+          get_index
+        end
 
         it "should find all customer files accessible to the user via the model" do
           mandatory_state = hash_including(access_token: access_token, refresh_token: refresh_token)
@@ -115,6 +123,12 @@ describe CustomerFileController, type: :controller do
             AccountRight::CustomerFile.stub!(:new).and_return(customer_file)
             AccountRight::CustomerFileUser.stub!(:new).and_return(user)
             client_application_state.stub!(:save)
+          end
+
+          it "should require the user to be logged-in to AccountRight Live" do
+            controller.should_receive(:require_live_login)
+
+            post_login
           end
 
           it "should create a customer file with the provided customer file id" do

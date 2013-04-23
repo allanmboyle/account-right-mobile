@@ -1,19 +1,30 @@
 define([ "jquery", "underscore" ], ($, _) ->
 
-  extendOptions: (options) ->
-    resolvedOptions = _.extend({}, options)
-    resolvedOptions.error = (xhr) =>
-      response = @_responseIn(xhr)
-      if response["liveLoginRequired"] then location.hash = "#live_login" else @_invokeCallback(options, arguments)
-    resolvedOptions
+  class AuthenticationExtensions
 
-  _responseIn: (xhr) ->
-    try
-      JSON.parse(xhr.responseText)
-    catch error
-      {}
+    constructor: (@applicationState) ->
 
-  _invokeCallback: (options, callbackArguments) ->
-    options.error.apply(options.error, callbackArguments) if options.error
+    extendOptions: (options) ->
+      resolvedOptions = _.extend({}, options)
+      resolvedOptions.error = (xhr) =>
+        @_redirectWhenAuthenticationIsRequired(options, arguments)
+      resolvedOptions
+
+    _redirectWhenAuthenticationIsRequired: (options, callbackArguments) ->
+      loginRequired = @_loginRequiredResponse(callbackArguments[0])
+      if loginRequired
+        @applicationState.reLoginRequired = true
+        location.hash = "##{loginRequired}"
+      else
+        @_invokeOriginalCallback(options, callbackArguments)
+
+    _loginRequiredResponse: (xhr) ->
+      try
+        JSON.parse(xhr.responseText)["loginRequired"]
+      catch error
+        null
+
+    _invokeOriginalCallback: (options, callbackArguments) ->
+      options.error.apply(options.error, callbackArguments) if options.error
 
 )

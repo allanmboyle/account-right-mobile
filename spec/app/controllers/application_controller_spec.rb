@@ -57,7 +57,7 @@ describe TestableApplicationController, type: :controller do
       it "should respond with a body indicating an AccountRight Live login is required" do
         post :action_requiring_live_login, format: :json
 
-        response.body.should eql({ liveLoginRequired: true }.to_json)
+        response.body.should eql({ loginRequired: :live_login }.to_json)
       end
 
     end
