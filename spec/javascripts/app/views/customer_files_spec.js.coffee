@@ -108,6 +108,39 @@ describe("CustomerFilesView", () ->
         expect($("#customer-file-login-content")).toBeHidden()
       )
 
+      describe("when re-login is required", () ->
+
+        beforeEach(() ->
+          applicationState.reLoginRequired = true
+        )
+
+        it("should show a message indicating re-login is required", () ->
+          customerFilesView.render()
+
+          reLoginMessageToBeVisible = () -> $("#customer-file-re-login-required-message").is(":visible")
+          waitsFor(reLoginMessageToBeVisible, "re-login message to be visible", 5000)
+        )
+
+        it("should remove the marker from the application state that indicates re-login is required", () ->
+          customerFilesView.render()
+
+          reLoginRequiredFlagToBeFalse = () -> applicationState.reLoginRequired == false
+          waitsFor(reLoginRequiredFlagToBeFalse, "re-login required flag to be false", 5000)
+        )
+
+      )
+
+      describe("when re-login is not required", () ->
+
+        it("should not show a message indicating re-login is required", () ->
+          customerFilesView.render()
+
+          reLoginMessageToBeHidden = () -> $("#customer-file-re-login-required-message").is(":hidden")
+          waitsFor(reLoginMessageToBeHidden, "re-login message to be hidden", 5000)
+        )
+
+      )
+
       describe("with multiple customer files", () ->
 
         beforeEach(() ->

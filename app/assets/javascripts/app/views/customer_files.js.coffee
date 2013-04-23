@@ -66,6 +66,7 @@ define([ "jquery",
     _pageBeforeShow: () ->
       @_showLoginAndUpdateModelWhenFileIsExpanded()
       @_showInitialLoginIfNecessary()
+      @_showReLoginMessageIfNecessary()
       @_showNoFilesMessageIfNecessary()
 
     _showLoginAndUpdateModelWhenFileIsExpanded: () ->
@@ -78,8 +79,13 @@ define([ "jquery",
     _showInitialLoginIfNecessary: () ->
       $(".customer-file:first-child").trigger("expand") if @customerFiles.length == 1
 
+    _showReLoginMessageIfNecessary: () ->
+      message = $("#customer-file-re-login-required-message")
+      if @applicationState.reLoginRequired then message.show() else message.hide()
+      @applicationState.reLoginRequired = false
+
     _showNoFilesMessageIfNecessary: () ->
-      if (@customerFiles.isEmpty()) then @_noFilesMessage().show() else @_noFilesMessage().hide()
+      if @customerFiles.isEmpty() then @_noFilesMessage().show() else @_noFilesMessage().hide()
 
     _showErrorIfNecessary: () ->
       $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.fetchError

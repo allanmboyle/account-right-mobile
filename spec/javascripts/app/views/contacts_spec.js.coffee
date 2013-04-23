@@ -3,6 +3,7 @@ describe("ContactsView", () ->
   Backbone = null
   ContactsView = null
   RequireLiveLoginFilter = null
+  RequireCustomerFileLoginFilter = null
   Contact = null
   customerFile = null
   applicationState = null
@@ -10,14 +11,17 @@ describe("ContactsView", () ->
   jasmineRequire(this, [ "backbone",
                          "app/views/contacts",
                          "app/views/filters/require_live_login",
+                         "app/views/filters/require_customer_file_login",
                          "app/models/contact",
                          "app/models/customer_file",
                          "app/models/application_state" ], (LoadedBackbone, LoadedContactsView,
-                                                            LoadedRequireLiveLoginFilter, LoadedContact,
-                                                            CustomerFile, ApplicationState) ->
+                                                            LoadedRequireLiveLoginFilter,
+                                                            LoadedRequireCustomerFileLoginFilter,
+                                                            LoadedContact, CustomerFile, ApplicationState) ->
     Backbone = LoadedBackbone
     ContactsView = LoadedContactsView
     RequireLiveLoginFilter = LoadedRequireLiveLoginFilter
+    RequireCustomerFileLoginFilter = LoadedRequireCustomerFileLoginFilter
     Contact = LoadedContact
     customerFile = new CustomerFile(Name: "Some File Name")
     applicationState = new ApplicationState()
@@ -57,7 +61,11 @@ describe("ContactsView", () ->
     )
 
     it("should require the user to be logged-in to AccountRight Live", () ->
-      expect(new ContactsView(applicationState).filters[0] instanceof RequireLiveLoginFilter).toBeTruthy()
+      expect(new ContactsView(applicationState).filters).toContainAnInstanceOf(RequireLiveLoginFilter)
+    )
+
+    it("should require the user to be logged-in to a Customer File", () ->
+      expect(new ContactsView(applicationState).filters).toContainAnInstanceOf(RequireCustomerFileLoginFilter)
     )
 
     describe("#update", () ->

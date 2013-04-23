@@ -9,4 +9,7 @@ define([ "./live_user", "./customer_file" ], (LiveUser, CustomerFile) ->
     isLoggedInToLive: () ->
       @liveUser.isLoggedIn
 
+    isLoggedInToCustomerFile: () ->
+      !@openedCustomerFile.isEmpty()
+
 )

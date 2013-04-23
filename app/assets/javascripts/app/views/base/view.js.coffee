@@ -10,7 +10,10 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
       if (@_executeFilters())
         @$el.page().page("destroy").empty()
         @prepareDom()
-        $.mobile.changePage("##{@$el.attr("id")}", _.extend({ reverse: false, changeHash: false }, @renderOptions))
+        $.mobile.changePage(
+          "##{@$el.attr("id")}",
+          _.extend({ reverse: false, changeHash: false, allowSamePageTransition: true }, @renderOptions)
+        )
 
     renderHeader: (options) ->
       resolvedOptions = _.extend({}, options)

@@ -1,5 +1,9 @@
 describe TestableApplicationController, type: :controller do
 
+  it "should expose Authentication Filters for use within controllers" do
+    controller.should be_a_kind_of(AuthenticationFilters)
+  end
+
   describe "#establish_client_application_state" do
 
     it "should be executed before each action" do
@@ -23,66 +27,6 @@ describe TestableApplicationController, type: :controller do
       assigns(:client_application_state).should eql(client_application_state)
     end
 
-
-  end
-
-  describe "#require_live_login" do
-
-    let(:client_application_state) { double(AccountRightMobile::ClientApplicationState) }
-
-    before(:each) { AccountRightMobile::ClientApplicationState.stub!(:new).and_return(client_application_state) }
-
-    describe "when the client application state indicates the user has logged-in to AccountRight Live" do
-
-      before(:each) { client_application_state.stub!(:logged_in_to_live?).and_return(true) }
-
-      it "should allow the action to be executed as normal" do
-        post :action_requiring_live_login, format: :json
-
-        response.body.should eql("Normal body")
-      end
-
-    end
-
-    describe "when the client application state indicates the user has not logged-in to AccountRight Live" do
-
-      before(:each) { client_application_state.stub!(:logged_in_to_live?).and_return(false) }
-
-      it "should respond with a status of 401 indicating the request was unauthorised" do
-        post :action_requiring_live_login, format: :json
-
-        response.status.should eql(401)
-      end
-
-      it "should respond with a body indicating an AccountRight Live login is required" do
-        post :action_requiring_live_login, format: :json
-
-        response.body.should eql({ loginRequired: :live_login }.to_json)
-      end
-
-    end
-
-  end
-
-  describe "#handle_unexpected_exception" do
-
-    it "should respond with a body containing a description of the exception" do
-      post :action_causing_exception, format: :json
-
-      response.body.should eql("Some general exception")
-    end
-
-    it "should notify the Rails logger that an unexpected exception occurred" do
-      Rails.logger.should_receive(:error).with(/an unexpected exception occurred/i)
-
-      post :action_causing_exception, format: :json
-    end
-
-    it "should log the description of the exception" do
-      Rails.logger.should_receive(:error).with(/Some general exception/)
-
-      post :action_causing_exception, format: :json
-    end
 
   end
 
@@ -116,6 +60,28 @@ describe TestableApplicationController, type: :controller do
       post :action_with_default_json_response, format: :json
 
       response.body.should eql({ "csrf-token" => session[:_csrf_token] }.to_json)
+    end
+
+  end
+
+  describe "#handle_unexpected_exception" do
+
+    it "should respond with a body containing a description of the exception" do
+      post :action_causing_exception, format: :json
+
+      response.body.should eql("Some general exception")
+    end
+
+    it "should notify the Rails logger that an unexpected exception occurred" do
+      Rails.logger.should_receive(:error).with(/an unexpected exception occurred/i)
+
+      post :action_causing_exception, format: :json
+    end
+
+    it "should log the description of the exception" do
+      Rails.logger.should_receive(:error).with(/Some general exception/)
+
+      post :action_causing_exception, format: :json
     end
 
   end

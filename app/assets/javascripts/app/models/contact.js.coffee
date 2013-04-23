@@ -3,11 +3,11 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
   class Contact extends Backbone.Model
 
     defaults: {
-      CoLastName: "Not specified"
-      IsIndividual: "Not specified"
-      FirstName: "Not specified"
-      Type: "Not specified"
-      CurrentBalance: "Not specified"
+      CoLastName: ""
+      IsIndividual: ""
+      FirstName: ""
+      Type: ""
+      CurrentBalance: ""
     }
 
     name: () ->

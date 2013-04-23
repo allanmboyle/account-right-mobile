@@ -184,4 +184,13 @@ describe AccountRightMobile::ClientApplicationState do
 
   end
 
+  describe "#logged_in_to_customer_file?" do
+
+    it "should indicate whether the state contains a customer file" do
+      client_application_state.method(:logged_in_to_customer_file?).should
+        eql(client_application_state.method(:contains_customer_file?))
+    end
+
+  end
+
 end

@@ -3,8 +3,8 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
   class CustomerFileUser extends Backbone.Model
 
     defaults: {
-      username: "Not specified"
-      password: "Not specified"
+      username: ""
+      password: ""
     }
 
     loginTo: (customerFile) ->

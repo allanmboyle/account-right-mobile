@@ -75,9 +75,10 @@ describe("BaseView", () ->
 
           testableView.render()
 
-          expect($.mobile.changePage).toHaveBeenCalledWith(
-            "#testable-base-view", { reverse: false, changeHash: false, anOption: "some_option_value" }
-          )
+          expectedRenderOptions = {
+            reverse: false, changeHash: false, allowSamePageTransition: true, anOption: "some_option_value"
+          }
+          expect($.mobile.changePage).toHaveBeenCalledWith("#testable-base-view", expectedRenderOptions)
         )
 
         it("should make the page the active JQueryMobile page", () ->

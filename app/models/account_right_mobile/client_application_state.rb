@@ -37,6 +37,8 @@ module AccountRightMobile
       !!(@state[:cf_token] && @state[:cf_id])
     end
 
+    alias_method :logged_in_to_customer_file?, :contains_customer_file?
+
   end
 
 end

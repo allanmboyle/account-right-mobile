@@ -48,8 +48,8 @@ describe("ApplicationState", () ->
         it("should return a CustomerFile with default values", () ->
           customerFile = applicationState.openedCustomerFile
 
-          expect(customerFile.get("Id")).toBe("Not specified")
-          expect(customerFile.get("Name")).toBe("Not specified")
+          expect(customerFile.get("Id")).toBe("")
+          expect(customerFile.get("Name")).toBe("")
         )
 
       )
@@ -84,6 +84,43 @@ describe("ApplicationState", () ->
 
       it("should return false", () ->
         expect(applicationState.isLoggedInToLive()).toBeFalsy()
+      )
+
+    )
+
+  )
+
+  describe("#isLoggedInToCustomerFile", () ->
+
+    customerFile = null
+
+    beforeEach(() ->
+      establishApplicationState()
+
+      customerFile = new CustomerFile()
+      applicationState.openedCustomerFile = customerFile
+    )
+
+    describe("when the user has opened a Customer File", () ->
+
+      beforeEach(() ->
+        spyOn(customerFile, "isEmpty").andReturn(false)
+      )
+
+      it("should return true", () ->
+        expect(applicationState.isLoggedInToCustomerFile()).toBeTruthy()
+      )
+
+    )
+
+    describe("when the user has not opened a Customer File", () ->
+
+      beforeEach(() ->
+        spyOn(customerFile, "isEmpty").andReturn(true)
+      )
+
+      it("should return false", () ->
+        expect(applicationState.isLoggedInToCustomerFile()).toBeFalsy()
       )
 
     )

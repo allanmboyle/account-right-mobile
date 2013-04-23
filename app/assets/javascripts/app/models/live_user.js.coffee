@@ -3,8 +3,8 @@ define([ "backbone" ], (Backbone) ->
   class LiveUser extends Backbone.Model
 
     defaults: {
-      emailAddress: "Not specified"
-      password: "Not specified"
+      emailAddress: ""
+      password: ""
     }
 
     initialize: () ->

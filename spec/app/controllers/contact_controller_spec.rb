@@ -24,6 +24,12 @@ describe ContactController, type: :controller do
           get_index
         end
 
+        it "should require the user to be logged-in to a Customer File" do
+          controller.should_receive(:require_customer_file_login)
+
+          get_index
+        end
+
         it "should create a customer file customer file for the id in the users session" do
           AccountRight::CustomerFile.should_receive(:new).with(id: customer_file_id).and_return(customer_file)
 

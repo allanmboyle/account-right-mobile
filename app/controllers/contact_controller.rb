@@ -1,6 +1,6 @@
 class ContactController < ApplicationController
 
-  before_filter :require_live_login
+  before_filter :require_live_login, :require_customer_file_login
 
   def index
     respond_to_json do

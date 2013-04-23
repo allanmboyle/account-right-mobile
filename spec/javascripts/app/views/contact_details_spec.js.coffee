@@ -2,18 +2,22 @@ describe("ContactsDetailsView", () ->
 
   ContactDetailsView = null
   RequireLiveLoginFilter = null
+  RequireCustomerFileLoginFilter = null
   Contact = null
   customerFile = null
   applicationState = null
 
   jasmineRequire(this, [ "app/views/contact_details",
                          "app/views/filters/require_live_login",
+                         "app/views/filters/require_customer_file_login",
                          "app/models/contact",
                          "app/models/customer_file",
                          "app/models/application_state" ], (LoadedContactDetailsView, LoadedRequireLiveLoginFilter,
+                                                            LoadedRequireCustomerFileLoginFilter,
                                                             LoadedContact, CustomerFile, ApplicationState) ->
     ContactDetailsView = LoadedContactDetailsView
     RequireLiveLoginFilter = LoadedRequireLiveLoginFilter
+    RequireCustomerFileLoginFilter = LoadedRequireCustomerFileLoginFilter
     Contact = LoadedContact
     customerFile = new CustomerFile(Name: "Some Customer File Name")
     applicationState = new ApplicationState()
@@ -41,7 +45,11 @@ describe("ContactsDetailsView", () ->
     )
 
     it("should require the user to be logged-in to AccountRight Live", () ->
-      expect(contactDetailsView.filters[0] instanceof RequireLiveLoginFilter).toBeTruthy()
+      expect(contactDetailsView.filters).toContainAnInstanceOf(RequireLiveLoginFilter)
+    )
+
+    it("should require the user to be logged-in to a Customer File", () ->
+       expect(contactDetailsView.filters).toContainAnInstanceOf(RequireCustomerFileLoginFilter)
     )
 
     describe("#render", () ->
