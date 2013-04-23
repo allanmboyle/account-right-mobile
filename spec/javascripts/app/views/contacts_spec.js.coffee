@@ -157,6 +157,13 @@ describe("ContactsView", () ->
           contacts = contactsView.contacts
         )
 
+        it("should show the contacts filter input", () ->
+          contactsView.render()
+
+          filterInputToBeVisible = () -> $("#contacts-content input").is(":visible")
+          waitsFor(filterInputToBeVisible, "filter input to be visible", 5000)
+        )
+
         it("should group contacts by their case-insensitive CoLastName", () ->
           contactsView.render()
 
@@ -220,7 +227,14 @@ describe("ContactsView", () ->
           contactsView.render()
 
           noContactsAvailableMessageToBeVisible = () -> $("#no-contacts-message").is(":visible")
-          waitsFor(noContactsAvailableMessageToBeVisible, "No contacts available message to be visible", 5000)
+          waitsFor(noContactsAvailableMessageToBeVisible, "no contacts available message to be visible", 5000)
+        )
+
+        it("should hide the contacts filter input", () ->
+          contactsView.render()
+
+          filterInputToBeHidden = () -> $("#contacts-content input").is(":hidden")
+          waitsFor(filterInputToBeHidden, "filter input to be hidden", 5000)
         )
 
       )

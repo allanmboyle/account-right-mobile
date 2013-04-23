@@ -53,6 +53,7 @@ define([ "jquery",
         autodividers: true,
         autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase()
       )
+      $("#contacts-content form").hide() if @contacts.isEmpty()
 
     _showNoContactsMessageIfNecessary: () ->
       if (@contacts.isEmpty()) then @_noContactsMessage().show() else @_noContactsMessage().hide()

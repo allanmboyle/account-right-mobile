@@ -39,6 +39,10 @@ module AccountRightMobile
           @session.click_link("customer-file-logout")
         end
 
+        def has_no_contacts_filter?
+          @session.has_css?("#contacts-content input", visible: false)
+        end
+
         def has_no_contacts_available_message?
           @session.has_css?("#contacts-content",
                             text: "No contacts are available to access at this time",

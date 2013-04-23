@@ -88,6 +88,10 @@ Then /^no other contacts name should be shown$/ do
   @current_page.contacts.should eql([@filter_contact])
 end
 
+Then /^the contacts filter should not be shown$/ do
+  @current_page.should have_no_contacts_filter
+end
+
 def to_field_symbol(description)
   description.gsub(/\s/, "_").to_sym
 end

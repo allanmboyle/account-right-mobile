@@ -14,6 +14,7 @@ Feature: List Contacts
     When the user logs-in to a Customer File with no contacts
     Then the Contacts page for the Customer File should be shown without error
     And a message should be displayed indicating the file contains no contacts
+    And the contacts filter should not be shown
 
   Scenario: Filter contacts by partial name
     Given the user has logged-in to AccountRight Live
