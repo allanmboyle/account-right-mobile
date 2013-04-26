@@ -37,11 +37,15 @@ describe("Contact", () ->
 
   describe("#balanceDescription", () ->
 
-    describe("when a contacts balance is positive", () ->
+    beforeEach(() ->
+      contact = createContactWithBalance(1)
+    )
 
-      beforeEach(() ->
-        contact = createContactWithBalance(1)
-      )
+    it("should return a string containing the value of the balance precise to two decimal places", () ->
+      expect(contact.balanceDescription()).toContain("1.00")
+    )
+
+    describe("when a contacts balance is positive", () ->
 
       it("should return a string containing 'They owe'", () ->
         expect(contact.balanceDescription()).toContain("They owe")
@@ -55,8 +59,8 @@ describe("Contact", () ->
         contact = createContactWithBalance(0)
       )
 
-      it("should return a string containing 'They owe'", () ->
-        expect(contact.balanceDescription()).toContain("They owe")
+      it("should return '0'", () ->
+        expect(contact.balanceDescription()).toEqual("0")
       )
 
     )
@@ -71,7 +75,7 @@ describe("Contact", () ->
         expect(contact.balanceDescription()).toContain("I owe")
       )
 
-      it("should display the negative balance as a positive number", () ->
+      it("should return a string containing the balance as a positive number", () ->
         expect(contact.balanceDescription()).not.toContain("-1")
         expect(contact.balanceDescription()).toContain("1")
       )
@@ -100,8 +104,8 @@ describe("Contact", () ->
         contact = createContactWithBalance(0)
       )
 
-      it("should return 'positive'", () ->
-        expect(contact.balanceClass()).toContain("positive")
+      it("should return 'zero'", () ->
+        expect(contact.balanceClass()).toContain("zero")
       )
 
     )
@@ -114,6 +118,86 @@ describe("Contact", () ->
 
       it("should return 'negative'", () ->
         expect(contact.balanceClass()).toBe("negative")
+      )
+
+    )
+
+  )
+
+  describe("#isOwing", () ->
+
+    describe("when a contacts balance is positive", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(1)
+      )
+
+      it("should return true", () ->
+        expect(contact.isOwing()).toBeTruthy()
+      )
+
+    )
+
+    describe("when a contacts balance is zero", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(0)
+      )
+
+      it("should return false", () ->
+        expect(contact.isOwing()).toBeFalsy()
+      )
+
+    )
+
+    describe("when a contacts balance is negative", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(-1)
+      )
+
+      it("should return false", () ->
+        expect(contact.isOwing()).toBeFalsy()
+      )
+
+    )
+
+  )
+
+  describe("#isOwed", () ->
+
+    describe("when a contacts balance is positive", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(1)
+      )
+
+      it("should return false", () ->
+        expect(contact.isOwed()).toBeFalsy()
+      )
+
+    )
+
+    describe("when a contacts balance is zero", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(0)
+      )
+
+      it("should return false", () ->
+        expect(contact.isOwed()).toBeFalsy()
+      )
+
+    )
+
+    describe("when a contacts balance is negative", () ->
+
+      beforeEach(() ->
+        contact = createContactWithBalance(-1)
+      )
+
+      it("should return true", () ->
+        expect(contact.isOwed()).toBeTruthy()
       )
 
     )

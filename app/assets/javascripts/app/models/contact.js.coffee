@@ -15,11 +15,24 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
 
     balanceDescription: () ->
       balance = @get("CurrentBalance")
-      oweingEntity = if balance < 0 then "I" else "They"
-      "#{oweingEntity} owe #{Math.abs(balance).toFixed(2)}"
+      owingEntity = @_owingEntity()
+      startingPhrase = if _.isEmpty(owingEntity) then "" else "#{owingEntity} owe "
+      "#{startingPhrase}#{Math.abs(balance).toFixed(if balance == 0 then 0 else 2)}"
 
     balanceClass: () ->
-      if @get("CurrentBalance") < 0 then "negative" else "positive"
+      balance = @get("CurrentBalance")
+      if balance < 0
+        "negative"
+      else if balance == 0
+        "zero"
+      else
+        "positive"
+
+    isOwing: () ->
+      @get("CurrentBalance") > 0
+
+    isOwed: () ->
+      @get("CurrentBalance") < 0
 
     phoneNumbers: () ->
       address = @_firstAddress()
@@ -41,5 +54,14 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
 
     _firstAddress: () ->
       _.find(@get("Addresses"), (address) -> address["Index"] == 1) || {}
+
+    _owingEntity: () ->
+      balance = @get("CurrentBalance")
+      if balance < 0
+        "I"
+      else if balance == 0
+        ""
+      else
+        "They"
 
 )

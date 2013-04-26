@@ -4,6 +4,8 @@ module AccountRightMobile
 
       class Contacts < Pages::Base
 
+        FILTER_BY_NAME_INPUT_SELECTOR = "#contacts-content .ui-listview-filter input"
+
         def self.title
           "Contacts"
         end
@@ -26,9 +28,17 @@ module AccountRightMobile
           end
         end
 
-        def filter(text)
-          @session.find("#contacts-content input").set(text)
+        def filter_by_name(text)
+          @session.find(FILTER_BY_NAME_INPUT_SELECTOR).set(text)
           @contacts = nil
+        end
+
+        def filter_by_they_owe
+          @session.choose("contacts-they-owe-filter")
+        end
+
+        def filter_by_i_owe
+          @session.choose("contacts-i-owe-filter")
         end
 
         def access_a_contact
@@ -39,8 +49,8 @@ module AccountRightMobile
           @session.click_link("customer-file-logout")
         end
 
-        def has_no_contacts_filter?
-          @session.has_css?("#contacts-content input", visible: false)
+        def has_no_contacts_filters?
+          has_no_by_balance_filter? && has_no_by_name_filter?
         end
 
         def has_no_contacts_available_message?
@@ -77,6 +87,14 @@ module AccountRightMobile
 
         def wait_until_all_contacts_are_shown
           wait_until_all_contain_text("#contacts .contact .name")
+        end
+
+        def has_no_by_balance_filter?
+          @session.has_css?("#contacts-content .balance-filter", visible: false)
+        end
+
+        def has_no_by_name_filter?
+          @session.has_css?(FILTER_BY_NAME_INPUT_SELECTOR, visible: false)
         end
 
       end

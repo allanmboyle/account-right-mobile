@@ -15,9 +15,19 @@ module AccountRightMobile
 
             def from_api_model(model, type)
               name = "#{model[:CoLastName]}#{model[:IsIndividual] ? ", #{model[:FirstName]}" : ""}"
-              balance_first_word = model[:CurrentBalance] < 0 ? "I" : "They"
-              balance = "#{balance_first_word} owe #{sprintf("%.2f", model[:CurrentBalance].abs)}"
-              self.new(name: name, type: type, balance: balance)
+              self.new(name: name, type: type, balance: balance_from_api_model(model))
+            end
+
+            private
+
+            def balance_from_api_model(model)
+              first_word = if model[:CurrentBalance] < 0
+                "I"
+              elsif model[:CurrentBalance] > 0
+                "They"
+              end
+              starting_phrase = first_word ? "#{first_word} owe " : ""
+              "#{starting_phrase}#{sprintf("%.2f", model[:CurrentBalance].abs)}"
             end
 
           end

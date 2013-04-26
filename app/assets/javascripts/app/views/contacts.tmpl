@@ -1,5 +1,15 @@
 <%= header %>
 <div id="contacts-content" data-role="content" data-theme="d">
+    <form class="balance-filter">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <input name="balance-filter" id="contacts-all-filter" value="" checked="checked" type="radio" />
+            <label for="contacts-all-filter">All</label>
+            <input name="balance-filter" id="contacts-they-owe-filter" value="isOwing" type="radio" />
+            <label for="contacts-they-owe-filter">They Owe</label>
+            <input name="balance-filter" id="contacts-i-owe-filter" value="isOwed" type="radio" />
+            <label for="contacts-i-owe-filter">I Owe</label>
+        </fieldset>
+    </form>
     <ul id="contacts-list" data-role="listview" data-autodividers="true" data-filter="true" data-filter-placeholder="Search" data-filter-theme="d">
         <% contacts.each(function(contact, index) { %>
         <li class="contact" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-position="<%= index %>">

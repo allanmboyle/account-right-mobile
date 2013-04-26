@@ -1,6 +1,7 @@
 describe("ContactsView", () ->
 
   Backbone = null
+  _ = null
   ContactsView = null
   RequireLiveLoginFilter = null
   RequireCustomerFileLoginFilter = null
@@ -9,16 +10,18 @@ describe("ContactsView", () ->
   applicationState = null
 
   jasmineRequire(this, [ "backbone",
+                         "underscore",
                          "app/views/contacts",
                          "app/views/filters/require_live_login",
                          "app/views/filters/require_customer_file_login",
                          "app/models/contact",
                          "app/models/customer_file",
-                         "app/models/application_state" ], (LoadedBackbone, LoadedContactsView,
+                         "app/models/application_state" ], (LoadedBackbone, LoadedUnderscore, LoadedContactsView,
                                                             LoadedRequireLiveLoginFilter,
                                                             LoadedRequireCustomerFileLoginFilter,
                                                             LoadedContact, CustomerFile, ApplicationState) ->
     Backbone = LoadedBackbone
+    _ = LoadedUnderscore
     ContactsView = LoadedContactsView
     RequireLiveLoginFilter = LoadedRequireLiveLoginFilter
     RequireCustomerFileLoginFilter = LoadedRequireCustomerFileLoginFilter
@@ -157,11 +160,11 @@ describe("ContactsView", () ->
           contacts = contactsView.contacts
         )
 
-        it("should show the contacts filter input", () ->
+        it("should show the contact filters", () ->
           contactsView.render()
 
-          filterInputToBeVisible = () -> $("#contacts-content input").is(":visible")
-          waitsFor(filterInputToBeVisible, "filter input to be visible", 5000)
+          allFilterFormsToBeVisible = () -> $("#contacts-content form:visible").length == 2
+          waitsFor(allFilterFormsToBeVisible, "all filter forms to be visible", 5000)
         )
 
         it("should group contacts by their case-insensitive CoLastName", () ->
@@ -219,6 +222,32 @@ describe("ContactsView", () ->
 
         )
 
+        describe("and the user clicks a balance filter button", () ->
+
+          ["all", "they-owe", "i-owe"].forEach((balanceFilterType) ->
+
+            describe("which filters by '#{balanceFilterType}'", () ->
+
+              beforeEach(() ->
+                contactsView.render()
+              )
+
+              it("should invoke the filter action", () ->
+                spyOn(contactsView, "filter")
+                contactsView.delegateEvents() # Attach spy to DOM events
+
+                $("#contacts-#{balanceFilterType}-filter").parent().find("label").click()
+
+                filterActionToBeInvoked = () -> contactsView.filter.callCount == 1
+                waitsFor(filterActionToBeInvoked, "filter action to be invoked", 5000)
+              )
+
+            )
+
+          )
+
+        )
+
       )
 
       describe("when no contacts are retrived", () ->
@@ -230,11 +259,209 @@ describe("ContactsView", () ->
           waitsFor(noContactsAvailableMessageToBeVisible, "no contacts available message to be visible", 5000)
         )
 
-        it("should hide the contacts filter input", () ->
+        it("should hide the contact filters", () ->
           contactsView.render()
 
-          filterInputToBeHidden = () -> $("#contacts-content input").is(":hidden")
-          waitsFor(filterInputToBeHidden, "filter input to be hidden", 5000)
+          allFilterFormsToBeHidden = () -> $("#contacts-content form:hidden").length == 2
+          waitsFor(allFilterFormsToBeHidden, "all filter forms to be hidden", 5000)
+        )
+
+      )
+
+    )
+
+    describe("#filter", () ->
+
+      describe("when there is a mix of owed and owing contacts", () ->
+
+        beforeEach(() ->
+          contactsView.contacts.add([ createContact(CoLastName: "Company A", CurrentBalance: 100.00),
+                                      createContact(CoLastName: "Company B", CurrentBalance: -200.00),
+                                      createContact(CoLastName: "Company C", CurrentBalance: 200.00),
+                                      createContact(CoLastName: "Sole Trader A", CurrentBalance: -800.00),
+                                      createContact(CoLastName: "Sole Trader B", CurrentBalance: 800.00) ])
+          contactsView.render()
+        )
+
+        describe("and the user filters by contacts that owe", () ->
+
+          beforeEach(() ->
+            $("#contacts-they-owe-filter").prop("checked", true)
+          )
+
+          it("should show the contacts that owe", () ->
+            contactsView.filter()
+
+            contactsThatOweToBeVisible = () -> hasVisibleContactPositions(0, 2, 4)
+            waitsFor(contactsThatOweToBeVisible, "contacts that owe to be visible", 5000)
+          )
+
+          it("should hide the contacts the user owe's", () ->
+            contactsView.filter()
+
+            contactsTheUserOwesToBeHidden = () -> hasHiddenContactPositions(1, 3)
+            waitsFor(contactsTheUserOwesToBeHidden, "contacts the user owe's to be hidden", 5000)
+          )
+
+        )
+
+        describe("and the user filters by contacts they owe", () ->
+
+          beforeEach(() ->
+            $("#contacts-i-owe-filter").prop("checked", true)
+          )
+
+          it("should show the contacts they owe", () ->
+            contactsView.filter()
+
+            contactsTheUserOwesToBeVisible = () -> hasVisibleContactPositions(1, 3)
+            waitsFor(contactsTheUserOwesToBeVisible, "contacts the user owe's to be visible", 5000)
+          )
+
+          it("should hide the contacts that owe", () ->
+            contactsView.filter()
+
+            contactsThatOweToBeHidden = () -> hasHiddenContactPositions(0, 2, 4)
+            waitsFor(contactsThatOweToBeHidden, "contacts that owe to be hidden", 5000)
+          )
+
+        )
+
+        describe("and the user filters by a contact name", () ->
+
+          describe("that exactly matches a contacts name", () ->
+
+            beforeEach(() ->
+              establishNameFilterValue("Company C")
+            )
+
+            it("should show the contact whose name matches", () ->
+              contactsView.filter()
+
+              contactWithMatchingNameToBeVisible = () -> hasVisibleContactPositions(2)
+              waitsFor(contactWithMatchingNameToBeVisible, "contact with a matching name to be visible", 5000)
+            )
+
+            it("should hide all other contacts", () ->
+              contactsView.filter()
+
+              contactsWhoseNameDoesNotMatchToBeHidden = () -> hasHiddenContactPositions(0, 1, 3, 4)
+              waitsFor(contactsWhoseNameDoesNotMatchToBeHidden, "contacts with non-matching name to be hidden", 5000)
+            )
+
+          )
+
+          describe("that matches a contacts name with different casing", () ->
+
+            beforeEach(() ->
+              establishNameFilterValue("company b")
+            )
+
+            it("should show the contact whose name matches", () ->
+               contactsView.filter()
+
+               contactWithMatchingNameToBeVisible = () -> hasVisibleContactPositions(1)
+               waitsFor(contactWithMatchingNameToBeVisible, "contact with a matching name to be visible", 5000)
+            )
+
+            it("should hide all other contacts", () ->
+               contactsView.filter()
+
+               contactsWhoseNameDoesNotMatchToBeHidden = () -> hasHiddenContactPositions(0, 2, 3, 4)
+               waitsFor(contactsWhoseNameDoesNotMatchToBeHidden, "contacts with non-matching name to be hidden", 5000)
+            )
+
+          )
+
+          describe("that matches multiple contact names", () ->
+
+            beforeEach(() ->
+              establishNameFilterValue("Company")
+            )
+
+            it("should show the contacts whose name matches", () ->
+              contactsView.filter()
+
+              contactsWithMatchingNameToBeVisible = () -> hasVisibleContactPositions(0, 1, 2)
+              waitsFor(contactsWithMatchingNameToBeVisible, "contacts with a matching name to be visible", 5000)
+            )
+
+            it("should hide all other contacts", () ->
+              contactsView.filter()
+
+              contactsWhoseNameDoesNotMatchToBeHidden = () -> hasHiddenContactPositions(3, 4)
+              waitsFor(contactsWhoseNameDoesNotMatchToBeHidden, "contacts with non-matching name to be hidden", 5000)
+            )
+
+          )
+
+        )
+
+        describe("and the user applies a filter reducing the number of contacts shown", () ->
+
+          beforeEach(() ->
+            $("#contacts-they-owe-filter").prop("checked", true)
+          )
+
+          describe("and then applies the other filter", () ->
+
+            beforeEach(() ->
+              establishNameFilterValue("Company")
+            )
+
+            it("should show the contacts matching both filters", () ->
+              contactsView.filter()
+
+              contactsMatchingTheFiltersToBeVisible = () -> hasVisibleContactPositions(0, 2)
+              waitsFor(contactsMatchingTheFiltersToBeVisible, "contacts matching the filters to be visible", 5000)
+            )
+
+            it("should hide all other contacts", () ->
+              contactsView.filter()
+
+              contactsNotMatchTheFiltersToBeHidden = () -> hasHiddenContactPositions(1, 3, 4)
+              waitsFor(contactsNotMatchTheFiltersToBeHidden, "non-matching contacts to be hidden", 5000)
+            )
+
+          )
+
+          describe("and then removes the filter", () ->
+
+            beforeEach(() ->
+              $("#contacts-all-filter").prop("checked", true)
+            )
+
+            it("should show all the contacts", () ->
+               contactsView.filter()
+
+               allContactsToBeVisible = () -> hasVisibleContactPositions(0, 1, 2, 3, 4)
+               waitsFor(allContactsToBeVisible, "all contacts to be visible", 5000)
+            )
+
+          )
+
+        )
+
+        describe("and the users filter results in no contacts being shown", () ->
+
+          beforeEach(() ->
+            establishNameFilterValue("someNonExistantContactName")
+          )
+
+          it("should hide all the contacts", () ->
+            contactsView.filter()
+
+            allContactsToBeHidden = () -> hasHiddenContactPositions(0, 1, 2, 3, 4)
+            waitsFor(allContactsToBeHidden, "all contacts to be hidden", 5000)
+          )
+
+          it("should show the contact filters", () ->
+            contactsView.filter()
+
+            allFilterFormsToBeVisible = () -> $("#contacts-content form:visible").length == 2
+            waitsFor(allFilterFormsToBeVisible, "all filter forms to be visible", 5000)
+          )
+
         )
 
       )
@@ -305,12 +532,34 @@ describe("ContactsView", () ->
       contactsView = new ContactsView(applicationState)
       contactsView.filters = []
 
+    contactCreationCounter = 0
+
+    createContact = (options) ->
+      _.extend({ CoLastName: "A Company #{++contactCreationCounter}", IsIndividual: false, FirstName: "", Type: "Customer", CurrentBalance: 100.00 }, options)
+
     assertContact = (container, expectedValues) ->
       jqueryContainer = $(container)
       expect(jqueryContainer.find(".name")).toHaveText(expectedValues.name)
       expect(jqueryContainer.find(".type")).toHaveText(expectedValues.type)
       expect(jqueryContainer.find(".balance")).toHaveText(new RegExp(regexEscape(expectedValues.balance)))
 
+    establishNameFilterValue = (value) ->
+      $("#contacts-content form.ui-listview-filter input").val(value)
+
+    hasVisibleContactPositions = () ->
+      expectedPositions = $.makeArray(arguments)
+      actualPositions = positionsFrom($("#contacts-content .contact:not(.ui-screen-hidden)"))
+      console.log("**** expected positions: #{JSON.stringify(expectedPositions)}")
+      console.log("**** actual positions: #{JSON.stringify(actualPositions)}")
+      JSON.stringify(actualPositions) == JSON.stringify(expectedPositions)
+
+    hasHiddenContactPositions = () ->
+      expectedPositions = $.makeArray(arguments)
+      actualPositions = positionsFrom($("#contacts-content .contact.ui-screen-hidden"))
+      JSON.stringify(actualPositions) == JSON.stringify(expectedPositions)
+
+    positionsFrom = (contactElements) ->
+      contactElements.map((i, element) -> $(element).data("position")).get()
   )
 
 )

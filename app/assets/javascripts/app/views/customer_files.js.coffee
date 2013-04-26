@@ -52,10 +52,10 @@ define([ "jquery",
       location.hash = "contacts"
 
     loginFail: () ->
-      $("#customer-file-login-fail-message").popup().popup("open")
+      $("#customer-file-login-fail-message").popup("open")
 
     loginError: () ->
-      $("#customer-file-login-error-message").popup().popup("open")
+      $("#customer-file-login-error-message").popup("open")
 
     _headerContent: () ->
       @renderHeader(
@@ -88,7 +88,7 @@ define([ "jquery",
       if @customerFiles.isEmpty() then @_noFilesMessage().show() else @_noFilesMessage().hide()
 
     _showErrorIfNecessary: () ->
-      $("#customer-files-general-error-message").popup().popup("open") if @customerFiles.fetchError
+      $("#customer-files-general-error-message").popup("open") if @customerFiles.fetchError
 
     _loginContent: () ->
       $("#customer-file-login-content")

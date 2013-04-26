@@ -1,10 +1,11 @@
 define([ "jquery",
          "underscore",
          "./base/view",
+         "../jquery-mobile/listview"
          "./filters/require_live_login",
          "./filters/require_customer_file_login",
          "../models/contacts",
-         "text!./contacts.tmpl" ], ($, _, BaseView,
+         "text!./contacts.tmpl" ], ($, _, BaseView, Listview,
                                     RequireLiveLoginFilter, RequireCustomerFileLoginFilter,
                                     Contacts, Template) ->
 
@@ -23,6 +24,7 @@ define([ "jquery",
     events: () ->
       "pagebeforeshow": "_pageBeforeShow"
       "pageshow": "_showErrorIfNecessary"
+      "change input[name='balance-filter']": "filter"
       "click .contact": "open"
 
     liveLoginRequired: true
@@ -32,6 +34,11 @@ define([ "jquery",
 
     prepareDom: () ->
       @$el.html(@compiledTemplate(header: @_headerContent(), contacts: @contacts))
+      @_balanceFilters = @$el.find("input[name='balance-filter']")
+      @_noContactsMessage = @$el.find("#no-contacts-message")
+
+    filter: () ->
+      @listview.filter()
 
     open: (event) ->
       @applicationState.openedContact = @_contactFrom(event)
@@ -46,23 +53,31 @@ define([ "jquery",
 
     _pageBeforeShow: () ->
       @_refreshList()
+      @_hideFiltersIfNecessary()
       @_showNoContactsMessageIfNecessary()
 
     _refreshList: () ->
-      $("#contacts-list").listview(
-        autodividers: true,
+      listviewOptions =
+        autodividers: true
         autodividersSelector: (li) -> $(li).find(".name").text()[0].toUpperCase()
-      )
-      $("#contacts-content form").hide() if @contacts.isEmpty()
+        filterCallback: (item) => @_filterContact(item)
+      @listview = new Listview("#contacts-list", listviewOptions)
+
+    _hideFiltersIfNecessary: () ->
+      @$el.find("form").hide() if @contacts.isEmpty()
 
     _showNoContactsMessageIfNecessary: () ->
-      if (@contacts.isEmpty()) then @_noContactsMessage().show() else @_noContactsMessage().hide()
+      if (@contacts.isEmpty()) then @_noContactsMessage.show() else @_noContactsMessage.hide()
 
     _showErrorIfNecessary: () ->
-      $("#contacts-general-error-message").popup().popup("open") if @contacts.fetchError
+      $("#contacts-general-error-message").popup("open") if @contacts.fetchError
 
-    _noContactsMessage: () ->
-      $("#no-contacts-message")
+    _filterContact: (element) ->
+      balanceMethod = @_balanceFilters.filter(":checked").val()
+      searchInput = @listview.searchElement.val().toLowerCase()
+      contact = @contacts.at(element.data("position"))
+      contact.name().toLowerCase().indexOf(searchInput) == -1 ||
+        (!_.isEmpty(balanceMethod) && !contact[balanceMethod].apply(contact, null))
 
     _contactFrom: (event) ->
       target = $(event.target)

@@ -48,11 +48,19 @@ module AccountRight
                                    DataFactory.create_company(CoLastName: ::Faker::Lorem.characters(255)) ] }.to_json
                            })
 
+            stub_activator("/return_customer_with_balance_of_zero", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
+                           method: :get,
+                           headers: NORMAL_HEADERS,
+                           response: { status: 200, body:
+                               { "Items" => [
+                                   DataFactory.create_company(CurrentBalance: 0) ]}.to_json
+                           })
+
             stub_activator("/return_customer_with_minimal_data", /#{COMPANY_FILE_URI}\/[^\/]+\/Customer/,
                            method: :get,
                            headers: NORMAL_HEADERS,
                            response: { status: 200, body:
-                               { "Items" => [ 
+                               { "Items" => [
                                    DataFactory.create_contact_with_minimal_data() ]}.to_json
                            })
 
