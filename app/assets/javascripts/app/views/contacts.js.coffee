@@ -53,7 +53,7 @@ define([ "jquery",
 
     _pageBeforeShow: () ->
       @_refreshList()
-      @_hideFiltersIfNecessary()
+      @_disableFiltersIfNecessary()
       @_showNoContactsMessageIfNecessary()
 
     _refreshList: () ->
@@ -63,8 +63,10 @@ define([ "jquery",
         filterCallback: (item) => @_filterContact(item)
       @listview = new Listview("#contacts-list", listviewOptions)
 
-    _hideFiltersIfNecessary: () ->
-      @$el.find("form").hide() if @contacts.isEmpty()
+    _disableFiltersIfNecessary: () ->
+      if @contacts.isEmpty()
+        @$el.find("input[type='radio']").checkboxradio("disable")
+        @listview.searchElement.textinput("disable")
 
     _showNoContactsMessageIfNecessary: () ->
       if (@contacts.isEmpty()) then @_noContactsMessage.show() else @_noContactsMessage.hide()

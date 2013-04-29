@@ -23,8 +23,8 @@ define([ "jquery", "underscore" ], ($, _) ->
         else
           childItems = true
       )
-      @_showItemsNotAddedToHideQueue(items)
-      @_hideItemsAddedToHideQueue(items)
+      @_showItemsNotOnHideQueue(items)
+      @_hideItemsOnHideQueue(items)
 
     _bindFilter: () ->
       @_unbindDefaultFilter()
@@ -36,11 +36,11 @@ define([ "jquery", "underscore" ], ($, _) ->
     _unbindDefaultFilter: () ->
       @searchElement.unbind()
 
-    _showItemsNotAddedToHideQueue: (items) ->
+    _showItemsNotOnHideQueue: (items) ->
       items.filter(":not(.ui-filter-hidequeue)")
         .toggleClass("ui-screen-hidden", false)
 
-    _hideItemsAddedToHideQueue: (items) ->
+    _hideItemsOnHideQueue: (items) ->
       items.filter(".ui-filter-hidequeue")
         .toggleClass("ui-screen-hidden", true)
         .toggleClass("ui-filter-hidequeue", false)

@@ -160,11 +160,10 @@ describe("ContactsView", () ->
           contacts = contactsView.contacts
         )
 
-        it("should show the contact filters", () ->
+        it("should enable the contact filters", () ->
           contactsView.render()
 
-          allFilterFormsToBeVisible = () -> $("#contacts-content form:visible").length == 2
-          waitsFor(allFilterFormsToBeVisible, "all filter forms to be visible", 5000)
+          waitsFor(allFilterFormsToBeEnabled, "all filters to be enabled", 5000)
         )
 
         it("should group contacts by their case-insensitive CoLastName", () ->
@@ -259,11 +258,10 @@ describe("ContactsView", () ->
           waitsFor(noContactsAvailableMessageToBeVisible, "no contacts available message to be visible", 5000)
         )
 
-        it("should hide the contact filters", () ->
+        it("should disable the contact filters", () ->
           contactsView.render()
 
-          allFilterFormsToBeHidden = () -> $("#contacts-content form:hidden").length == 2
-          waitsFor(allFilterFormsToBeHidden, "all filter forms to be hidden", 5000)
+          waitsFor(allFilterFormsToBeDisabled, "all filters to be disabled", 5000)
         )
 
       )
@@ -455,11 +453,10 @@ describe("ContactsView", () ->
             waitsFor(allContactsToBeHidden, "all contacts to be hidden", 5000)
           )
 
-          it("should show the contact filters", () ->
+          it("should enable the contact filters", () ->
             contactsView.filter()
 
-            allFilterFormsToBeVisible = () -> $("#contacts-content form:visible").length == 2
-            waitsFor(allFilterFormsToBeVisible, "all filter forms to be visible", 5000)
+            waitsFor(allFilterFormsToBeEnabled, "all filters to be enabled", 5000)
           )
 
         )
@@ -546,19 +543,23 @@ describe("ContactsView", () ->
     establishNameFilterValue = (value) ->
       $("#contacts-content form.ui-listview-filter input").val(value)
 
+    allFilterFormsToBeEnabled = () ->
+      $("#contacts-content ui-input-search.ui-disabled, #contacts-content ui-radio.ui-disabled").size() == 0
+
+    allFilterFormsToBeDisabled = () ->
+      $("#contacts-content ui-input-search:not(.ui-disabled), #contacts-content ui-radio:not(.ui-disabled)").size() == 0
+
     hasVisibleContactPositions = () ->
       expectedPositions = $.makeArray(arguments)
-      actualPositions = positionsFrom($("#contacts-content .contact:not(.ui-screen-hidden)"))
-      console.log("**** expected positions: #{JSON.stringify(expectedPositions)}")
-      console.log("**** actual positions: #{JSON.stringify(actualPositions)}")
+      actualPositions = contactPositionsFrom($("#contacts-content .contact:not(.ui-screen-hidden)"))
       JSON.stringify(actualPositions) == JSON.stringify(expectedPositions)
 
     hasHiddenContactPositions = () ->
       expectedPositions = $.makeArray(arguments)
-      actualPositions = positionsFrom($("#contacts-content .contact.ui-screen-hidden"))
+      actualPositions = contactPositionsFrom($("#contacts-content .contact.ui-screen-hidden"))
       JSON.stringify(actualPositions) == JSON.stringify(expectedPositions)
 
-    positionsFrom = (contactElements) ->
+    contactPositionsFrom = (contactElements) ->
       contactElements.map((i, element) -> $(element).data("position")).get()
   )
 
