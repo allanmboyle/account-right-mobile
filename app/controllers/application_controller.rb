@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_unexpected_exception(exception)
-    Rails.logger.error("An unexpected exception occurred: #{exception.class.name} #{exception}")
+    exception_details = "#{exception.class.name} #{exception}\n#{exception.backtrace.join("\n")}"
+    Rails.logger.error("An unexpected exception occurred: #{exception_details}")
     respond_to_json { render json: exception.message, status: 500 }
   end
 

@@ -84,6 +84,13 @@ describe TestableApplicationController, type: :controller do
       post :action_causing_exception, format: :json
     end
 
+    it "should log the backtrace of the exception" do
+      method_on_callstack = "action_causing_exception"
+      Rails.logger.should_receive(:error).with(/#{method_on_callstack}/)
+
+      post :action_causing_exception, format: :json
+    end
+
   end
 
 end
