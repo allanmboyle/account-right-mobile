@@ -35,7 +35,7 @@ module AccountRightMobile
         end
 
         def shown?
-          @session.has_selector?('title', text: self.class.title).tap do |is_shown|
+          @session.has_selector?('title', text: self.class.title, visible: false).tap do |is_shown|
             wait_until_completely_shown if is_shown
           end
         end
