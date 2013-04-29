@@ -102,9 +102,9 @@ describe("ContactsView", () ->
            contactsView.update()
 
            contacts = $(".contact")
-           assertContact(contacts[0], { name: "A Company", type: "Customer", balance: "100.00" })
-           assertContact(contacts[1], { name: "Another Company", type: "Customer", balance: "200.00" })
-           assertContact(contacts[2], { name: "Noah, Joachim", type: "Supplier", balance: "100.00" })
+           assertContact(contacts[0], { name: "A Company", type: "Customer", balance: "$100.00" })
+           assertContact(contacts[1], { name: "Another Company", type: "Customer", balance: "$200.00" })
+           assertContact(contacts[2], { name: "Noah, Joachim", type: "Supplier", balance: "$100.00" })
         )
 
         it("should not show a message indicating an error occurred", () ->
@@ -172,8 +172,8 @@ describe("ContactsView", () ->
           groupLetters = $(".ui-li-divider").text()
           expect(groupLetters).toBe("A")
           contactElements = $(".contact")
-          assertContact(contactElements[0], { name: "a Company", type: "Customer", balance: "100.00" })
-          assertContact(contactElements[1], { name: "Another Company", type: "Supplier", balance: "200.00" })
+          assertContact(contactElements[0], { name: "a Company", type: "Customer", balance: "$100.00" })
+          assertContact(contactElements[1], { name: "Another Company", type: "Supplier", balance: "$200.00" })
         )
 
         it("should render the balance as the contacts balance description", () ->

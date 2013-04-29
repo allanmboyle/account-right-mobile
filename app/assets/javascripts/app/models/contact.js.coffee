@@ -1,4 +1,4 @@
-define([ "backbone", "underscore" ], (Backbone, _) ->
+define([ "backbone", "underscore", "accounting" ], (Backbone, _, accounting) ->
 
   class Contact extends Backbone.Model
 
@@ -17,7 +17,7 @@ define([ "backbone", "underscore" ], (Backbone, _) ->
       balance = @get("CurrentBalance")
       owingEntity = @_owingEntity()
       startingPhrase = if _.isEmpty(owingEntity) then "" else "#{owingEntity} owe "
-      "#{startingPhrase}#{Math.abs(balance).toFixed(if balance == 0 then 0 else 2)}"
+      "#{startingPhrase}#{accounting.formatMoney(Math.abs(balance))}"
 
     balanceClass: () ->
       balance = @get("CurrentBalance")

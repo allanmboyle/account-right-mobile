@@ -11,14 +11,12 @@ module AccountRightMobile
           class << self
 
             def from_page_node(node)
-              self.new(name: node.find(".name").text(),
-                       type: node.find(".type").text(),
-                       balance: node.find(".balance").text(),
-                       phone_numbers: text_from(node.all(".phoneNumber")),
-                       callable_phone_numbers: text_from(node.all(".phoneNumber a[href^='tel:']")),
-                       email_address: text_from(node.first(".emailAddress")),
-                       mailable_email_address: text_from(node.first(".emailAddress a[href^='mailto:']")),
-                       address: text_from(node.all(".address .line")))
+              overview = ContactOverview.from_page_node(node).to_h
+              self.new(overview.merge(phone_numbers: text_from(node.all(".phoneNumber")),
+                                      callable_phone_numbers: text_from(node.all(".phoneNumber a[href^='tel:']")),
+                                      email_address: text_from(node.first(".emailAddress")),
+                                      mailable_email_address: text_from(node.first(".emailAddress a[href^='mailto:']")),
+                                      address: text_from(node.all(".address .line"))))
             end
 
             def from_api_model(model, type)

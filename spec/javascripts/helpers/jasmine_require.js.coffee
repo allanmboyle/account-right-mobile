@@ -1,4 +1,4 @@
-JasmineRequire = {
+JasmineRequire =
 
   require: (executionContext, modulesToRequire, callback) ->
     @requireWithStubs(executionContext, {}, modulesToRequire, callback)
@@ -37,7 +37,8 @@ JasmineRequire = {
         jquerymobile: "jquery.mobile-1.3.0.min"
         underscore: "underscore-1.4.4.min"
         backbone: "backbone-0.9.9.min"
-        text : "text-2.0.3"
+        text: "text-2.0.3"
+        accounting: "accounting-0.3.2.min"
       shim:
         underscore:
           exports: "_"
@@ -51,8 +52,6 @@ JasmineRequire = {
       do (value) ->
         define("stub#{key}", () -> value)
     require: newRequire
-
-}
 
 window.jasmineRequire = () -> JasmineRequire.require.apply(JasmineRequire, arguments)
 window.jasmineRequireWithStubs = () -> JasmineRequire.requireWithStubs.apply(JasmineRequire, arguments)

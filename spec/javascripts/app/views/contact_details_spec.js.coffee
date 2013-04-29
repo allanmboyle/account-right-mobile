@@ -99,7 +99,7 @@ describe("ContactsDetailsView", () ->
 
             expect($(".contact .name")).toHaveText("a Company")
             expect($(".contact .type")).toHaveText("Customer")
-            expect($(".contact .balance")).toHaveText("They owe 100.00")
+            expect($(".contact .balance")).toHaveText("They owe $100.00")
             renderedPhoneNumbers = _.map($(".contact .phoneNumber"), (element) -> $(element).text())
             expect(renderedPhoneNumbers).toEqual([ "111111111", "222222222", "333333333" ])
             expect($(".contact .emailAddress")).toHaveText("someone@test.com")

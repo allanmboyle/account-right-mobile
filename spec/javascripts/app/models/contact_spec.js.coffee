@@ -41,8 +41,8 @@ describe("Contact", () ->
       contact = createContactWithBalance(1)
     )
 
-    it("should return a string containing the value of the balance precise to two decimal places", () ->
-      expect(contact.balanceDescription()).toContain("1.00")
+    it("should return a string containing the balance displayed as money precise to two decimal places", () ->
+      expect(contact.balanceDescription()).toContain("$1.00")
     )
 
     describe("when a contacts balance is positive", () ->
@@ -59,8 +59,8 @@ describe("Contact", () ->
         contact = createContactWithBalance(0)
       )
 
-      it("should return '0'", () ->
-        expect(contact.balanceDescription()).toEqual("0")
+      it("should return '$0.00'", () ->
+        expect(contact.balanceDescription()).toEqual("$0.00")
       )
 
     )
@@ -75,9 +75,9 @@ describe("Contact", () ->
         expect(contact.balanceDescription()).toContain("I owe")
       )
 
-      it("should return a string containing the balance as a positive number", () ->
-        expect(contact.balanceDescription()).not.toContain("-1")
-        expect(contact.balanceDescription()).toContain("1")
+      it("should return a string containing the balance as a positive monetary value", () ->
+        expect(contact.balanceDescription()).not.toContain("-$1.00")
+        expect(contact.balanceDescription()).toContain("$1.00")
       )
 
     )
