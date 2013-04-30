@@ -1,8 +1,6 @@
 source ENV['GEMFURY_URL'] if ENV['GEMFURY_URL']
 source 'http://rubygems.org'
 
-gem 'bundler', '~> 1.3.5'
-
 ruby '1.9.3'
 
 gem 'rails', '3.2.13'
