@@ -27,8 +27,7 @@ namespace(:jasmine) do
     desc "Exercises Jasmine specifications via node target #{node_target}"
     task(task_name => %w{ jasmine:compile }) do
       output = execute_with_logging "node #{AccountRightMobile::Build::Npm.root.join("grunt", "bin", "grunt")} -v #{node_target}"
-      results_match = output.match(/\d* specs, (\d+) failure/) || [nil, 0]
-      fail "Jasmine specs failed" if results_match[1].to_i > 0
+      fail "Jasmine specs failed" unless output.match(/Done, without errors/)
     end
   end
 
