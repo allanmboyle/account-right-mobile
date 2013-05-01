@@ -22,7 +22,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'account-right-mobile-configuration', '0.2.12' if ENV['GEMFURY_URL']
+gem 'account-right-mobile-configuration', '0.2.13' if ENV['GEMFURY_URL']
 gem 'json'
 gem 'httparty', '~> 0.10.2'
 
