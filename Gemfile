@@ -8,9 +8,6 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'account-right-mobile-configuration', '0.2.12' if ENV['GEMFURY_URL']
-gem 'json'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -25,8 +22,13 @@ end
 
 gem 'jquery-rails'
 
+gem 'account-right-mobile-configuration', '0.2.12' if ENV['GEMFURY_URL']
+gem 'json'
+gem 'httparty', '~> 0.10.2'
+
 group :test do
   gem 'immutable_struct', '~> 1.1.0'
+  gem 'wait_until', '~> 0.0.1'
 
   gem 'rspec-rails', '~> 2.13.0'
   gem 'simplecov', '~> 0.7.1'
@@ -38,14 +40,11 @@ group :test do
   # gem 'ruby-debug19'
 end
 
-gem 'sys-proctree', '~> 0.0.4', require: 'sys/proctree'
-gem 'http_stub', '~> 0.7.3'
-gem 'faker', '~> 1.1.2'
-gem 'http_server_manager', '~> 0.2.0'
-gem 'wait_until', '~> 0.0.1'
-gem 'httparty', '~> 0.10.2'
-
-gem 'newrelic_rpm'
+group :stub_services do
+  gem 'faker', '~> 1.1.2'
+  gem 'http_server_manager', '~> 0.2.0'
+  gem 'http_stub', '~> 0.7.3'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -58,3 +57,5 @@ gem 'newrelic_rpm'
 
 # Deploy with Capistrano
 # gem 'capistrano'
+
+gem 'newrelic_rpm'

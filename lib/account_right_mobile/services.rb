@@ -1,3 +1,8 @@
+Bundler.setup(:stub_services)
+require 'faker'
+require 'http_server_manager'
+require 'http_stub'
+
 HttpServerManager.pid_dir = "#{Rails.root}/tmp/pids"
 HttpServerManager.log_dir = "#{Rails.root}/log"
 
