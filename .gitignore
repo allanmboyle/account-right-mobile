@@ -1,10 +1,10 @@
+.bundle
 .DS_Store
 .idea
 .node
 .sass-cache
 *.log
 _SpecRunner.html
-Gemfile.lock
 coverage
 grunt
 grunt-jasmine-runner
