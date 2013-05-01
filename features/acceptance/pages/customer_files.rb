@@ -21,7 +21,7 @@ module AccountRightMobile
         end
 
         def access_a_file
-          customer_file_link = @session.all("#customer-files-list a").first
+          customer_file_link = @session.find(".customer-file:first-of-type a")
           customer_file_link.click unless customer_file_names.size == 1
           wait_until_login_is_shown
           customer_file_link.find(".customer-file-name").text()
