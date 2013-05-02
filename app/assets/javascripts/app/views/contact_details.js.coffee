@@ -17,8 +17,6 @@ define([ "jquery",
 
     el: $("#contact-details")
 
-    liveLoginRequired: true
-
     renderOptions: { transition: "slide" }
 
     prepareDom: () ->

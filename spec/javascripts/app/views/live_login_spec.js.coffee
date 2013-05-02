@@ -18,17 +18,17 @@ describe("LiveLoginView", () ->
 
   beforeEach(() ->
     # Compensation for pageshow not being triggered in behaviours
-    $("#live_login").on("pagebeforeshow", () -> $("#live_login").trigger("pageshow"))
+    $("#live-login").on("pagebeforeshow", () -> $("#live-login").trigger("pageshow"))
   )
 
   afterEach(() ->
-    $("#live_login").remove()
+    $("#live-login").remove()
   )
 
   describe("when loaded", () ->
 
     it("should add a page placeholder to the dom", () ->
-      expect($("#live_login")).toExist()
+      expect($("#live-login")).toExist()
     )
 
   )
@@ -53,14 +53,14 @@ describe("LiveLoginView", () ->
 
     describe("model event configuration", () ->
 
-      resetSuccessSpy = null
+      renderSpy = null
       resetErrorSpy = null
       loginSuccessSpy = null
       loginFailSpy = null
       loginErrorSpy = null
 
       beforeEach(() ->
-        resetSuccessSpy = LiveLoginView.prototype.resetSuccess = jasmine.createSpy()
+        renderSpy = LiveLoginView.prototype.render = jasmine.createSpy()
         resetErrorSpy = LiveLoginView.prototype.resetError = jasmine.createSpy()
         loginSuccessSpy = LiveLoginView.prototype.loginSuccess = jasmine.createSpy()
         loginFailSpy = LiveLoginView.prototype.loginFail = jasmine.createSpy()
@@ -69,10 +69,10 @@ describe("LiveLoginView", () ->
         liveLoginView = new LiveLoginView(applicationState)
       )
 
-      it("should cause the resetSuccess action to be invoked when the users reset:success event occurs", () ->
+      it("should cause the render action to be invoked when the users reset:success event occurs", () ->
         liveUser.trigger("reset:success")
 
-        expect(resetSuccessSpy).toHaveBeenCalled()
+        expect(renderSpy).toHaveBeenCalled()
       )
 
       it("should cause the resetError action to be invoked when the users reset:error event occurs", () ->
@@ -101,19 +101,19 @@ describe("LiveLoginView", () ->
 
     )
 
-    describe("#render", () ->
+    describe("#reset", () ->
 
       it("should reset the current user", () ->
         spyOn(liveUser, "reset")
 
-        liveLoginView.render()
+        liveLoginView.reset()
 
         expect(liveUser.reset).toHaveBeenCalled()
       )
 
     )
 
-    describe("#resetSuccess", () ->
+    describe("#render", () ->
 
       describe("when re-login is required", () ->
 
@@ -122,14 +122,14 @@ describe("LiveLoginView", () ->
         )
 
         it("should show a message indicating re-login is required", () ->
-          liveLoginView.resetSuccess()
+          liveLoginView.render()
 
           reLoginMessageToBeVisible = () -> $("#live-re-login-required-message").is(":visible")
           waitsFor(reLoginMessageToBeVisible, "re-login message to be visible", 5000)
         )
 
         it("should remove the marker from the application state that indicates re-login is required", () ->
-          liveLoginView.resetSuccess()
+          liveLoginView.render()
 
           reLoginRequiredFlagToBeFalse = () -> applicationState.reLoginRequired == false
           waitsFor(reLoginRequiredFlagToBeFalse, "re-login required flag to be false", 5000)
@@ -140,7 +140,7 @@ describe("LiveLoginView", () ->
       describe("when re-login is not required", () ->
 
         it("should not show a message indicating re-login is required", () ->
-          liveLoginView.resetSuccess()
+          liveLoginView.render()
 
           reLoginMessageToBeHidden = () -> $("#live-re-login-required-message").is(":hidden")
           waitsFor(reLoginMessageToBeHidden, "re-login message to be hidden", 5000)
@@ -153,7 +153,7 @@ describe("LiveLoginView", () ->
     describe("and rendered", () ->
 
       beforeEach(() ->
-        liveLoginView.resetSuccess()
+        liveLoginView.render()
       )
 
       describe("and crendentials have been entered", () ->

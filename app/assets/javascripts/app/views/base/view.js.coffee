@@ -2,18 +2,18 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
 
   class BaseView extends Backbone.View
 
-    renderOptions: {}
-
     initialize: (@applicationState, @filters=[]) ->
+
+    additionalEvents: {}
+
+    events: () ->
+      _.extend({ "pagebeforecreate": "prepareDom" }, @additionalEvents)
+
+    renderOptions: {}
 
     render: () ->
       if (@_executeFilters())
-        @$el.page().page("destroy").empty()
-        @prepareDom()
-        $.mobile.changePage(
-          "##{@$el.attr("id")}",
-          _.extend({ reverse: false, changeHash: false, allowSamePageTransition: true }, @renderOptions)
-        )
+        $.mobile.changePage(@$el, _.extend({}, @_defaultRenderOptions, @renderOptions))
 
     renderHeader: (options) ->
       resolvedOptions = _.extend({}, options)
@@ -22,6 +22,15 @@ define([ "jquery", "backbone", "underscore", "text!./header.tmpl" ], ($, Backbon
       resolvedOptions["title"] = @_titleOptions(options["title"])
       @compiledHeaderTemplate ?= _.template(HeaderTemplate)
       @compiledHeaderTemplate(resolvedOptions)
+
+    prepareDom: () ->
+      # Override as required
+
+    _defaultRenderOptions:
+      changeHash: false
+      reverse: false
+      allowSamePageTransition: true
+      reloadPage: true
 
     _headerOptions: (options) ->
       { elementClass: @_optionalAttribute("class", options["elementClass"]) }

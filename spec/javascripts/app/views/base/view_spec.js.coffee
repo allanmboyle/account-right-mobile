@@ -56,14 +56,6 @@ describe("BaseView", () ->
 
       describe("when no filters are provided", () ->
 
-        it("should destroy any previously rendered page", () ->
-          pageMethodSpy = spyOn(testableView.$el, "page").andReturn(testableView.$el)
-
-          testableView.render()
-
-          expect(pageMethodSpy).toHaveBeenCalledWith("destroy")
-        )
-
         it("should delegate to prepareDom to insert content in the DOM", () ->
           testableView.render()
 
@@ -75,16 +67,19 @@ describe("BaseView", () ->
 
           testableView.render()
 
-          expectedRenderOptions = {
-            reverse: false, changeHash: false, allowSamePageTransition: true, anOption: "some_option_value"
-          }
-          expect($.mobile.changePage).toHaveBeenCalledWith("#testable-base-view", expectedRenderOptions)
+          expectedRenderOptions =
+            changeHash: false
+            reverse: false
+            allowSamePageTransition: true
+            reloadPage: true
+            anOption: "some_option_value"
+          expect($.mobile.changePage).toHaveBeenCalledWith($("#testable-base-view"), expectedRenderOptions)
         )
 
         it("should make the page the active JQueryMobile page", () ->
           testableView.render()
 
-          expect($.mobile.activePage).toHaveAttr("id", "testable-base-view")
+          expect($.mobile.activePage).toBe($("#testable-base-view"))
         )
 
       )

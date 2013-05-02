@@ -25,12 +25,10 @@ define([ "jquery",
 
     el: $("#customer-files")
 
-    events: () ->
+    additionalEvents:
       "pagebeforeshow": "_pageBeforeShow"
       "pageshow": "_showErrorIfNecessary"
       "click #customer-file-login-submit": "login"
-
-    liveLoginRequired: true
 
     update: () ->
       @customerFiles.fetch()

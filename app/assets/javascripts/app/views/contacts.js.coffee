@@ -21,13 +21,11 @@ define([ "jquery",
 
     el: $("#contacts")
 
-    events: () ->
+    additionalEvents:
       "pagebeforeshow": "_pageBeforeShow"
       "pageshow": "_showErrorIfNecessary"
       "change input[name='balance-filter']": "filter"
       "click .contact": "open"
-
-    liveLoginRequired: true
 
     update: () ->
       @contacts.fetch()

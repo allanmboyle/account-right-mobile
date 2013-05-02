@@ -24,7 +24,7 @@ define([ "jquery",
 
     liveLogin: () ->
       @liveLoginView ?= new LiveLoginView(@applicationState)
-      @liveLoginView.render()
+      @liveLoginView.reset()
 
     customerFiles: () ->
       @customerFilesView ?= new CustomerFilesView(@applicationState)

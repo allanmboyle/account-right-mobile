@@ -3,13 +3,13 @@ define([ "jquery",
          "./base/view",
          "text!./live_login.tmpl" ], ($, _, BaseView, Template) ->
 
-  $("body").append("<div id='live_login' data-role='page' data-title='AccountRight Live log in'></div>")
+  $("body").append("<div id='live-login' data-role='page' data-title='AccountRight Live log in'></div>")
 
   class LiveLoginView extends BaseView
 
     initialize: (applicationState) ->
       super
-      @user = @applicationState.liveUser.on("reset:success", @resetSuccess, this)
+      @user = @applicationState.liveUser.on("reset:success", @render, this)
                                         .on("reset:error", @resetError, this)
                                         .on("login:success", @loginSuccess, this)
                                         .on("login:fail", @loginFail, this)
@@ -17,23 +17,20 @@ define([ "jquery",
       @$el.html(_.template(Template,
                            header: @renderHeader(elementClass: "myob-homepage-header", title: { label: "Contacts" })))
 
-    el: $("#live_login")
+    el: $("#live-login")
 
-    events: () ->
+    events:
       "pagebeforeshow": "_showReLoginMessageIfNecessary"
       "pageshow": "_focusOnFirstFormElement"
       "click #live-login-submit": "login"
 
-    render: () ->
+    reset: () ->
       @user.reset()
 
     login: (event) ->
       @syncUser()
       @user.login()
       event.preventDefault()
-
-    resetSuccess: () ->
-      $.mobile.changePage("#live_login", reverse: false, changeHash: false, allowSamePageTransition: true)
 
     resetError: () ->
       $("#live-login-general-error-message").popup().popup("open")
