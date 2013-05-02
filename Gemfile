@@ -1,7 +1,8 @@
-source ENV['GEMFURY_URL'] if ENV['GEMFURY_URL']
 source 'http://rubygems.org'
 
 ruby '1.9.3'
+
+gem 'bundler', '~> 1.3.5'
 
 gem 'rails', '3.2.13'
 
@@ -22,7 +23,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'account-right-mobile-configuration', '0.2.13' if ENV['GEMFURY_URL']
+gem 'account-right-mobile-configuration', git: 'https://github.com/MYOB-Technology/account-right-mobile-configuration.git', tag: 'v0.2.13'
 gem 'json'
 gem 'httparty', '~> 0.10.2'
 

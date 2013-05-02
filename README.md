@@ -15,11 +15,15 @@ Build:
 * Firefox (acceptance testing dependency - default browser)
 
 Client Web App:
-
 * Backbone 0.9.9
 * JQuery Mobile 1.3
 * RequireJS 2.1.4
 * JQuery 1.9.1
+
+Non-MYOB Developer Instructions
+-------------------------------
+
+In order to run the application remove the account-right-mobile-configuration entry in the Gemfile
 
 Simon's Command Cheat Sheet
 ---------------------------
