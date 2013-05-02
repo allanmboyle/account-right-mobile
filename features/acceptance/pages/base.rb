@@ -35,13 +35,13 @@ module AccountRightMobile
         end
 
         def shown?
-          @session.has_selector?('title', text: self.class.title, visible: false).tap do |is_shown|
+          page_and_content_are_shown?.tap do |is_shown|
             wait_until_completely_shown if is_shown
           end
         end
 
         def shown_without_error?
-          shown? && @session.has_no_selector?(".ui-popup-active", text: /error/i)
+          shown? && no_error_popups_are_shown?
         end
 
         protected
@@ -54,8 +54,17 @@ module AccountRightMobile
 
         private
 
+        def page_and_content_are_shown?
+          @session.has_selector?("##{self.class.element_id}", visible: true) &&
+              @session.has_selector?("##{self.class.element_id} .ui-content", visible: true)
+        end
+
         def wait_until_completely_shown
           # Intentionally blank
+        end
+
+        def no_error_popups_are_shown?
+          @session.has_no_selector?("#{self.class.element_id} .ui-popup-active", text: /error/i)
         end
 
       end

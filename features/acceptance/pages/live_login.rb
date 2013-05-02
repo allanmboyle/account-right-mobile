@@ -4,8 +4,16 @@ module AccountRightMobile
 
       class LiveLogin < Pages::Base
 
-        def self.title
-          "AccountRight Live log in"
+        class << self
+
+          def title
+            "AccountRight Live log in"
+          end
+
+          def element_id
+            "live-login"
+          end
+
         end
 
         def initialize(session, configuration)

@@ -4,8 +4,16 @@ module AccountRightMobile
 
       class CustomerFiles < Pages::Base
 
-        def self.title
-          "Customer Files"
+        class << self
+
+          def title
+            "Customer Files"
+          end
+
+          def element_id
+            "customer-files"
+          end
+
         end
 
         def initialize(session, configuration)
@@ -87,7 +95,7 @@ module AccountRightMobile
         end
 
         def wait_until_login_is_shown
-          ::Wait.until_true!("login is shown") { @session.find("#customer-file-login-content").visible? }
+          @session.find("#customer-file-login-content", visible: true)
         end
 
       end

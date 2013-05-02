@@ -6,8 +6,16 @@ module AccountRightMobile
 
         FILTER_BY_NAME_INPUT_SELECTOR = "#contacts-content .ui-listview-filter input"
 
-        def self.title
-          "Contacts"
+        class << self
+
+          def title
+            "Contacts"
+          end
+
+          def element_id
+            "contacts"
+          end
+
         end
 
         def initialize(session, configuration)
