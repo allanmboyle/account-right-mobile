@@ -23,7 +23,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'account-right-mobile-configuration', git: 'https://github.com/MYOB-Technology/account-right-mobile-configuration.git', tag: 'v0.2.13'
+gem 'account-right-mobile-configuration', git: 'git@github.com:MYOB-Technology/account-right-mobile-configuration.git', tag: 'v0.2.13'
 gem 'json'
 gem 'httparty', '~> 0.10.2'
 

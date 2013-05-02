@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/MYOB-Technology/account-right-mobile-configuration.git
+  remote: git@github.com:MYOB-Technology/account-right-mobile-configuration.git
   revision: a87ed6d04a425de710f968ce9229302338d877f4
   tag: v0.2.13
   specs:
